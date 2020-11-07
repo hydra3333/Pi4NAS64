@@ -121,7 +121,7 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 
 ## Install the NAS related apps into the Pi4    
 
-1. *Re-check* that the Pi4 has been pre-configured correctly, particularly the server-name and fixed IPv4 address    
+1. Re-check that the Pi4 has been pre-configured correctly, particularly the server-name and fixed IPv4 address    
 
 2. Prepare our USB3 drives on the Pi4
    - plug the USB3 external hard drive(s) into the Pi4 (always use the same drives in the same USB3 slots !)
@@ -170,6 +170,8 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
      * ... it will be used as the top-level folder name on our external USB3 drive, so put our video files in there
    - `Designate the mount point for the USB3 external hard drive` it's a "virtual" place used everywhere to access the top level of the USB3 external hard drive when mounted, eg `/mnt/mp4library`
    - `Designate the root folder on the USB3 external hard drive` it's the top level folder on the USB3 external hard drive containing .mp4 files and subfolders containing .mp4 files, eg `/mnt/mp4library/mp4library`
+
+6. Answer more questions    
    - when we see something like this:
      ```
      Before we start the server, we’ll want to set a Samba password. Enter we pi password.
@@ -178,29 +180,33 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
      ```
      enter the password we had set for the pi login,    
      then enter it again when we see `Retype new SMB password:`    
-   - then when we see something like this,
+   - then when we see something like this,    
      ```
      Before we start the server, we’ll want to set a Samba password. Enter we pi password.
      + sudo smbpasswd -a root
      New SMB password:
      ```
      enter the password we had set for the pi login,    
-     then enter it when we see `Retype new SMB password:`
-   - answer other prompts
-     * sometimes we will be asked to visually scan and check setup results for issues, and to press Enter to continue
+     then enter it when we see `Retype new SMB password:`    
 
-5. When the process completes, Reboot the Pi4 so that the new settings take effect
+7. Answer more prompts    
+   - sometimes we will be asked to visually scan and check setup results for issues, and to press Enter to continue
 
-   
-
-
-
-
-
-
-
+8. When the process completes, Reboot the Pi4 so that the new settings take effect
 
    
+
+
+
+
+
+
+
+
+   
+---
+---
+---
 ---
 # under construction
 

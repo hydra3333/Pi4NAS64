@@ -67,18 +67,18 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 
 ## Pre-Installaton stuff which must setup first    
 
-0. Ensure our USB3 disks are *not* yet plugged into the Pi4   
+1. Ensure our USB3 disks are *not* yet plugged into the Pi4   
 
-1. Install and configure our Raspberry Pi4 4Gb or 8Gb
-   - Install 32-bit Raspberry Pi O/S and configure it how we like    
+2. Install and configure our Raspberry Pi4 4Gb or 8Gb
+   - Install 32-bit Raspberry Pi O/S and configure it to how we like it    
+   - its hostname must be short and easy and has no spaces or special characters (it will be used as the website name) ... ideally choose `Pi4NAS`   
    - configure it to boot to GIU and autologin ... it is safe to autologin since the Pi is only visible inside our "secure" home LAN   
-   - configure a screen resolution which enables VNC server/client to run better when headless   
-   - in a Terminal, using sudo raspi-config, Advanced 
+   - configure a screen resolution which enables VNC server/client to run properly when headless   
+     * in a Terminal, using sudo raspi-config, Advanced 
      * choose a screen resolution ANYTHING (eg 1920x1080) *other* than "default" so that a framebuffer gets allocated on a Pi4 which magically enables VNC server to run even when a screen is not connected to the HDMI port
    - (the GUI should be left to boot and run, even in a headless state later)
 
-2. Check, perhaps in the GUI menu item `Raspberry Pi Configuration`,
-   - its hostname is short and easy and has no spaces or special characters (it will be used as the website name) ... ideally choose `Pi4NAS`   
+3. Check, perhaps in the GUI menu item `Raspberry Pi Configuration`,
    - "login as user pi" is ticked
    - "wait for network" is unticked
    - "splash screen" is disabled
@@ -87,16 +87,16 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
    - GPU memory is 384Mb
    - "localisation" tab is used to check/configure our timezone/locale etc... also set local language to `UTF-8` to avoid issues   
 
-3. Ensure the Pi has a fixed IP address
+4. Ensure the Pi has a fixed IP address
    - perhaps by using our home router's DHCP facility to recognise the Pi's mac address and provide a fixed IP address
 
-4. If the Pi4 is Wired ethernet (ideally it will be), disable WiFi and BlueTooth on the Pi4
+5. If the Pi4 is Wired ethernet (ideally it will be), disable WiFi and BlueTooth on the Pi4
    - add these lines into '/boot/config.txt' and reboot the Pi4   
      ```
      dtoverlay=pi3-disable-wifi
      dtoverlay=pi3-disable-bt
      ```
-5. Prepare our USB3 disks
+6. Prepare our USB3 disks
    - plug the USB3 external hard drive(s) in to the Pi4 (always use the same drives in the same USB3 slots !)
    - wait 15 to 30 seconds for the USB3 external hard drives to spin up and be mounted automatically
    - find and note EXACTLY the correct `UUID=` string of letters and numbers for the USB3 external hard drive(s) ... start a Terminal and do this:
@@ -116,7 +116,7 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
      * then look for its physical mount point ... in this case it is `/dev/sda2` ... copy and paste the string somewhere as we must use it later
      * with a second USB3 drive, both these would be obvious as well ... also copy and paste these strings somewhere as we must use them later 
 
-6. Clone the Pi4NAS Github respository to the Desktop of the Pi and copy the setup files to the Desktop
+7. Clone the Pi4NAS Github respository to the Desktop of the Pi and copy the setup files to the Desktop
    - start a Terminal and do this:
      ```
      cd ~/Desktop
@@ -131,7 +131,7 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 	 echo "uid=$(id -r -u pi) gid=$(id -r -g pi)" 
      ```
 
-7. Now, start a Terminal and start the intall/configure process:
+8. Now, start a Terminal and start the intall/configure process:
      ```
      cd ~/Desktop
      chmod +777 *.sh

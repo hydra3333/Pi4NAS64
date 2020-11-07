@@ -5,12 +5,12 @@
 
 ## Description <TL;DR> 
 
-Configure a Raspberry Pi4 with attached USB3 disks to create an NAS on our local home LAN with 
+Configure a Raspberry Pi4 with attached USB3 drives to create an NAS on our local home LAN with 
 - "open" rw NFS file shares   
 - "open" rw SAMBA file shares   
 - "open" rw ftp server   
 - a DLNA server   
-- the `hd-idle` app to spin down disks when not used   
+- the `hd-idle` app to spin down drives when not used   
 
 It can be connected to by the newly released "Google ChromeCast with Google TV" devices with 
 apps `Kodi` and `VLC` in order to play our collection of home media files.    
@@ -25,21 +25,22 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 
 
 1. We have One or perhaps Two USB3 external hard drives full of videos, to attach to the Raspbetty Pi    
-   - these USB3 drives must be formatted as NTFS by Windows, and have security set to `Everyone` gaving `Full Access` to the top level and all subfolders
+   - these USB3 drives must be formatted as NTFS by Windows, and have security set to `Everyone` having `Full Access` to the top level and all subfolders and files
    - first USB3 drive has characteristics:    
-   * Drive label `mp4library`    
-   * a folder at the root level of the first USB3 drive must be `mp4library` and have security set to `Everyone` gaving `Full Access` to this folder and all subfolders    
+     * Drive label `mp4library`    
+     * a folder at the root level of the first USB3 drive must be `mp4library` and have security set to `Everyone` having `Full Access` to this folder and all subfolders    
    - second USB3 drive has characteristics:    
-   * Drive label `mp4library2`    
-   * a folder at the root level of the first USB3 drive must be `mp4library` (same as the first drive) and have security set to `Everyone` gaving `Full Access` to this folder and all subfolders    
+     * Drive label `mp4library2`    
+     * a folder at the root level of the first USB3 drive must be `mp4library` (same as the first drive) and have security set to `Everyone` having `Full Access` to this folder and all subfolders    
 
 2. We choose to sometimes detach the USB3 drives from the Raspberry Pi4 and temporarily attach them to a Windows 10 PC to copy large media files onto them    
-   - as we all know, USB3 file copy speeds will be *much* greater for locally attached disks vs copying cross the network    
+   - as we all know, USB3 file copy speeds will be *much* greater for locally attached drives vs copying cross the network    
 
 3. The Raspberry Pi4 is connected to our home LAN via wired ethernet (we'll turn off bluetooth and WiFi)     
    - as we all know, from actual testing, WiFi is subject to contention which limits bandwidth and this may cause lag/stuttering when playing media on devices accessing the shares    
 
-4. We **must** allocate a fixed IPv4 address for our Pi4, perhaps by assigning it a permanent IPv4 lease in DHCP in our home router    
+4. We **must** allocate a fixed IPv4 address for our Pi4, perhaps by assigning it a permanent IPv4 lease in DHCP in our home router   
+   -  this is really important
 
 5. "Google ChromeCast with Google TV" devices are ideally connected to our home LAN via wired ethernet    
    - as we all know, from actual test results, WiFi is subject to contention which limits bandwidth and this may cause lag/stuttering when playing media    
@@ -67,7 +68,7 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 
 ## Pre-Installaton stuff which must setup first    
 
-1. Ensure our USB3 disks are *not* yet plugged into the Pi4   
+1. Ensure our USB3 drives are *not* yet plugged into the Pi4   
 
 2. Install and configure our Raspberry Pi4 4Gb or 8Gb
    - Install 32-bit Raspberry Pi O/S and configure it to how we like it    
@@ -87,17 +88,36 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
    - GPU memory is 384Mb
    - "localisation" tab is used to check/configure our timezone/locale etc... also set local language to `UTF-8` to avoid issues   
 
-4. Ensure the Pi has a fixed IPv4 address
-   - perhaps by using our home router's DHCP facility to recognise the Pi's mac address and provide it with an ongoing fixed IPv4 address
-
-5. If the Pi4 is Wired ethernet (ideally it will be), disable WiFi and BlueTooth on the Pi4
-   - add these lines into '/boot/config.txt' and reboot the Pi4   
+4. If the Pi4 is Wired ethernet (ideally it will be), disable WiFi and BlueTooth on the Pi4
+   - edit and add these lines into '/boot/config.txt' (perhaps in a Terminal use `sudo nano /boot/config.txt`) and then reboot the Pi4   
      ```
      dtoverlay=pi3-disable-wifi
      dtoverlay=pi3-disable-bt
      ```
-6. Prepare our USB3 disks
-   - plug the USB3 external hard drive(s) in to the Pi4 (always use the same drives in the same USB3 slots !)
+
+5. Ensure the Pi has a fixed IPv4 address
+   - perhaps by using our home router's DHCP facility to recognise the Pi's mac address and provide it with an ongoing fixed IPv4 address
+   - ensure the Pi4 is rebooted and the IP address "sticks"
+   - then start a Terminal and use `ifconfig` to check the IPv4 address has "stuck"
+
+
+6. Prepare our USB3 drives before we even go near plugging them into the Pi4
+   - plug the drive(s) into a Windows PC 
+   - format then as NTFS 
+   - set security on the drive itself to `Everyone` having `Full Access`
+   - set security on the top level and all subfolders and files to `Everyone` having `Full Access`
+     * hiont: one may need to change "inherited permissions"
+   - first USB3 drive has characteristics:    
+     * Drive label `mp4library`    
+     * a folder at the root level of the first USB3 drive must be `mp4library` and have security set to `Everyone` having `Full Access` to this folder and all subfolders and files    
+   - (if one has one) second USB3 drive has characteristics:    
+     * Drive label `mp4library2`    
+     * a folder at the root level of the first USB3 drive must be `mp4library` (same as the first drive) and have security set to `Everyone` having `Full Access` to this folder and all subfolders and files 
+   - copy media files into the folder tree one created, and check security permissikons on them is set correctly	 
+
+
+7. Prepare our USB3 drives on the Pi4
+   - plug the USB3 external hard drive(s) into the Pi4 (always use the same drives in the same USB3 slots !)
    - wait 15 to 30 seconds for the USB3 external hard drives to spin up and be mounted automatically
    - find and note EXACTLY the correct `UUID=` string of letters and numbers for the USB3 external hard drive(s) ... start a Terminal and do this:
      ```

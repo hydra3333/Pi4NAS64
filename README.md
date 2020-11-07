@@ -17,6 +17,8 @@ apps `Kodi` and `VLC` in order to play our collection of home media files.
 
 A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and has decent thoughput to handle multiple streams.
 
+"Google ChromeCast for Google TV" : https://store.google.com/au/product/chromecast_google_tv_specs
+
 ---
 
 ## Assumptions     
@@ -34,23 +36,23 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 2. We choose to sometimes detach the USB3 drives from the Raspberry Pi4 and temporarily attach them to a Windows 10 PC to copy large media files onto them    
    - as we all know, USB3 file copy speeds will be *much* greater for locally attached disks vs copying cross the network    
 
-3. The Raspberry Pi4 is connected to the LAN via wired ethernet (we'll turn off bluetooth and WiFi)     
+3. The Raspberry Pi4 is connected to our home LAN via wired ethernet (we'll turn off bluetooth and WiFi)     
    - as we all know, from actual testing, WiFi is subject to contention which limits bandwidth and this may cause lag/stuttering when playing media on devices accessing the shares    
 
-4. The "Google ChromeCast for Google TV" devices are ideally connected to the LAN via wired ethernet    
-   - as we all know, from actual testing, WiFi is subject to contention which limits bandwidth and this may cause lag/stuttering when playing media    
+4. We **must** allocate a fixed IPv4 address for our Pi4, perhaps by assigning it a permanent IP lease in DHCP in our home router    
 
-5. We **must** allocate a fixed IPv4 address to our Pi4, perhaps by assigning it a permanent IP lease in DHCP in our home router    
+5. "Google ChromeCast for Google TV" devices are ideally connected to our home LAN via wired ethernet    
+   - as we all know, from actual test results, WiFi is subject to contention which limits bandwidth and this may cause lag/stuttering when playing media    
 
 6. After setup, the monitor/mouse/keyboard can be disconnected from the Pi4 so as to run "headless"    
 
-7. The Pi4 will **NOT** do any *external* network connections outside our home LAN at runtime, other than for normal Raspberry Pi O/S and its software updates   
+7. The Pi4 will *NOT* perform any *external* network connections outside our home LAN at runtime, other than for normal Raspberry Pi O/S operations and its software updates   
 
 8. We will run the *32-bit* version of Raspberry Pi O/S and apps    
    - as at 2020.11.07, we haven't moved over to the 64-bit version of hd-idle (although eveything else should install/work under 64bit)      
 
 9. Of probable interest, playable .mp4 files are    
-   - not interlaced (a `Chromecast Ultra` device will not play them, and probably not the "Google ChromeCast for Google TV" wither)    
+   - not interlaced (a `Chromecast Ultra` device will not play them, and probably not the "Google ChromeCast for Google TV" either)    
    - max resolution of `1080p` and having an `SDR` colour scheme (unless we have a `Chromecast Ultra` device, in which case `4K` and `HDR`)
    - ideally encoded with codecs `h.264(avc)/aac` ... or `h.265(hevc)/aac`
    - videos encoded with `hevc/avc` won't play in a Chrome browser, but they *will* cast to and play on a Chromecast device 

@@ -1,19 +1,19 @@
 # UNDER CONSTRUCTION
 
 # Pi4NAS
-## a Raspberry Pi4 NAS 
-## for use by "Google ChromeCast for Google TV" devices   
+### a Raspberry Pi4 NAS for use by "Google ChromeCast for Google TV" devices   
 
 ## Description <TL;DR> 
 
-Configure a Raspberry Pi4 with attached USB3 disks to create an NAS on our local LAN with 
+Configure a Raspberry Pi4 with attached USB3 disks to create an NAS on our local home LAN with 
 - "open" rw NFS file shares   
 - "open" rw SAMBA file shares   
 - "open" rw ftp server   
 - a DLNA server   
-- `hd-idle`, to spin down disks when not used   
+- the `hd-idle` app to spin down disks when not used   
 
-It will be good for use by the newly released "Google ChromeCast for Google TV" devices with apps `Kodi` and `VLC` as at 2020.11.07.   
+It will be good for use by the newly released "Google ChromeCast for Google TV" devices with apps `Kodi` and `VLC`   
+(as at 2020.11.07)
 
 ---
 

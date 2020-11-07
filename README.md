@@ -22,7 +22,7 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 ## Assumptions     
 
 
-1. We have One or perhaps Two USB3 external hard drives    
+1. We have One or perhaps Two USB3 external hard drives full of videos, to attach to the Raspbetty Pi    
    - these USB3 drives must be formatted as NTFS by Windows, and have security set to `Everyone` gaving `Full Access` to the top level and all subfolders
    - first USB3 drive has characteristics:    
    * Drive label `mp4library`    
@@ -58,8 +58,8 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
    - Google's *probably out-of-date list* of acceptable .mp4 codecs for the `Chromecast Ultra` is at https://developers.google.com/cast/docs/media but as yet we can't find one for the "Google ChromeCast for Google TV"
 
 10. We could try using a Raspberry Pi 3b+ instead of a Pi 4, it would build fine, however 
-   - it only has USB2 to attach the external, drives which may not provide the bandwidth one needs to deliver uninterrupted streams
-   - its limited ethernet interface may not provide enough bandwidth one needs to deliver uninterrupted streams
+    - it only has USB2 to attach the external, drives which may not provide the bandwidth one needs to deliver uninterrupted streams
+    - its limited ethernet interface may not provide enough bandwidth one needs to deliver uninterrupted streams
 
 ---
 

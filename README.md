@@ -60,8 +60,8 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
    - Google's *probably out-of-date list* of acceptable .mp4 codecs for the `Chromecast Ultra` is at https://developers.google.com/cast/docs/media but as yet we can't find one for the "Google ChromeCast with Google TV"
 
 10. We could try using a Raspberry Pi 3b+ instead of a Pi 4, it would build fine, however 
-    - it only has USB2 to attach the external, drives which may not provide the bandwidth one needs to deliver uninterrupted streams
-    - its limited ethernet interface may not provide enough bandwidth one needs to deliver uninterrupted streams
+    - it only has USB2 ports with which to attach the external drives, which may not provide enough bandwidth one needs to deliver uninterrupted streams
+    - its "limited" ethernet interface may not provide enough bandwidth one needs to deliver uninterrupted streams
 
 ---
 

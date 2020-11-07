@@ -39,7 +39,7 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 3. The Raspberry Pi4 is connected to our home LAN via wired ethernet (we'll turn off bluetooth and WiFi)     
    - as we all know, from actual testing, WiFi is subject to contention which limits bandwidth and this may cause lag/stuttering when playing media on devices accessing the shares    
 
-4. We **must** allocate a fixed IPv4 address for our Pi4, perhaps by assigning it a permanent IP lease in DHCP in our home router    
+4. We **must** allocate a fixed IPv4 address for our Pi4, perhaps by assigning it a permanent IPv4 lease in DHCP in our home router    
 
 5. "Google ChromeCast with Google TV" devices are ideally connected to our home LAN via wired ethernet    
    - as we all know, from actual test results, WiFi is subject to contention which limits bandwidth and this may cause lag/stuttering when playing media    
@@ -76,9 +76,9 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
    - configure a screen resolution which enables VNC server/client to run properly when headless   
      * in a Terminal, using sudo raspi-config, Advanced 
      * choose a screen resolution ANYTHING (eg 1920x1080) *other* than "default" so that a framebuffer gets allocated on a Pi4 which magically enables VNC server to run even when a screen is not connected to the HDMI port
-   - (the GUI should be left to boot and run, even in a headless state later)
+   - the GUI should be left to boot and auto start, even in a headless state 
 
-3. Check, perhaps in the GUI menu item `Raspberry Pi Configuration`,
+3. Check, perhaps using the GUI menu item `Raspberry Pi Configuration`,
    - "login as user pi" is ticked
    - "wait for network" is unticked
    - "splash screen" is disabled
@@ -87,8 +87,8 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
    - GPU memory is 384Mb
    - "localisation" tab is used to check/configure our timezone/locale etc... also set local language to `UTF-8` to avoid issues   
 
-4. Ensure the Pi has a fixed IP address
-   - perhaps by using our home router's DHCP facility to recognise the Pi's mac address and provide a fixed IP address
+4. Ensure the Pi has a fixed IPv4 address
+   - perhaps by using our home router's DHCP facility to recognise the Pi's mac address and provide it with an ongoing fixed IPv4 address
 
 5. If the Pi4 is Wired ethernet (ideally it will be), disable WiFi and BlueTooth on the Pi4
    - add these lines into '/boot/config.txt' and reboot the Pi4   
@@ -197,13 +197,13 @@ under here is stuff used for editing into the text above
        enter the password we had set for the pi login, then enter it again when we see `Retype new SMB password:`
 8. After rebooting now, it's ready.
    - try to connect to it from a PC or tablet using a Chrome browser,
-     (where Pi4NAS below is the hostname of the Pi and xx.xx.xx.xx is the fixed IP address of the Pi)
+     (where Pi4NAS below is the hostname of the Pi and xx.xx.xx.xx is the fixed IPv4 address of the Pi)
      ```
      https://xx.xx.xx.xx/Pi4NAS
      https://xx.xx.xx.xx/mp4library
      ```
      on the Pi itself, we can try the Chromium browser to at least see if it works
-     (where Pi4NAS below is the hostname of the Pi and xx.xx.xx.xx is the fixed IP address of the Pi)
+     (where Pi4NAS below is the hostname of the Pi and xx.xx.xx.xx is the fixed IPv4 address of the Pi)
      ```
      https://xx.xx.xx.xx/Pi4NAS
      https://xx.xx.xx.xx/mp4library

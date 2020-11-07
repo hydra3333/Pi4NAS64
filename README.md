@@ -1,7 +1,7 @@
 # UNDER CONSTRUCTION
 
 # Pi4NAS
-### a Raspberry Pi4 NAS for use by "Google ChromeCast for Google TV" devices   
+### a Raspberry Pi4 NAS for use by "Google ChromeCast with Google TV" devices   
 
 ## Description <TL;DR> 
 
@@ -12,12 +12,12 @@ Configure a Raspberry Pi4 with attached USB3 disks to create an NAS on our local
 - a DLNA server   
 - the `hd-idle` app to spin down disks when not used   
 
-It can be connected to by the newly released "Google ChromeCast for Google TV" devices with 
+It can be connected to by the newly released "Google ChromeCast with Google TV" devices with 
 apps `Kodi` and `VLC` in order to play our collection of home media files.    
 
 A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and has decent thoughput to handle multiple streams.
 
-"Google ChromeCast for Google TV" : https://store.google.com/au/product/chromecast_google_tv_specs
+"Google ChromeCast with Google TV" : https://store.google.com/au/product/chromecast_google_tv_specs
 
 ---
 
@@ -41,7 +41,7 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 
 4. We **must** allocate a fixed IPv4 address for our Pi4, perhaps by assigning it a permanent IP lease in DHCP in our home router    
 
-5. "Google ChromeCast for Google TV" devices are ideally connected to our home LAN via wired ethernet    
+5. "Google ChromeCast with Google TV" devices are ideally connected to our home LAN via wired ethernet    
    - as we all know, from actual test results, WiFi is subject to contention which limits bandwidth and this may cause lag/stuttering when playing media    
 
 6. After setup, the monitor/mouse/keyboard can be disconnected from the Pi4 so as to run "headless"    
@@ -52,12 +52,12 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
    - as at 2020.11.07, we haven't moved over to the 64-bit version of hd-idle (although eveything else should install/work under 64bit)      
 
 9. Of probable interest, playable .mp4 files are    
-   - not interlaced (a `Chromecast Ultra` device will not play them, and probably not the "Google ChromeCast for Google TV" either)    
+   - not interlaced (a `Chromecast Ultra` device will not play them, and probably not the "Google ChromeCast with Google TV" either)    
    - max resolution of `1080p` and having an `SDR` colour scheme (unless we have a `Chromecast Ultra` device, in which case `4K` and `HDR`)
    - ideally encoded with codecs `h.264(avc)/aac` ... or `h.265(hevc)/aac`
    - videos encoded with `hevc/avc` won't play in a Chrome browser, but they *will* cast to and play on a Chromecast device 
      * (... neither type of video plays inside a Pi's Chromium browser, unfortunately) 
-   - Google's *probably out-of-date list* of acceptable .mp4 codecs for the `Chromecast Ultra` is at https://developers.google.com/cast/docs/media but as yet we can't find one for the "Google ChromeCast for Google TV"
+   - Google's *probably out-of-date list* of acceptable .mp4 codecs for the `Chromecast Ultra` is at https://developers.google.com/cast/docs/media but as yet we can't find one for the "Google ChromeCast with Google TV"
 
 10. We could try using a Raspberry Pi 3b+ instead of a Pi 4, it would build fine, however 
     - it only has USB2 to attach the external, drives which may not provide the bandwidth one needs to deliver uninterrupted streams

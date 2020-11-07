@@ -1,2 +1,3 @@
 # Pi4NAS
-NFS and SAMBA NAS on a Raspberry Pi4 using attached USB3 disks, for use by the new "Google ChromeCast for Google TV" devices
+Use a Raspberry Pi4 with attached USB3 disks to create an NAS with open NFS and SAMBA shares on your local LAN.   
+Good for use by the new "Google ChromeCast for Google TV" devices with apps Kodi and VLC.

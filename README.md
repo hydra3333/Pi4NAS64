@@ -12,8 +12,10 @@ Configure a Raspberry Pi4 with attached USB3 disks to create an NAS on our local
 - a DLNA server   
 - the `hd-idle` app to spin down disks when not used   
 
-It will be good for use by the newly released "Google ChromeCast for Google TV" devices with apps `Kodi` and `VLC`   
-(as at 2020.11.07)
+It can be connected to by the newly released "Google ChromeCast for Google TV" devices with 
+apps `Kodi` and `VLC` in order to play our collection of home media files.    
+
+A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and has decent thoughput to handle multiple streams.
 
 ---
 
@@ -38,11 +40,11 @@ It will be good for use by the newly released "Google ChromeCast for Google TV" 
 4. The "Google ChromeCast for Google TV" devices are ideally connected to the LAN via wired ethernet    
    - as we all know, from actual testing, WiFi is subject to contention which limits bandwidth and this may cause lag/stuttering when playing media    
 
-5. We *must* allocate a fixed IPv4 address to our Pi4, perhaps by assigning it a permanent IP lease in DHCP in our home router    
+5. We **must** allocate a fixed IPv4 address to our Pi4, perhaps by assigning it a permanent IP lease in DHCP in our home router    
 
 6. After setup, the monitor/mouse/keyboard can be disconnected from the Pi4 so as to run "headless"    
 
-7. The Pi4 will *NOT* do any *external* network connections outside our home LAN at runtime, other than for normal Raspberry Pi O/S and its software updates   
+7. The Pi4 will **NOT** do any *external* network connections outside our home LAN at runtime, other than for normal Raspberry Pi O/S and its software updates   
 
 8. We will run the *32-bit* version of Raspberry Pi O/S and apps    
    - as at 2020.11.07, we haven't moved over to the 64-bit version of hd-idle (although eveything else should install/work under 64bit)      
@@ -54,6 +56,10 @@ It will be good for use by the newly released "Google ChromeCast for Google TV" 
    - videos encoded with `hevc/avc` won't play in a Chrome browser, but they *will* cast to and play on a Chromecast device 
      * (... neither type of video plays inside a Pi's Chromium browser, unfortunately) 
    - Google's *probably out-of-date list* of acceptable .mp4 codecs for the `Chromecast Ultra` is at https://developers.google.com/cast/docs/media but as yet we can't find one for the "Google ChromeCast for Google TV"
+
+10. We could try using a Raspberry Pi 3b+ instead of a Pi 4, it would build fine, however 
+   - it only has USB2 to attach the external, drives which may not provide the bandwidth one needs to deliver uninterrupted streams
+   - its limited ethernet interface may not provide enough bandwidth one needs to deliver uninterrupted streams
 
 ---
 

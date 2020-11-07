@@ -119,10 +119,11 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 
 ---
 
-## Installaton on the Pi4    
+## Install the NAS related apps into the Pi4    
 
+1. *Ensure* the Pi4 has been pre-configured corretly, particularly the server-name and fixed IPv4 address    
 
-7. Prepare our USB3 drives on the Pi4
+2. Prepare our USB3 drives on the Pi4
    - plug the USB3 external hard drive(s) into the Pi4 (always use the same drives in the same USB3 slots !)
    - wait 15 to 30 seconds for the USB3 external hard drives to spin up and be mounted automatically
    - find and note EXACTLY the correct `UUID=` string of letters and numbers for the USB3 external hard drive(s) ... start a Terminal and do this:
@@ -142,7 +143,7 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
      * then look for its physical mount point ... in this case it is `/dev/sda2` ... copy and paste the string somewhere as we must use it later
      * with a second USB3 drive, both these would be obvious as well ... also copy and paste these strings somewhere as we must use them later 
 
-7. Clone the Pi4NAS Github respository to the Desktop of the Pi and copy the setup files to the Desktop
+3. Clone the Pi4NAS Github respository to the Desktop of the Pi and copy the setup files to the Desktop
    - start a Terminal and do this:
      ```
      cd ~/Desktop
@@ -157,7 +158,7 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
 	 echo "uid=$(id -r -u pi) gid=$(id -r -g pi)" 
      ```
 
-8. Now, start a Terminal and start the intall/configure process:
+4. Now, start a Terminal and start the intall/configure process:
      ```
      cd ~/Desktop
      chmod +777 *.sh
@@ -166,12 +167,29 @@ A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and
    - answer the prompts (it will save most of these answers for use later)
      * `This server_name` it's best to choose the Pi4's hostname of the Pi4 here (we use Pi4NAS) - it will be used as the network service name by `Kodi` and `VLC` etc
      * `This server_alias (will become a Virtual Folder for mounting purposes)` - recommend leave it as `mp4library` so it matches the top level folder name on the USB3 drive
-	    * ... it will be used as the top-level folder name on our external USB3 drive, so put our video files in there
+       * ... it will be used as the top-level folder name on our external USB3 drive, so put our video files in there
      * `Designate the mount point for the USB3 external hard drive` it's a "virtual" place used everywhere to access the top level of the USB3 external hard drive when mounted, eg `/mnt/mp4library`
      * `Designate the root folder on the USB3 external hard drive` it's the top level folder on the USB3 external hard drive containing .mp4 files and subfolders containing .mp4 files, eg `/mnt/mp4library/mp4library`
+     * when we see something like this:
+       ```
+       Before we start the server, we’ll want to set a Samba password. Enter we pi password.
+       + sudo smbpasswd -a pi
+       New SMB password:
+       ```
+       enter the password we had set for the pi login,    
+       then enter it again when we see `Retype new SMB password:`    
+     * then when we see something like this,
+       ```
+       Before we start the server, we’ll want to set a Samba password. Enter we pi password.
+       + sudo smbpasswd -a root
+       New SMB password:
+       ```
+       enter the password we had set for the pi login,    
+       then enter it when we see `Retype new SMB password:`
    - answer other prompts
-     * sometimes we will be asked to visually scan setup results for issues, and press Enter to continue
-   - When the process completes, Reboot the Pi4 so that new settings take effect
+     * sometimes we will be asked to visually scan and check setup results for issues, and to press Enter to continue
+
+5. When the process completes, Reboot the Pi4 so that the new settings take effect
 
    
 

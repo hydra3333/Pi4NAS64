@@ -37,20 +37,22 @@ echo ""
 echo ""
 echo "# Find and note EXACTLY the correct UUID= string and physical mount point string for the USB3 external hard drive(s)"
 echo ""
-echo "# The next commands should yield something a bit like this"
+echo "# Instructions:"
+echo "# The upcoming commands should yield something a bit like this"
 echo '# /dev/mmcblk0p1: LABEL_FATBOOT="boot" LABEL="boot" UUID="69D5-9B27" TYPE="vfat" PARTUUID="d9b3f436-01"'
 echo '# /dev/mmcblk0p2: LABEL="rootfs" UUID="24eaa08b-10f2-49e0-8283-359f7eb1a0b6" TYPE="ext4" PARTUUID="d9b3f436-02"'
 echo '# /dev/sda2: LABEL="5TB-mp4library" UUID="F8ACDEBBACDE741A" TYPE="ntfs" PTTYPE="atari" PARTLABEL="Basic data partition" PARTUUID="6cc8d3fb-6942-4b4b-a7b1-c31d864accef"'
 echo '# /dev/mmcblk0: PTUUID="d9b3f436" PTTYPE="dos"'
 echo '# /dev/sda1: PARTLABEL="Microsoft reserved partition" PARTUUID="62ac9e1a-a82b-4df7-92b9-19ffc689d80b"'
-echo ""
 echo "# Look for the Disk Label ... in the above case the UUID is F8ACDEBBACDE741A "
 echo "# ... copy and paste the UUID string somewhere as we must use it later"
 echo "# Then look for its physical mount point ... in this case it is /dev/sda2"
 echo "# ... copy and paste the string somewhere as we must use it later"
 echo "# With a second USB3 drive, both these would be obvious as well ... also copy and paste these strings somewhere as we must use them later"
+#echo ""
+#read -p "# Press Enter to see the values on this Pi4 continue."
 echo ""
-read -p "# Press Enter to see the values on this Pi4 continue."
+echo "Settings for this Pi4:"
 echo ""
 set -x
 sudo df

@@ -1,4 +1,5 @@
 # UNDER CONSTRUCTION
+## it does  not yet work
 
 # Pi4NAS
 ### a Raspberry Pi4 NAS for use by "Google ChromeCast with Google TV" devices   

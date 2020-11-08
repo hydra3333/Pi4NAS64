@@ -1,6 +1,3 @@
-# UNDER CONSTRUCTION
-## it does  not yet work
-
 # Pi4NAS
 ### a Raspberry Pi4 NAS for use by "Google ChromeCast with Google TV" devices   
 
@@ -197,3 +194,4 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 8. When the process completes, Reboot the Pi4 so that the new settings take effect
 
+---

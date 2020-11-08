@@ -183,7 +183,6 @@ echo "#-------------------------------------------------------------------------
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Fix user rights for user pi so that it has no trouble with mounting external drives."
-read -p "# Press Enter to continue."
 echo ""
 set -x
 sudo usermod -a -G plugdev pi
@@ -767,7 +766,7 @@ echo "# Install SAMBA and create the file shares"
 echo ""
 read -p "# Press Enter to continue."
 echo ""
-echo "# Un-Install any previous SAMBA install ..."
+echo "# First Un-Install any previous SAMBA install and then Install it ..."
 echo ""
 set -x
 #sudo systemctl stop smbd
@@ -787,7 +786,7 @@ sudo apt-get install -y             --fix-broken --fix-missing --allow-unauthent
 sudo apt-get install -y --reinstall --fix-broken --fix-missing --allow-unauthenticated samba
 set +x
 echo ""
-echo "# If the Un-Install did not work, control-C then fix any issues, then re-start this script."
+echo "# If the Un-Install/Install did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
@@ -1124,12 +1123,14 @@ echo ""
 # <minute> <hour> <day> <month> <dow> <tags and command>
 set -x
 sudo crontab -l # before
+crontab -l # before
 set +x
 echo ""
 ( crontab -l ; echo "0 4 * * * ${sh_file} 2>&1 >> ${log_file}" ) 2>&1 | sed "s/no crontab for $(whoami)//g" | sort - | uniq - | crontab -
 echo ""
 set -x
 sudo crontab -l # after
+crontab -l # before
 sudo grep CRON /var/log/syslog
 set +x
 echo ""

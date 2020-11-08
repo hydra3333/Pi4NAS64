@@ -26,7 +26,56 @@ echo ""
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 echo ""
-read -p "# First, confirm default values for the Pi4 and USB3 drives.  Press Enter to continue."
+echo "OK, please visually check some settings on the Pi4"
+echo ""
+set -x
+sudo dhclient -r
+sudo dhclient
+sudo ifconfig
+sudo hostname
+sudo hostname --fqdn
+sudo hostname --all-ip-addresses
+set +x
+echo ""
+echo "# Check the fixed IP Address and Host name etc."
+echo "# If not OK, control-C, then redo the pre-Install stuff, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# Find and note EXACTLY the correct UUID= string and physical mount point string for the USB3 external hard drive(s)"
+echo ""
+echo "# The next commands should yield something a bit like this"
+echo '# /dev/mmcblk0p1: LABEL_FATBOOT="boot" LABEL="boot" UUID="69D5-9B27" TYPE="vfat" PARTUUID="d9b3f436-01"'
+echo '# /dev/mmcblk0p2: LABEL="rootfs" UUID="24eaa08b-10f2-49e0-8283-359f7eb1a0b6" TYPE="ext4" PARTUUID="d9b3f436-02"'
+echo '# /dev/sda2: LABEL="5TB-mp4library" UUID="F8ACDEBBACDE741A" TYPE="ntfs" PTTYPE="atari" PARTLABEL="Basic data partition" PARTUUID="6cc8d3fb-6942-4b4b-a7b1-c31d864accef"'
+echo '# /dev/mmcblk0: PTUUID="d9b3f436" PTTYPE="dos"'
+echo '# /dev/sda1: PARTLABEL="Microsoft reserved partition" PARTUUID="62ac9e1a-a82b-4df7-92b9-19ffc689d80b"'
+echo ""
+echo "# Look for the Disk Label ... in the above case the UUID is F8ACDEBBACDE741A "
+echo "# ... copy and paste the UUID string somewhere as we must use it later"
+echo "# Then look for its physical mount point ... in this case it is /dev/sda2"
+echo "# ... copy and paste the string somewhere as we must use it later"
+echo "# With a second USB3 drive, both these would be obvious as well ... also copy and paste these strings somewhere as we must use them later"
+echo ""
+read -p "# Press Enter to see the values on this Pi4 continue."
+echo ""
+set -x
+sudo df
+sudo blkid 
+set +x
+echo ""
+echo "# OK, see and copy the relevant UUID string(s) and physical mount point string(s)."
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+read -p "# Confirm default values for the Pi4 and USB3 drives.  Press Enter to continue."
 echo ""
 echo "# ------------------------------------------------------------------------------------------------------------------------"
 # Ask for and setup default settings and try to remember them. Yes there's a ". " at the start of the line".
@@ -61,24 +110,6 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 #-------------------------------------------------------------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------------------------------------------------------------
-echo ""
-echo "OK, please visually check some settings on the Pi4"
-echo ""
-set -x
-sudo dhclient -r
-sudo dhclient
-sudo ifconfig
-sudo hostname
-sudo hostname --fqdn
-sudo hostname --all-ip-addresses
-set +x
-echo ""
-echo "# Check the fixed IP Address and Host name etc."
-echo "# If not OK, control-C, then redo the pre-Install stuff, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 echo ""
@@ -148,6 +179,117 @@ echo ""
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 echo ""
+echo "# Fix user rights for user pi so that it has no trouble with mounting external drives."
+read -p "# Press Enter to continue."
+echo ""
+set -x
+sudo usermod -a -G plugdev pi
+set +x
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# OK ... PLEASE CONNECT THE EXTERNALLY-POWERED USB3 HARD DRIVE(S) INTO THE Pi4 NOW."
+echo "# OK ... PLEASE CONNECT THE EXTERNALLY-POWERED USB3 HARD DRIVE(S) INTO THE Pi4 NOW."
+echo ""
+echo "# Always use the same USB socket on the Pi."
+echo "# Always use an externally-powered  USB3 drive, so that we have "
+echo "# sufficient power and sufficient data transfer bandwidth."
+echo "# Once it spins up, the USB3 drive(s) will auto-mount with NTFS."
+echo ""
+read -p "# Press Enter to continue, after you have plugged them in and waited 30 seconds for them to auto-mount."
+echo ""
+echo "# Create a mount point folder(s) for the USB3 drive(s), which we'll use in a minute."
+echo "# In this case I want to call it 'mp4library'"
+echo ""
+set -x
+sudo mkdir -p ${server_root_USBmountpoint}
+sudo chmod -c a=rwx -R ${server_root_USBmountpoint}
+if [ "${SecondaryDisk}" = "y" ]; then
+	sudo mkdir -p ${server_root_USBmountpoint2}
+	sudo chmod -c a=rwx -R ${server_root_USBmountpoint2}
+fi
+set +x
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# Just for kicks, see what filesystems are supported by the Pi4"
+echo ""
+set -x
+ls -al "/lib/modules/$(uname -r)/kernel/fs/"
+set +x
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# **********************************************************************************************"
+echo "# **********************************************************************************************"
+echo "# **********************************************************************************************"
+echo "# "
+echo "# * THIS NEXT BIT IS VERY IMPORTANT - PLEASE LOOK CLOSELY AND ACT IF NECESSARY                  "
+echo "# * THIS NEXT BIT IS VERY IMPORTANT - PLEASE LOOK CLOSELY AND ACT IF NECESSARY                  "
+echo "# "
+echo "# Now we add a line to file '/etc/fstab' so that USB3 drives are installed the same every time"
+echo "# (remember, always be consistent and plugin the main USB3 drive into the bottom USB3 socket)"
+echo "# https://wiki.debian.org/fstab"
+echo "# "
+echo "# **********************************************************************************************"
+echo "# **********************************************************************************************"
+echo "# **********************************************************************************************"
+echo ""
+read -p "# Press Enter to continue."
+echo ""
+set -x
+sudo cp -fv "/etc/fstab" "/etc/fstab.old"
+# put a "#" at the start of all lines containing this string: ntfs defaults,auto
+sudo sed -i.bak "/ntfs defaults,auto/s/^/#/" "/etc/fstab"
+#	"/ntfs defaults,auto/" matches a line with "ntfs defaults,auto"
+#	s perform a substitution on the lines matched above (notice no "g" at the end of the "s" due to aforementioned line matching)
+#	The substitution will insert a pound character (#) at the beginning of the line (^)
+#	old subst fails with too many substitutes if server_USB3_DEVICE_UUID2 is blank : sudo sed -i.bak "s/UUID=${server_USB3_DEVICE_UUID}/#UUID=${server_USB3_DEVICE_UUID}/g" "/etc/fstab"
+sudo sed -i.bak "$ a UUID=${server_USB3_DEVICE_UUID} ${server_root_USBmountpoint} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+set +x
+if [ "${SecondaryDisk}" = "y" ]; then
+	set -x
+	sudo sed -i.bak "s/UUID=${server_USB3_DEVICE_UUID2}/#UUID=${server_USB3_DEVICE_UUID2}/g" "/etc/fstab"
+	sudo sed -i.bak "$ a UUID=${server_USB3_DEVICE_UUID2} ${server_root_USBmountpoint2} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+	set +x
+fi
+set +x
+echo ""
+echo "# Please check '/etc/fstab' below NOW ... if it is incorrect then abort this process NOW and fix it manually"
+echo "# Please check '/etc/fstab' below NOW ... if it is incorrect then abort this process NOW and fix it manually"
+echo "# Please check '/etc/fstab' below NOW ... if it is incorrect then abort this process NOW and fix it manually"
+echo ""
+set -x
+sudo diff -U 10 "/etc/fstab.old" "/etc/fstab" 
+set +x
+echo ""
+set -x
+sudo cat "/etc/fstab"
+set +x
+echo ""
+echo "# If this is the first time this script is run please Control-C now and Reboot"
+echo "# If this is the first time this script is run please Control-C now and Reboot"
+echo "# If this is the first time this script is run please Control-C now and Reboot"
+echo "# (So that the disks are mounted with the correct mount points"
+echo "# Then after the Reboot, Re-run this script."
+echo ""
+read -p "# Eithe Control-C and Reboot, or Press Enter to continue" 
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
 echo "# Install a remote-printing feature so we can print from the Pi via the Windows 10 PC (see below)"
 read -p "# Press Enter to continue."
 echo ""
@@ -200,145 +342,9 @@ echo ""
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 echo ""
-echo "# Fix user rights for user pi so that it has no trouble with mounting external drives."
-read -p "# Press Enter to continue."
+echo "# Get ready for IPv4 only, by disabling IPv6"
 echo ""
 set -x
-sudo usermod -a -G plugdev pi
-set +x
-echo "# If that did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------------------------------------------------------------
-echo ""
-echo "# OK ... PLEASE CONNECT THE EXTERNALLY-POWERED USB3 HARD DRIVE(S) INTO THE Pi4 NOW."
-echo "# OK ... PLEASE CONNECT THE EXTERNALLY-POWERED USB3 HARD DRIVE(S) INTO THE Pi4 NOW."
-echo ""
-echo "# Always use the same USB socket on the Pi."
-echo "# Always use an externally-powered  USB3 drive, so that we have "
-echo "# sufficient power and sufficient data transfer bandwidth."
-echo "# Once it spins up, the USB3 drive(s) will auto-mount with NTFS."
-echo ""
-read -p "# Press Enter to continue, after you have plugged them in and waited 30 seconds for them to auto-mount."
-echo ""
-echo "# Create a mount point folder(s) for the USB3 drive(s), which we'll use in a minute."
-echo "# In this case I want to call it 'mp4library'"
-echo ""
-set -x
-sudo mkdir -p ${server_root_USBmountpoint}
-sudo chmod -c a=rwx -R ${server_root_USBmountpoint}
-if [ "${SecondaryDisk}" = "y" ]; then
-	sudo mkdir -p ${server_root_USBmountpoint2}
-	sudo chmod -c a=rwx -R ${server_root_USBmountpoint2}
-fi
-set +x
-echo "# If that did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------------------------------------------------------------
-echo ""
-echo "# Find and note EXACTLY the correct UUID= string and physical mount point string for the USB3 external hard drive(s)"
-echo ""
-echo "# The next commands should yield something a bit like this"
-echo '# /dev/mmcblk0p1: LABEL_FATBOOT="boot" LABEL="boot" UUID="69D5-9B27" TYPE="vfat" PARTUUID="d9b3f436-01"'
-echo '# /dev/mmcblk0p2: LABEL="rootfs" UUID="24eaa08b-10f2-49e0-8283-359f7eb1a0b6" TYPE="ext4" PARTUUID="d9b3f436-02"'
-echo '# /dev/sda2: LABEL="5TB-mp4library" UUID="F8ACDEBBACDE741A" TYPE="ntfs" PTTYPE="atari" PARTLABEL="Basic data partition" PARTUUID="6cc8d3fb-6942-4b4b-a7b1-c31d864accef"'
-echo '# /dev/mmcblk0: PTUUID="d9b3f436" PTTYPE="dos"'
-echo '# /dev/sda1: PARTLABEL="Microsoft reserved partition" PARTUUID="62ac9e1a-a82b-4df7-92b9-19ffc689d80b"'
-echo ""
-echo "# Look for the Disk Label ... in the above case the UUID is F8ACDEBBACDE741A "
-echo "# ... copy and paste the UUID string somewhere as we must use it later"
-echo "# Then look for its physical mount point ... in this case it is /dev/sda2"
-echo "# ... copy and paste the string somewhere as we must use it later"
-echo "# With a second USB3 drive, both these would be obvious as well ... also copy and paste these strings somewhere as we must use them later"
-echo ""
-read -p "# Press Enter to see the values on this Pi4 continue."
-echo ""
-set -x
-sudo df
-sudo blkid 
-set +x
-echo ""
-echo "# OK, see and copy the relevant UUID string(s) and physical mount point string(s)."
-echo "# If that did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------------------------------------------------------------
-echo ""
-echo "# Just for kicks, see what filesystems are supported by the Pi4"
-echo ""
-set -x
-ls -al "/lib/modules/$(uname -r)/kernel/fs/"
-set +x
-echo "# If that did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-echo ""
-echo ""
-echo "**********************************************************************************************"
-echo "**********************************************************************************************"
-echo "**********************************************************************************************"
-echo "**********************************************************************************************"
-echo "**********************************************************************************************"
-echo "* THIS NEXT BIT IS VERY IMPORTANT - LOOK CLOSELY AND ACT IF NECESSARY                         "
-echo "* THIS NEXT BIT IS VERY IMPORTANT - LOOK CLOSELY AND ACT IF NECESSARY                         "
-echo ""
-echo "# Now we add a line to file /etc/fstab so that the external USB3 drive is installed the same every time"
-echo "# (remember, always be consistent and plugin the USB3 drive into the bottom USB3 socket)"
-echo "# https://wiki.debian.org/fstab"
-echo ""
-echo "**********************************************************************************************"
-echo "**********************************************************************************************"
-echo "**********************************************************************************************"
-echo "**********************************************************************************************"
-echo "**********************************************************************************************"
-set -x
-sudo cp -fv "/etc/fstab" "/etc/fstab.old"
-# put a "#" at the start of all lines containing this string: ntfs defaults,auto
-sudo sed -i.bak "/ntfs defaults,auto/s/^/#/" "/etc/fstab"
-#	"/ntfs defaults,auto/" matches a line with "ntfs defaults,auto"
-#	s perform a substitution on the lines matched above (notice no "g" at the end of the "s" due to aforementioned line matching)
-#	The substitution will insert a pound character (#) at the beginning of the line (^)
-#	old subst fails with too many substitutes if server_USB3_DEVICE_UUID2 is blank : sudo sed -i.bak "s/UUID=${server_USB3_DEVICE_UUID}/#UUID=${server_USB3_DEVICE_UUID}/g" "/etc/fstab"
-sudo sed -i.bak "$ a UUID=${server_USB3_DEVICE_UUID} ${server_root_USBmountpoint} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
-set +x
-if [ "${SecondaryDisk}" = "y" ]; then
-	set -x
-	sudo sed -i.bak "s/UUID=${server_USB3_DEVICE_UUID2}/#UUID=${server_USB3_DEVICE_UUID2}/g" "/etc/fstab"
-	sudo sed -i.bak "$ a UUID=${server_USB3_DEVICE_UUID2} ${server_root_USBmountpoint2} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
-	set +x
-fi
-set +x
-echo " We MUST check /etc/fstab NOW ... if it is incorrect then abort this process NOW and fix it manually"
-echo " We MUST check /etc/fstab NOW ... if it is incorrect then abort this process NOW and fix it manually"
-echo " We MUST check /etc/fstab NOW ... if it is incorrect then abort this process NOW and fix it manually"
-echo ""
-set -x
-sudo diff -U 10 "/etc/fstab.old" "/etc/fstab" 
-set +x
-echo ""
-set -x
-sudo cat "/etc/fstab"
-set +x
-echo ""
-##read -p "Press Enter if /etc/fstab is OK, otherwise Control-C now and fix it manually !" 
-
-echo ""
-echo ""
-echo "Get ready for IPv4 only"
-set -x
-# set a new permanent limit with:
 sudo sysctl net.ipv6.conf.all.disable_ipv6=1 
 sudo sysctl -p
 sudo sed -i.bak "s;net.ipv6.conf.all.disable_ipv6;#net.ipv6.conf.all.disable_ipv6;g" "/etc/sysctl.conf"
@@ -346,10 +352,59 @@ echo net.ipv6.conf.all.disable_ipv6=1 | sudo tee -a "/etc/sysctl.conf"
 sudo sysctl -p
 set +x
 echo ""
-
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
 echo ""
-echo "Get ready for minidlna. Increase system max_user_watches to avoid this error:"
-echo "WARNING: Inotify max_user_watches [8192] is low or close to the number of used watches [2] and I do not have permission to increase this limit.  Please do so manually by writing a higher value into /proc/sys/fs/inotify/max_user_watches."
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# Install 'hd-idle' to spinf down disks when nto in use"
+read -p "# Press Enter to continue."
+echo ""
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# Install NFS and create the file shares"
+read -p "# Press Enter to continue."
+echo ""
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# Install SAMBA and create the file shares"
+read -p "# Press Enter to continue."
+echo ""
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# Get ready for minidlna. "
+echo "# Increase system max_user_watches to avoid this error:"
+echo "# WARNING: Inotify max_user_watches [8192] is low or close to the number of used watches [2] and I do not have permission to increase this limit.  Please do so manually by writing a higher value into /proc/sys/fs/inotify/max_user_watches."
 set -x
 # sudo sed -i.bak "s;8182;32768;g" "/proc/sys/fs/inotify/max_user_watches" # this fails with no permissions
 sudo cat /proc/sys/fs/inotify/max_user_watches
@@ -363,28 +418,42 @@ sudo sed -i.bak "s;fs.inotify.max_user_watches=;#fs.inotify.max_user_watches=;g"
 echo fs.inotify.max_user_watches=262144 | sudo tee -a "/etc/sysctl.conf"
 sudo sysctl -p
 set +x
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
 echo ""
-echo ""
-echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
 
-#exit
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# Install miniDLNA and configure it"
+read -p "# Press Enter to continue."
+echo ""
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
 
-echo "# ------------------------------------------------------------------------------------------------------------------------"
-## Build and configure HD-IDLE
-cd ~/Desktop
-. "./setup_0.2_setup_HD-IDLE.sh"
-echo "# ------------------------------------------------------------------------------------------------------------------------"
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# Install proFTPd set server and ocnfigure it"
+read -p "# Press Enter to continue."
+echo ""
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 echo ""
-echo ""
-echo "Remember, to disable WiFi:"
-echo "add this line to '/boot/config.txt' and then reboot for it to take effect"
-echo "dtoverlay=pi3-disable-wifi"
-echo ""
-echo ""
-echo "Please Reboot now for the USB disk naming to take effect, before attempting to run setup_1.0.sh"
-echo "Please Reboot now for the USB disk naming to take effect, before attempting to run setup_1.0.sh"
-echo "Please Reboot now for the USB disk naming to take effect, before attempting to run setup_1.0.sh"
+echo "# Please Reboot the Pi4 now for the updated settings to take effect"
+echo "# Please Reboot the Pi4 now for the updated settings to take effect"
+echo "# Please Reboot the Pi4 now for the updated settings to take effect"
+echo "# Please Reboot the Pi4 now for the updated settings to take effect"
 echo ""
 
 exit

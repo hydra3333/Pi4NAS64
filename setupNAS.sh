@@ -68,10 +68,10 @@ echo ""
 read -p "# Confirm default values for the Pi4 and USB3 drives.  Press Enter to continue."
 echo ""
 # Ask for and setup default settings and try to remember them. Yes there's a ". " at the start of the line".
-s_name=./setupNAS_ask_defaults
-echo . "${s_name}"
+sdname=./setupNAS_ask_defaults.sh
+echo . "${sdname}"
 set -x
-. "${s_name}"
+. "${sdname}"
 set +x
 echo ""
 echo "# If that did not work, control-C then fix any issues, then re-start this script."

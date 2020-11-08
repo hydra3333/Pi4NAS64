@@ -161,7 +161,7 @@ echo ""
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 echo ""
-echo "# Install https for distros although not strictly needed"
+echo "# Install https for distros, although not strictly needed"
 read -p "# Press Enter to continue."
 echo ""
 set -x
@@ -250,16 +250,32 @@ echo '# /dev/sda2: LABEL="5TB-mp4library" UUID="F8ACDEBBACDE741A" TYPE="ntfs" PT
 echo '# /dev/mmcblk0: PTUUID="d9b3f436" PTTYPE="dos"'
 echo '# /dev/sda1: PARTLABEL="Microsoft reserved partition" PARTUUID="62ac9e1a-a82b-4df7-92b9-19ffc689d80b"'
 echo ""
-echo "# Look for the Disk Label ... in the above case the UUID is F8ACDEBBACDE741A ... copy and paste the UUID string somewhere as we must use it later"
-echo "# Then look for its physical mount point ... in this case it is /dev/sda2 ... copy and paste the string somewhere as we must use it later"
+echo "# Look for the Disk Label ... in the above case the UUID is F8ACDEBBACDE741A "
+echo "# ... copy and paste the UUID string somewhere as we must use it later"
+echo "# Then look for its physical mount point ... in this case it is /dev/sda2"
+echo "# ... copy and paste the string somewhere as we must use it later"
 echo "# With a second USB3 drive, both these would be obvious as well ... also copy and paste these strings somewhere as we must use them later"
-read -p "# Press Enter to continue."
+echo ""
+read -p "# Press Enter to see the values on this Pi4 continue."
 echo ""
 set -x
 sudo df
 sudo blkid 
 set +x
 echo ""
+echo "# OK, see and copy the relevant UUID string(s) and physical mount point string(s)."
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+echo ""
+echo "# Just for kicks, see what filesystems are supported by the Pi4"
+echo ""
+set -x
+ls -al "/lib/modules/$(uname -r)/kernel/fs/"
+set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
@@ -267,13 +283,6 @@ echo ""
 
 
 
-echo ""
-echo "# Note line showing the disk with the label we're interested in eg ${server_USB3_DEVICE_NAME} with UUID=${server_USB3_DEVICE_UUID}"
-echo ""
-#echo " for kicks, see what filesystems are supported"
-#set -x
-#ls -al "/lib/modules/$(uname -r)/kernel/fs/"
-#set +x
 
 echo ""
 echo ""

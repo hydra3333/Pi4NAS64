@@ -2,18 +2,18 @@
 # to get rid of MSDOS format do this to this file: sudo sed -i.bak s/\\r//g ./filename
 # or, open in nano, control-o and then then alt-M a few times to toggle msdos format off and then save
 #
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 set -x
 cd ~/Desktop
 set +x
-#-------------------------------------------------------------------------------------------------------------------------------------
 echo ""
 echo "# Have we completed the pre-Install set of instructions per the Readme ?"
 echo "# If not, control-C then do them, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "OK, please visually check some settings on the Pi4"
 echo ""
@@ -31,9 +31,9 @@ echo "# Check the fixed IP Address and Host name etc."
 echo "# If not OK, control-C, then redo the pre-Install stuff, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Find and note EXACTLY the correct UUID= string and physical mount point string for the USB3 external hard drive(s)"
 echo ""
@@ -63,11 +63,11 @@ echo "# OK, see and copy the relevant UUID string(s) and physical mount point st
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-read -p "# Confirm default values for the Pi4 and USB3 drives.  Press Enter to continue."
+read -p "# Now please Confirm default values for the Pi4 and USB3 drives.  Press Enter to continue."
 echo ""
 # Ask for and setup default settings and try to remember them. Yes there's a ". " at the start of the line".
 sdname=./setupNAS_ask_defaults.sh
@@ -79,9 +79,9 @@ echo ""
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Update /etc/apt/sources.list so that all standard repositories for o/s updates are allowed."
 echo ""
@@ -92,9 +92,9 @@ set +x
 echo "# If that did not work, control-C, then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Update the Rasbperry Pi4 Operating System with the latest patches."
 echo ""
@@ -106,10 +106,9 @@ echo ""
 echo "# If that process requested we to Reboot the Pi4, control-C then Reboot then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Add 30 seconds for the USB3 drive to spin up during startup."
 echo ""
@@ -139,9 +138,9 @@ echo ""
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "Now,"
 echo "# Use sudo raspi-config to check and if need be then set these options"
@@ -167,7 +166,7 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "# ------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Re-Update the Rasbperry Pi4 Operating System with the latest patches, given we now have more Sources."
 echo ""
@@ -179,9 +178,9 @@ echo ""
 echo "# If that process requested we to Reboot the Pi4, control-C then Reboot then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Fix user rights for user pi so that it has no trouble with mounting external drives."
 read -p "# Press Enter to continue."
@@ -192,9 +191,9 @@ set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# OK ... PLEASE CONNECT THE EXTERNALLY-POWERED USB3 HARD DRIVE(S) INTO THE Pi4 NOW."
 echo "# OK ... PLEASE CONNECT THE EXTERNALLY-POWERED USB3 HARD DRIVE(S) INTO THE Pi4 NOW."
@@ -220,9 +219,9 @@ set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Just for kicks, see what filesystems are supported by the Pi4"
 echo ""
@@ -232,9 +231,9 @@ set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# **********************************************************************************************"
 echo "# **********************************************************************************************"
@@ -290,9 +289,9 @@ echo "# (So that the disks are mounted with the correct mount points"
 echo "# Then after the Reboot, Re-run this script."
 echo ""
 read -p "# Eithe Control-C and Reboot, or Press Enter to continue" 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Install a remote-printing feature so we can print from the Pi via the Windows 10 PC (see below)"
 read -p "# Press Enter to continue."
@@ -303,9 +302,9 @@ set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Install https for distros, although not strictly needed"
 read -p "# Press Enter to continue."
@@ -316,9 +315,9 @@ set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Install the tool which can be used to turn EOL inside text files from windows type to unix type"
 read -p "# Press Enter to continue."
@@ -329,9 +328,9 @@ set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Install the curl tool to download support files if required"
 read -p "# Press Enter to continue."
@@ -342,9 +341,9 @@ set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Get ready for IPv4 only, by disabling IPv6"
 echo ""
@@ -359,9 +358,9 @@ echo ""
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "################################################################################################################################"
 echo ""
@@ -413,6 +412,8 @@ sudo dpkg -l hd-idle
 cd ~/Desktop
 set +x
 echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
 echo "# Configure hd-idle and dependencies"
 echo ""
 # option -d = debug
@@ -429,6 +430,8 @@ echo ""
 #   #-h Print usage information.
 ## observe output
 ##Use Ctrl+C to stop hd-idle in the terminal
+echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Modify the hd-idle configuration file to enable the service to automatically start and spin down drives"
 echo ""
@@ -450,6 +453,8 @@ sudo cat "/etc/default/hd-idle"
 sudo diff -U 10 "/etc/default/hd-idle.old" "/etc/default/hd-idle"
 set +x
 echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
 echo "# Restart the hd-idle service to engage the updated config"
 echo ""
 set -x
@@ -466,9 +471,9 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "################################################################################################################################"
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "################################################################################################################################"
 echo ""
@@ -478,13 +483,14 @@ read -p "# Press Enter to continue."
 echo ""
 # https://magpi.raspberrypi.org/articles/raspberry-pi-samba-file-server
 # https://pimylifeup.com/raspberry-pi-samba/
-nfs_export_top="/NFS-shares"
-nfs_export_full="${nfs_export_top}/mp4library"
-nfs_export_full2="${nfs_export_top}/mp4library2"
-#
+echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Un-Install any previous NFS install ... no, just stop it instead."
 echo ""
+nfs_export_top="/NFS-shares"
+nfs_export_full="${nfs_export_top}/mp4library"
+nfs_export_full2="${nfs_export_top}/mp4library2"
 set -x
 #sudo umount -f "${nfs_export_full}"
 cd ~/Desktop
@@ -503,6 +509,8 @@ echo ""
 #sudo rm -fvR "${nfs_export_full}"
 #sudo rm -fvR "${nfs_export_top}"
 echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
 echo "# Comment out any prior NFS mount points in '/etc/fstab'"
 echo ""
 set -x
@@ -516,6 +524,8 @@ echo ""
 echo "# If modifying file '/etc/fstab' did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 ##
+echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Install NFS then stop it again immediately."
 echo ""
@@ -555,6 +565,8 @@ echo "# If creating the mount folders did not work, control-C then fix any issue
 read -p "# Otherwise - Press Enter to continue."
 ##
 echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
 echo "# Mount the new shares"
 echo ""
 set -x
@@ -578,6 +590,8 @@ echo "# If Mount the new shares did not work, control-C then fix any issues, the
 read -p "# Otherwise - Press Enter to continue."
 ##
 echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
 echo "# Now add lines to file '/etc/fstab' so that the NFS shares are mounted the same way every time"
 echo ""
 set -x
@@ -598,7 +612,8 @@ set +x
 echo ""
 echo "# If adding the lines to '/etc/fstab' did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
-##
+echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Now add lines to file '/etc/exports' which definine the NFS shares"
 echo ""
@@ -635,7 +650,8 @@ set +x
 echo ""
 echo "# If adding the lines to '/etc/exports' did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
-##
+echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Now modify file '/etc/default/nfs-kernel-server' to change a paramter"
 echo ""
@@ -663,6 +679,8 @@ read -p "# Otherwise - Press Enter to continue."
 #Nobody-User = nobody
 #Nobody-Group = nogroup
 echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
 echo "# Now check file '/etc/idmapd.conf' has the following 3 lines (it should) "
 echo "[Mapping]"
 echo "Nobody-User = nobody"
@@ -674,7 +692,6 @@ set +x
 echo ""
 echo "# If '/etc/idmapd.conf' did no have those 3 lines, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
-##
 echo ""
 echo "# Now export the definitions to make them available"
 echo ""
@@ -688,7 +705,8 @@ set +x
 echo ""
 echo "# If the exportfs did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
-##
+echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Now list the content of the shexport the definitions to make them available"
 echo ""
@@ -703,7 +721,8 @@ set +x
 echo ""
 echo "# If the listing did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
-##
+echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "Now cleanup ..."
 echo ""
@@ -734,9 +753,11 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "################################################################################################################################"
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+
 echo ""
 echo "################################################################################################################################"
 echo ""
@@ -766,7 +787,8 @@ set +x
 echo ""
 echo "# If the Un-Install did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
-##
+echo ""
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Create a SAMBA password."
 echo ""
@@ -780,7 +802,7 @@ echo ""
 echo "# If the SAMBA password creation did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Use a modified SAMBA conf with all of the good stuff"
 echo ""
@@ -852,7 +874,7 @@ echo ""
 echo "# If modifying the SAMBA conf did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Test that the samba config is OK"
 echo "# ignore this: # rlimit_max: increasing rlimit_max (1024) to minimum Windows limit (16384) ..."
@@ -864,7 +886,7 @@ echo ""
 echo "# If testparm did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Restart Samba service"
 echo ""
@@ -878,7 +900,7 @@ echo ""
 echo "# If service start did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# List the new Sanba users (which can have different passwords to the Pi itself)"
 echo ""
@@ -889,7 +911,7 @@ echo ""
 echo "# If service start did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "You can now access the defined shares from a Windows machine"
 echo "or from an app that supports the SMB protocol"
@@ -899,16 +921,16 @@ sudo hostname
 sudo hostname --fqdn
 sudo hostname --all-ip-addresses
 set +x
-##
 echo ""
 echo "# If something did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "################################################################################################################################"
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "################################################################################################################################"
 echo ""
@@ -944,7 +966,7 @@ echo ""
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Un-Install any prior minDLNA"
 echo ""
@@ -963,7 +985,7 @@ echo ""
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Do the minidlna install and the stop the service so we can configure it"
 echo ""
@@ -978,7 +1000,7 @@ echo ""
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Add Groups, then Create a folder for minidlna logs and db - place the folder in the root of the USB3 drive"
 echo ""
@@ -1008,7 +1030,7 @@ echo ""
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Change miniDLNA config settings"
 echo ""
@@ -1034,7 +1056,7 @@ echo ""
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Reconfigure miniDLNA."
 echo "# Also force a re-scan at 4:00 am every night using crontab"
@@ -1112,7 +1134,7 @@ echo ""
 echo "# If the crontab did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Start miniDLNA."
 echo ""
@@ -1148,7 +1170,7 @@ echo ""
 echo "# If the start and curl did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 sudo ls -al "/run/minidlna"
 sudo cat ${log_dir}/minidlna.log
@@ -1167,9 +1189,11 @@ echo "# If something did not work, control-C then fix any issues, then re-start 
 read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "################################################################################################################################"
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
-#-------------------------------------------------------------------------------------------------------------------------------------
+
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+
 echo ""
 echo "################################################################################################################################"
 echo ""
@@ -1193,7 +1217,7 @@ echo ""
 echo "# If something did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-##
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Configure proFTPd"
 echo ""
@@ -1275,7 +1299,7 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "################################################################################################################################"
 echo ""
-#-------------------------------------------------------------------------------------------------------------------------------------
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
 echo ""
 set -x

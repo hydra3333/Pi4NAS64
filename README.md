@@ -195,3 +195,11 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 8. When the process completes, Reboot the Pi4 so that the new settings take effect
 
 ---
+
+## Also see ...
+
+How to setup a Raspberry Pi 4 as a NAS using SAMBA with an external USB3 disk    
+https://www.raspberrypi.org/forums/viewtopic.php?f=91&t=289943    
+
+How to setup a Raspberry Pi 4 as a NAS using SAMBA with an external USB3 disk    
+https://www.raspberrypi.org/forums/viewtopic.php?f=91&t=289943    

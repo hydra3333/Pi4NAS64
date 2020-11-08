@@ -361,7 +361,7 @@ echo ""
 echo ""
 echo "################################################################################################################################"
 echo ""
-echo "# Install 'hd-idle' so that external USB3 disks spin dowwn when idle and not wear out quickly."
+echo "# Install 'hd-idle' so that external USB3 disks spin down when idle and not wear out quickly."
 read -p "# Press Enter to continue."
 echo ""
 echo "# Some WD external USB3 disks won't spin down on idle and HDPARM and SDPARM don't work on them."
@@ -722,6 +722,7 @@ fi
 # do NOT remove it as it may accidentally wipe the mounted drive !!!
 set +x
 #
+echo ""
 echo "# If the cleanup did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
@@ -733,15 +734,173 @@ echo ""
 echo "################################################################################################################################"
 echo ""
 echo "# Install SAMBA and create the file shares"
+echo ""
 read -p "# Press Enter to continue."
 echo ""
-
-
-
-echo "# If that did not work, control-C then fix any issues, then re-start this script."
+echo "# Un-Install any previous SAMBA install ..."
+echo ""
+set -x
+#sudo systemctl stop smbd
+sudo apt-get purge -y --allow-unauthenticated --allow-remove-essential winbind
+sudo apt-get purge -y --allow-unauthenticated --allow-remove-essential samba-common
+sudo apt-get purge -y --allow-unauthenticated --allow-remove-essential samba
+sudo apt autoremove -y
+sudo apt-get check -y samba
+sudo rm -vf "/etc/samba/smb.conf"
+sudo rm -vf "/etc/samba/smb.conf.old"
+sudo rm -vfR "/etc/samba"
+sudo rm -vfR "/var/lib/samba"
+sudo rm -vfR "/usr/share/samba"
+#sudo rm -vf "/etc/rc*.d/*samba" "/etc/init.d/samba"
+sudo apt-get install -y --reinstall --fix-broken --fix-missing --allow-unauthenticated winbind
+sudo apt-get install -y             --fix-broken --fix-missing --allow-unauthenticated samba
+sudo apt-get install -y --reinstall --fix-broken --fix-missing --allow-unauthenticated samba
+set +x
+echo ""
+echo "# If the Un-Install did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+##
+echo ""
+echo "# Create a SAMBA password."
+echo ""
+echo "# Before we start the server, you’ll want to set a Samba password. Enter you pi password."
+echo "# Before we start the server, you’ll want to set a Samba password. Enter you pi password."
+set -x
+sudo smbpasswd -a pi
+sudo smbpasswd -a root
+set +x
+echo ""
+echo "# If the SAMBA password creation did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
+##
+echo ""
+echo "# Use a modified SAMBA conf with all of the good stuff"
+echo ""
+set -x
+cd ~/Desktop
+sudo rm -vf "./smb.conf"
+url="https://raw.githubusercontent.com/hydra3333/Pi4CC/master/setup_support_files/smb.conf"
+curl -4 -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' -H 'Cache-Control: max-age=0' "$url" --retry 50 -L --output "./smb.conf" --fail # -L means "allow redirection" or some odd :|
+sudo cp -fv "./smb.conf"  "./smb.conf.old"
+set +x
+echo "Start Adding stuff to configuration file './smb.conf' ..."
+echo "[${server_alias}]">>"./smb.conf"
+echo "comment=Pi4CC ${server_alias} home">>"./smb.conf"
+echo "#force group = users">>"./smb.conf"
+echo "#guest only = Yes">>"./smb.conf"
+echo "guest ok = Yes">>"./smb.conf"
+echo "public = yes">>"./smb.conf"
+echo "#valid users = @users">>"./smb.conf"
+echo "path = ${server_root_folder}">>"./smb.conf"
+echo "available = yes">>"./smb.conf"
+echo "read only = no">>"./smb.conf"
+echo "browsable = yes">>"./smb.conf"
+echo "writeable = yes">>"./smb.conf"
+echo "#create mask = 0777">>"./smb.conf"
+echo "#directory mask = 0777">>"./smb.conf"
+echo "force create mode = 1777">>"./smb.conf"
+echo "force directory mode = 1777">>"./smb.conf"
+echo "inherit permissions = yes">>"./smb.conf"
+echo "# 2020.08.10">>"./smb.conf"
+echo "allow insecure wide links = yes">>"./smb.conf"
+echo "follow symlinks = yes">>"./smb.conf"
+echo "wide links = yes">>"./smb.conf"
+echo "">>"./smb.conf"
+if [ "${SecondaryDisk}" = "y" ]; then
+	echo "[${server_alias}2]">>"./smb.conf"
+	echo "comment=Pi4CC ${server_alias}2 home">>"./smb.conf"
+	echo "#force group = users">>"./smb.conf"
+	echo "#guest only = Yes">>"./smb.conf"
+	echo "guest ok = Yes">>"./smb.conf"
+	echo "public = yes">>"./smb.conf"
+	echo "#valid users = @users">>"./smb.conf"
+	echo "path = ${server_root_folder2}">>"./smb.conf"
+	echo "available = yes">>"./smb.conf"
+	echo "read only = no">>"./smb.conf"
+	echo "browsable = yes">>"./smb.conf"
+	echo "writeable = yes">>"./smb.conf"
+	echo "#create mask = 0777">>"./smb.conf"
+	echo "#directory mask = 0777">>"./smb.conf"
+	echo "force create mode = 1777">>"./smb.conf"
+	echo "force directory mode = 1777">>"./smb.conf"
+	echo "inherit permissions = yes">>"./smb.conf"
+	echo "# 2020.08.10">>"./smb.conf"
+	echo "allow insecure wide links = yes">>"./smb.conf"
+	echo "follow symlinks = yes">>"./smb.conf"
+	echo "wide links = yes">>"./smb.conf"
+	echo "">>"./smb.conf"
+fi
+echo "Finished Adding stuff to file './smb.conf' ..."
+set -x
+sudo chmod -c a=rwx -R *
+#sudo diff -U 10 "./smb.conf.old" "./smb.conf"
+sudo rm -vf "/etc/samba/smb.conf.old"
+sudo cp -vf "/etc/samba/smb.conf" "/etc/samba/smb.conf.old"
+sudo cp -vf "./smb.conf" "/etc/samba/smb.conf"
+sudo chmod -c a=rwx -R "/etc/samba"
+sudo diff -U 10 "/etc/samba/smb.conf.old" "/etc/samba/smb.conf"
+set +x
+echo ""
+echo "# If modifying the SAMBA conf did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+##
+echo ""
+echo "# Test that the samba config is OK"
+echo "# ignore this: # rlimit_max: increasing rlimit_max (1024) to minimum Windows limit (16384) ..."
+echo ""
+set -x
+sudo testparm
+set +x
+echo ""
+echo "# If testparm did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+##
+echo ""
+echo "# Restart Samba service"
+echo ""
+set -x
+sudo systemctl stop smbd
+sudo systemctl restart smbd
+#sudo service smbd restart
+sleep 10s
+set +x
+echo ""
+echo "# If service start did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+##
+echo ""
+echo "# List the new Sanba users (which can have different passwords to the Pi itself)"
+echo ""
+set -x
+sudo pdbedit -L -v
+set +x
+echo ""
+echo "# If service start did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+##
+echo ""
+echo "You can now access the defined shares from a Windows machine"
+echo "or from an app that supports the SMB protocol"
+echo "eg from Win10 PC in Windows Explorer use the IP address of ${server_name} like ... \\\\${server_ip}\\ "
+set -x
+hostname
+hostname --fqdn
+hostname --all-ip-addresses
+set +x
+##
+echo ""
+echo "# If something did not work, control-C then fix any issues, then re-start this script."
+read -p "# Otherwise - Press Enter to continue."
+echo ""
+echo "################################################################################################################################"
 #-------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 

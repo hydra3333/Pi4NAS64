@@ -17,7 +17,7 @@ Configure a Raspberry Pi4 with attached USB3 drives to create an NAS on our loca
 The newly released "Google ChromeCast with Google TV" devices can connect to the Pi4NAS 
 with apps like `Kodi` and `VLC` in order to play our collections of home media files.    
 
-A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and has decent thoughput to handle multiple streams.
+A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely reliable, and has decent thoughput to handle multiple streams.
 
 "Google ChromeCast with Google TV" : https://store.google.com/au/product/chromecast_google_tv_specs
 

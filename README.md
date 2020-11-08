@@ -10,8 +10,8 @@
 Configure a Raspberry Pi4 with attached USB3 drives to create an NAS on our local home LAN with 
 - "open" rw NFS file shares   
 - "open" rw SAMBA file shares   
-- "open" rw ftp server   
-- a DLNA server   
+- "open" rw ftp server (proftpd)   
+- a DLNA server (miniDLNA)   
 - the `hd-idle` app to spin down drives when not used   
 
 It can be connected to by the newly released "Google ChromeCast with Google TV" devices with 

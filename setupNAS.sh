@@ -288,12 +288,14 @@ echo "# If this is the first time this script is run please Control-C now and Re
 echo "# (So that the disks are mounted with the correct mount points"
 echo "# Then after the Reboot, Re-run this script."
 echo ""
-read -p "# Eithe Control-C and Reboot, or Press Enter to continue" 
+echo "# Either Control-C and Reboot, or Press Enter to continue"
+echo "# Either Control-C and Reboot, or Press Enter to continue"
+read -p "# Either Control-C and Reboot, or Press Enter to continue" 
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Install a remote-printing feature so we can print from the Pi via the Windows 10 PC (see below)"
+echo "# Install a remote-printing feature so we can print from the Pi via the Windows 10 PC. This will take a while."
 read -p "# Press Enter to continue."
 echo ""
 set -x

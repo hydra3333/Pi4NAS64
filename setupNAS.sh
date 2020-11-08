@@ -117,14 +117,14 @@ echo ""
 #sudo sed -i.bak "1 i boot_delay=30" "/boot/config.txt" # doesn't work if the file has no line 1
 set -x
 sudo cp -fv "/boot/config.txt" "/boot/config.txt.old"
-rm -f ./tmp.tmp
+sudo rm -f ./tmp.tmp
 sudo sed -i.bak "/boot_delay/d" "/boot/config.txt"
 echo "boot_delay=30" > ./tmp.tmp
 sudo cat /boot/config.txt >> ./tmp.tmp
 sudo cp -fv ./tmp.tmp /boot/config.txt
-rm -f ./tmp.tmp
+sudo rm -f ./tmp.tmp
 sudo diff -U 10 "/boot/config.txt.old" "/boot/config.txt"
-cat "/boot/config.txt"
+sudo cat "/boot/config.txt"
 set +x
 echo ""
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
@@ -218,7 +218,7 @@ echo ""
 echo "# Just for kicks, see what filesystems are supported by the Pi4"
 echo ""
 set -x
-ls -al "/lib/modules/$(uname -r)/kernel/fs/"
+sudo ls -al "/lib/modules/$(uname -r)/kernel/fs/"
 set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
@@ -393,13 +393,15 @@ echo "# Install hd-idle and dependencies"
 echo ""
 set -x
 sudo apt-get install build-essential fakeroot debhelper -y
+cd ~/Desktop
 wget http://sourceforge.net/projects/hd-idle/files/hd-idle-1.05.tgz
 tar -xvf hd-idle-1.05.tgz
 cd hd-idle
-dpkg-buildpackage -rfakeroot
+sudo dpkg-buildpackage -rfakeroot
 sudo dpkg -i ../hd-idle_*.deb
 cd ..
 sudo dpkg -l hd-idle
+cd ~/Desktop
 set +x
 echo ""
 echo "# Configure hd-idle and dependencies"
@@ -533,8 +535,8 @@ if [ "${SecondaryDisk}" = "y" ]; then
 	sudo chmod -c a=rwx -R "${nfs_export_full2}"
 fi
 # sudo mount -v --bind  "existing-folder-tree" "new-mount-point-folder"
-id -u pi
-id -g pi
+sudo id -u pi
+sudo id -g pi
 # do not umount nfs_export_full as it dismounts the underpinning volume and causes things to crash 
 #sudo umount -f "${nfs_export_full}" 
 #sudo mount -v -a
@@ -549,12 +551,12 @@ echo ""
 set -x
 sudo df -h
 sudo mount -v --bind "${server_root_folder}" "${nfs_export_full}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
-ls -al "${server_root_folder}" 
-ls -al "${nfs_export_full}" 
+sudo ls -al "${server_root_folder}" 
+sudo ls -al "${nfs_export_full}" 
 if [ "${SecondaryDisk}" = "y" ]; then
 	sudo mount -v --bind "${server_root_folder2}" "${nfs_export_full2}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
-	ls -al "${server_root_folder2}" 
-	ls -al "${nfs_export_full2}" 
+	sudo ls -al "${server_root_folder2}" 
+	sudo ls -al "${nfs_export_full2}" 
 fi
 set +x
 echo ""
@@ -639,7 +641,7 @@ echo "Check /etc/default/nfs-kernel-server has parameter:"
 echo 'NEED_SVCGSSD="no"'
 echo ""
 set -x
-cat "/etc/default/nfs-kernel-server"
+sudo cat "/etc/default/nfs-kernel-server"
 set +x
 echo ""
 echo "# If modifying file '/etc/default/nfs-kernel-server' did not work, control-C then fix any issues, then re-start this script."
@@ -658,7 +660,7 @@ echo "Nobody-User = nobody"
 echo "Nobody-Group = nogroup"
 echo ""
 set -x
-cat "/etc/idmapd.conf"
+sudo cat "/etc/idmapd.conf"
 set +x
 echo ""
 echo "# If '/etc/idmapd.conf' did no have those 3 lines, control-C then fix any issues, then re-start this script."
@@ -682,11 +684,11 @@ echo ""
 echo "# Now list the content of the shexport the definitions to make them available"
 echo ""
 set -x
-ls -al "${server_root_folder}" 
-ls -al "${nfs_export_full}" 
+sudo ls -al "${server_root_folder}" 
+sudo ls -al "${nfs_export_full}" 
 if [ "${SecondaryDisk}" = "y" ]; then
-	ls -al "${server_root_folder2}" 
-	ls -al "${nfs_export_full2}" 
+	sudo ls -al "${server_root_folder2}" 
+	sudo ls -al "${nfs_export_full2}" 
 fi
 set +x
 echo ""
@@ -884,9 +886,9 @@ echo "You can now access the defined shares from a Windows machine"
 echo "or from an app that supports the SMB protocol"
 echo "eg from Win10 PC in Windows Explorer use the IP address of ${server_name} like ... \\\\${server_ip}\\ "
 set -x
-hostname
-hostname --fqdn
-hostname --all-ip-addresses
+sudo hostname
+sudo hostname --fqdn
+sudo hostname --all-ip-addresses
 set +x
 ##
 echo ""
@@ -979,18 +981,18 @@ sudo usermod -a -G minidlna root
 sudo mkdir -p "${server_root_USBmountpoint}/minidlna"
 sudo chmod -c a=rwx -R "${server_root_USBmountpoint}/minidlna"
 sudo chown -c -R pi:minidlna "${server_root_USBmountpoint}/minidlna"
-sudo chmod -c a=rwx -R   "/run/minidlna"
-sudo chown -c -R pi:minidlna      "/run/minidlna"
-#sudo chmod -c a=rwx -R   "/run/minidlna/minidlna.pid"
-#sudo chown -c -R pi:minidlna      "/run/minidlna/minidlna.pid"
-ls -al "/run/minidlna"
+sudo chmod -c a=rwx -R "/run/minidlna"
+sudo chown -c -R pi:minidlna "/run/minidlna"
+#sudo chmod -c a=rwx -R "/run/minidlna/minidlna.pid"
+#sudo chown -c -R pi:minidlna "/run/minidlna/minidlna.pid"
+sudo ls -al "/run/minidlna"
 sudo chmod -c a=rwx -R "/etc/minidlna.conf"
 sudo chown -c -R pi:minidlna "/etc/minidlna.conf"
 sudo chmod -c a=rwx -R "/var/cache/minidlna"
 sudo chown -c -R pi:minidlna "/var/cache/minidlna"
 sudo chmod -c a=rwx -R "/var/log/minidlna.log"
 sudo chown -c -R pi:minidlna "/var/log/minidlna.log"
-#cat "/var/log/minidlna.log"
+#sudo cat "/var/log/minidlna.log"
 #sudo rm -vfR "/var/log/minidlna.log"
 set +x
 echo ""
@@ -1041,7 +1043,7 @@ log_file=${log_dir}/minidlna_refresh.log
 main_log_dir=${log_dir}/minidlna.log
 set -x
 sudo rm -vf "${log_file}"
-touch "${log_file}"
+sudo touch "${log_file}"
 sudo rm -vf "${sh_file}"
 set +x
 echo "#!/bin/bash" >> "${sh_file}"
@@ -1088,14 +1090,14 @@ echo ""
 # https://stackoverflow.com/questions/610839/how-can-i-programmatically-create-a-new-cron-job
 # <minute> <hour> <day> <month> <dow> <tags and command>
 set -x
-crontab -l # before
+sudo crontab -l # before
 set +x
 echo ""
 ( crontab -l ; echo "0 4 * * * ${sh_file} 2>&1 >> ${log_file}" ) 2>&1 | sed "s/no crontab for $(whoami)//g" | sort - | uniq - | crontab -
 echo ""
 set -x
-crontab -l # after
-grep CRON /var/log/syslog
+sudo crontab -l # after
+sudo grep CRON /var/log/syslog
 set +x
 echo ""
 echo "# If the crontab did not work, control-C then fix any issues, then re-start this script."
@@ -1105,7 +1107,7 @@ echo ""
 echo ""
 echo "# Start miniDLNA."
 echo ""
-ls -al "/run/minidlna"
+sudo ls -al "/run/minidlna"
 sudo systemctl start minidlna
 #sudo service minidlna start
 sleep 10s
@@ -1139,17 +1141,17 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 ##
 echo ""
-ls -al "/run/minidlna"
-cat ${log_dir}/minidlna.log
-cat "/var/log/minidlna.log"
+sudo ls -al "/run/minidlna"
+sudo cat ${log_dir}/minidlna.log
+sudo cat "/var/log/minidlna.log"
 echo ""
 echo "# Force a re-load of miniDLNA to ensure it starts re-looking for new files."
 echo ""
 sudo systemctl reload-or-restart minidlna
 #sudo service minidlna force-reload # same as systemctl reload-or-restart
 sleep 10s
-cat ${log_dir}/minidlna.log
-cat "/var/log/minidlna.log"
+sudo cat ${log_dir}/minidlna.log
+sudo cat "/var/log/minidlna.log"
 set +x
 echo ""
 echo "# If something did not work, control-C then fix any issues, then re-start this script."
@@ -1243,11 +1245,11 @@ sudo sed -i "/Include \/etc\/proftpd\/conf.d\//d" "./tmp.tmp"
 # Include other custom configuration files
 #Include /etc/proftpd/conf.d/
 #EOF
-#cat "./tmp.tmp"
+#sudo cat "./tmp.tmp"
 #
 sudo cp -fv "./tmp.tmp" "/etc/proftpd/proftpd.conf"
-rm -f "./tmp.tmp"
-ls -al "/etc/proftpd/proftpd.conf.old" "/etc/proftpd/proftpd.conf"
+sudo rm -f "./tmp.tmp"
+sudo ls -al "/etc/proftpd/proftpd.conf.old" "/etc/proftpd/proftpd.conf"
 sudo diff -U 10 "/etc/proftpd/proftpd.conf.old" "/etc/proftpd/proftpd.conf"
 # re-enable server
 sudo kill -TERM `cat /run/proftpd.pid`
@@ -1266,6 +1268,12 @@ echo "##########################################################################
 echo ""
 #-------------------------------------------------------------------------------------------------------------------------------------
 
+echo ""
+set -x
+cd ~/Desktop
+sudo chmod -c a=rwx -R *
+set +x
+#
 echo ""
 echo "# Please Reboot the Pi4 now for the updated settings to take effect"
 echo "# Please Reboot the Pi4 now for the updated settings to take effect"

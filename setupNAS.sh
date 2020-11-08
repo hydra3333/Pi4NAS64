@@ -20,6 +20,7 @@ echo ""
 set -x
 sudo dhclient -r
 sudo dhclient
+sudo dhclient -4
 sudo ifconfig
 sudo hostname
 sudo hostname --fqdn

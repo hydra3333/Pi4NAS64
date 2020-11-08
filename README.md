@@ -14,8 +14,8 @@ Configure a Raspberry Pi4 with attached USB3 drives to create an NAS on our loca
 - a DLNA server (`miniDLNA`)   
 - the `hd-idle` app to spin down drives when not used   
 
-The newly released "Google ChromeCast with Google TV" devices can connect to the Pi4NAS with 
-apps `Kodi` and `VLC` in order to play our collections of home media files.    
+The newly released "Google ChromeCast with Google TV" devices can connect to the Pi4NAS 
+with apps like `Kodi` and `VLC` in order to play our collections of home media files.    
 
 A Raspbetty Pi 4 is comparatively cheap, very low power, extremely reliable, and has decent thoughput to handle multiple streams.
 

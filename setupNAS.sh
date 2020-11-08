@@ -169,7 +169,7 @@ echo "# ------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 echo ""
-echo "# Re-Update the Rasbperry Pi4 Operating System with the latest patches."
+echo "# Re-Update the Rasbperry Pi4 Operating System with the latest patches, given we now have more Sources."
 echo ""
 set -x
 sudo apt update -y

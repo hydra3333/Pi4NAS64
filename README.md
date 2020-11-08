@@ -198,8 +198,8 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 ## Also see ...
 
-How to setup a Raspberry Pi 4 as a NAS using SAMBA with an external USB3 disk    
-https://www.raspberrypi.org/forums/viewtopic.php?f=91&t=289943    
+How to setup a Raspberry Pi 4 as a NAS using NFS with an external USB3 disk    
+https://www.raspberrypi.org/forums/viewtopic.php?f=91&t=289118&p=1751528#p1751528    
 
 How to setup a Raspberry Pi 4 as a NAS using SAMBA with an external USB3 disk    
 https://www.raspberrypi.org/forums/viewtopic.php?f=91&t=289943    

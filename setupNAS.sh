@@ -810,13 +810,13 @@ echo ""
 set -x
 cd ~/Desktop
 sudo rm -vf "./smb.conf"
-url="https://raw.githubusercontent.com/hydra3333/Pi4CC/master/setup_support_files/smb.conf"
+url="https://raw.githubusercontent.com/hydra3333/Pi4NAS/master/smb.conf"
 curl -4 -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' -H 'Cache-Control: max-age=0' "$url" --retry 50 -L --output "./smb.conf" --fail # -L means "allow redirection" or some odd :|
 sudo cp -fv "./smb.conf"  "./smb.conf.old"
 set +x
 echo "Start Adding stuff to configuration file './smb.conf' ..."
 echo "[${server_alias}]">>"./smb.conf"
-echo "comment=Pi4CC ${server_alias} home">>"./smb.conf"
+echo "comment=${server_name} ${server_alias} home">>"./smb.conf"
 echo "#force group = users">>"./smb.conf"
 echo "#guest only = Yes">>"./smb.conf"
 echo "guest ok = Yes">>"./smb.conf"
@@ -839,7 +839,7 @@ echo "wide links = yes">>"./smb.conf"
 echo "">>"./smb.conf"
 if [ "${SecondaryDisk}" = "y" ]; then
 	echo "[${server_alias}2]">>"./smb.conf"
-	echo "comment=Pi4CC ${server_alias}2 home">>"./smb.conf"
+	echo "comment=${server_name} ${server_alias}2 home">>"./smb.conf"
 	echo "#force group = users">>"./smb.conf"
 	echo "#guest only = Yes">>"./smb.conf"
 	echo "guest ok = Yes">>"./smb.conf"
@@ -1042,6 +1042,9 @@ sh_dir=${server_root_USBmountpoint}/minidlna
 sudo cp -fv "/etc/minidlna.conf" "/etc/minidlna.conf.old"
 sudo sed -i "s;#user=minidlna;#user=minidlna\n#user=pi;g" "/etc/minidlna.conf"
 sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\nmedia_dir=PV,${server_root_folder};g" "/etc/minidlna.conf"
+if [ "${SecondaryDisk}" = "y" ]; then
+	sudo sed -i "s;media_dir=PV,${server_root_folder};media_dir=PV,${server_root_folder}\nmedia_dir=PV,${server_root_folder2};g" "/etc/minidlna.conf"
+fi
 sudo sed -i "s;#db_dir=/var/cache/minidlna;#db_dir=/var/cache/minidlna\ndb_dir=${db_dir};g" "/etc/minidlna.conf"
 sudo sed -i "s;#log_dir=/var/log;#log_dir=/var/log\nlog_dir=${log_dir};g" "/etc/minidlna.conf"
 sudo sed -i "s;#friendly_name=;#friendly_name=\nfriendly_name=${server_name}-minidlna;g" "/etc/minidlna.conf"
@@ -1141,10 +1144,12 @@ echo "#-------------------------------------------------------------------------
 echo ""
 echo "# Start miniDLNA."
 echo ""
+set -x
 sudo ls -al "/run/minidlna"
 sudo systemctl start minidlna
 #sudo service minidlna start
 sleep 10s
+set +x
 echo "#"
 echo "# The minidlna service comes with a small webinterface. "
 echo "# This webinterface is just for informational purposes. "

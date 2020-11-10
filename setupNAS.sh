@@ -376,8 +376,9 @@ echo ""
 echo "# **********************************************************************************************"
 echo "# **********************************************************************************************"
 echo "# **********************************************************************************************"
-echo "# * THIS NEXT BIT IS VERY IMPORTANT - LOOK CLOSELY AND ACT IF NECESSARY                        "
-echo "# * THIS NEXT BIT IS VERY IMPORTANT - LOOK CLOSELY AND ACT IF NECESSARY                        "
+echo "# *                                                                                             "
+echo "# * THIS NEXT BIT IS VERY IMPORTANT IN SETTING UP HD-IDLE - LOOK CLOSELY AND ACT IF NECESSARY   "
+echo "# * THIS NEXT BIT IS VERY IMPORTANT IN SETTING UP HD-IDLE - LOOK CLOSELY AND ACT IF NECESSARY   "
 echo "# *                                                                                             "
 echo "# **********************************************************************************************"
 echo "# **********************************************************************************************"
@@ -397,20 +398,37 @@ set -x
 sudo dpkg -l hd-idle
 sudo apt purge -y hd-idle
 set +x
+
+#
+#### OLD hd-idle install from sourceforge ... hasn't been updated ina long while
+###echo "# Install hd-idle and dependencies"
+###echo ""
+###set -x
+###sudo apt-get install build-essential fakeroot debhelper -y
+###cd ~/Desktop
+###wget http://sourceforge.net/projects/hd-idle/files/hd-idle-1.05.tgz
+###tar -xvf hd-idle-1.05.tgz
+###cd hd-idle
+###sudo dpkg-buildpackage -rfakeroot
+###sudo dpkg -i ../hd-idle_*.deb
+###cd ..
+###sudo dpkg -l hd-idle
+###cd ~/Desktop
+###set +x
+###echo ""
+#
 echo ""
 echo "# Install hd-idle and dependencies"
 echo ""
 set -x
-sudo apt-get install build-essential fakeroot debhelper -y
 cd ~/Desktop
-wget http://sourceforge.net/projects/hd-idle/files/hd-idle-1.05.tgz
-tar -xvf hd-idle-1.05.tgz
-cd hd-idle
-sudo dpkg-buildpackage -rfakeroot
-sudo dpkg -i ../hd-idle_*.deb
-cd ..
+hdidle_ver=1.11
+hdidle_deb=hd-idle_${hdidle_ver}_armhf.deb
+hdidle_url=https://github.com/adelolmo/hd-idle/releases/download/v${hdidle_ver}/${hdidle_deb}
+sudo rm -vf "./${hdidle_deb}"
+wget ${hdidle_url}
+sudo dpkg -i "./${hdidle_deb}"
 sudo dpkg -l hd-idle
-cd ~/Desktop
 set +x
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"

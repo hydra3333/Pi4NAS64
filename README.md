@@ -162,7 +162,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      ```
      cd ~/Desktop
      chmod +777 *.sh
-     ./setupNAS.sh
+     ./setupNAS.sh 2>&1 | tee setupNAS.log
      ```
 5. Answer the prompts (it will save most of these answers for use later)
    - `This server_name` it's best to choose the Pi4's hostname of the Pi4 here (we use Pi4NAS) - it will be used as the network service name by `Kodi` and `VLC` etc

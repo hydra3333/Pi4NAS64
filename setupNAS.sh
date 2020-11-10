@@ -1198,17 +1198,20 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
+set -x
 sudo ls -al "/run/minidlna"
 sudo cat ${log_dir}/minidlna.log
-sudo cat "/var/log/minidlna.log"
+#sudo cat "/var/log/minidlna.log"
+set +x
 echo ""
 echo "# Force a re-load of miniDLNA to ensure it starts re-looking for new files."
 echo ""
+set -x
 sudo systemctl reload-or-restart minidlna
 #sudo service minidlna force-reload # same as systemctl reload-or-restart
 sleep 10s
 sudo cat ${log_dir}/minidlna.log
-sudo cat "/var/log/minidlna.log"
+#sudo cat "/var/log/minidlna.log"
 set +x
 echo ""
 echo "# If something did not work, control-C then fix any issues, then re-start this script."

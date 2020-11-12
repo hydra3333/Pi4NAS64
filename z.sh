@@ -11,9 +11,6 @@ echo ""
 echo "OK, please visually check some settings on the Pi4"
 echo ""
 set -x
-sudo dhclient -r
-sudo dhclient
-sudo dhclient -4
 sudo ifconfig
 sudo hostname
 sudo hostname --fqdn
@@ -31,11 +28,19 @@ echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "################################################################################################################################"
+nfs_export_top="/NFS-shares"
+nfs_export_full="${nfs_export_top}/mp4library"
+nfs_export_full2="${nfs_export_top}/mp4library2"
 
-echo ""
 echo ""
 set -x
 cd ~/Desktop
+sudo systemctl stop nfs-kernel-server
+sleep 3s
+sudo systemctl restart nfs-kernel-server
+sleep 3s
+set +x
+#
 f_ls_nsf=~/Desktop/ls-nsf.sh
 sudo rm -vf "${f_ls_nsf}"
 echo "#!/bin/bash:" >>"${f_ls_nsf}"

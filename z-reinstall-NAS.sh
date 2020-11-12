@@ -260,7 +260,7 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Now list the content of the shexport the definitions to make them available"
+echo "# Now list the content of the fsexport the definitions to make them available"
 echo ""
 set -x
 sudo ls -al "${server_root_folder}" 

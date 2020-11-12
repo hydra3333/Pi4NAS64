@@ -27,10 +27,6 @@ sudo hostname --fqdn
 sudo hostname --all-ip-addresses
 set +x
 
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-echo ""
-read -p "# Now please Confirm default values for the Pi4 and USB3 drives.  Press Enter to continue."
-echo ""
 # Ask for and setup default settings and try to remember them. Yes there's a ". " at the start of the line".
 sdname=./setupNAS_ask_defaults.sh
 echo . "${sdname}"
@@ -64,6 +60,8 @@ echo sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
 #sudo ls -al "/tmp-NFS-mountpoint"
 sudo mount -v -t nfs ${server_ip}:/${nfs_export_full} "/tmp-NFS-mountpoint"
 echo sudo mount -v -t nfs ${server_ip}:/${nfs_export_full} "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
+sleep 10
+echo sleep 10>>"${f_ls_nsf}"
 sudo ls -al "/tmp-NFS-mountpoint/"
 echo # list files in the main share ">>"${f_ls_nsf}"
 echo sudo ls -al "/tmp-NFS-mountpoint/">>"${f_ls_nsf}"
@@ -79,6 +77,8 @@ if [ "${SecondaryDisk}" = "y" ]; then
 	#sudo ls -al "/tmp-NFS-mountpoint2"
 	sudo mount -v -t nfs ${server_ip}:/${nfs_export_full2} "/tmp-NFS-mountpoint2"
 	echo sudo mount -v -t nfs ${server_ip}:/${nfs_export_full2} "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
+	sleep 10
+	echo sleep 10>>"${f_ls_nsf}"
 	sudo ls -al "/tmp-NFS-mountpoint2/"
 	echo # list files in the secondary share ">>"${f_ls_nsf}"
 	echo sudo ls -al "/tmp-NFS-mountpoint2/">>"${f_ls_nsf}"

@@ -32,6 +32,7 @@ nfs_export_top="/NFS-shares"
 nfs_export_full="${nfs_export_top}/mp4library"
 nfs_export_full2="${nfs_export_top}/mp4library2"
 
+
 echo ""
 set -x
 cd ~/Desktop
@@ -39,8 +40,27 @@ sudo systemctl stop nfs-kernel-server
 sleep 3s
 sudo systemctl restart nfs-kernel-server
 sleep 3s
-set +x
 #
+sudo umount -f "/tmp-NFS-mountpoint"
+sudo mkdir -p "/tmp-NFS-mountpoint"
+sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint"
+#sudo ls -al "/tmp-NFS-mountpoint"
+sudo mount -v -t nfs ${server_ip}:/${nfs_export_full} "/tmp-NFS-mountpoint"
+sleep 10
+sudo ls -al "/tmp-NFS-mountpoint/"
+sudo umount -f "/tmp-NFS-mountpoint"
+if [ "${SecondaryDisk}" = "y" ]; then
+	sudo umount -f "/tmp-NFS-mountpoint2"
+	sudo mkdir -p "/tmp-NFS-mountpoint2"
+	sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint2"
+	#sudo ls -al "/tmp-NFS-mountpoint2"
+	sudo mount -v -t nfs ${server_ip}:/${nfs_export_full2} "/tmp-NFS-mountpoint2"
+	sleep 10
+	sudo ls -al "/tmp-NFS-mountpoint2/"
+	sudo umount -f "/tmp-NFS-mountpoint2"
+fi
+set +x
+
 f_ls_nsf=~/Desktop/ls-nsf.sh
 sudo rm -vf "${f_ls_nsf}"
 echo "#!/bin/bash:" >>"${f_ls_nsf}"
@@ -49,43 +69,31 @@ echo "# or, open in nano, control-o and then then alt-M a few times to toggle ms
 echo "#" >>"${f_ls_nsf}"
 echo "# Connect to and list the content of local NFS file shares " >>"${f_ls_nsf}"
 echo "#" >>"${f_ls_nsf}"
-sudo umount -f "/tmp-NFS-mountpoint"
+echo "set -x" >>"${f_ls_nsf}"
 echo sudo umount -f "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
-sudo mkdir -p "/tmp-NFS-mountpoint"
 echo sudo mkdir -p "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
-sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint"
 echo sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
 #sudo ls -al "/tmp-NFS-mountpoint"
-sudo mount -v -t nfs ${server_ip}:/${nfs_export_full} "/tmp-NFS-mountpoint"
 echo sudo mount -v -t nfs ${server_ip}:/${nfs_export_full} "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
-sleep 10
 echo sleep 10>>"${f_ls_nsf}"
-sudo ls -al "/tmp-NFS-mountpoint/"
 echo # list files in the main share ">>"${f_ls_nsf}"
 echo sudo ls -al "/tmp-NFS-mountpoint/">>"${f_ls_nsf}"
-sudo umount -f "/tmp-NFS-mountpoint"
 echo sudo umount -f "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
 if [ "${SecondaryDisk}" = "y" ]; then
-	sudo umount -f "/tmp-NFS-mountpoint2"
 	echo sudo umount -f "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
-	sudo mkdir -p "/tmp-NFS-mountpoint2"
 	echo sudo mkdir -p "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
-	sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint2"
 	echo sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
 	#sudo ls -al "/tmp-NFS-mountpoint2"
-	sudo mount -v -t nfs ${server_ip}:/${nfs_export_full2} "/tmp-NFS-mountpoint2"
 	echo sudo mount -v -t nfs ${server_ip}:/${nfs_export_full2} "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
-	sleep 10
 	echo sleep 10>>"${f_ls_nsf}"
-	sudo ls -al "/tmp-NFS-mountpoint2/"
 	echo # list files in the secondary share ">>"${f_ls_nsf}"
 	echo sudo ls -al "/tmp-NFS-mountpoint2/">>"${f_ls_nsf}"
-	sudo umount -f "/tmp-NFS-mountpoint2"
 	echo sudo umount -f "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
 fi
+echo "set +x" >>"${f_ls_nsf}"
+
 #sudo rm -vf "/tmp-NFS-mountpoint"
 # do NOT remove it as it may accidentally wipe the mounted drive !!!
-set +x
 #
 echo ""
 echo "Now you can run this .sh file :-"

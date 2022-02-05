@@ -3,11 +3,15 @@
 # or, open in nano, control-o and then then alt-M a few times to toggle msdos format off and then save
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo "# THis is now the x64 version for Raspberry Pi OS x64   - and ONLY the x64 version"
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 set -x
 cd ~/Desktop
 set +x
 echo ""
-echo "# Have we completed the pre-Install set of instructions per the Readme ?"
+echo "# Have we completed the pre-Install set of instructions per the Readme on this GIT ?"
 echo "# If not, control-C then do them, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
@@ -87,7 +91,9 @@ echo "# Update /etc/apt/sources.list so that all standard repositories for o/s u
 echo ""
 set -x
 # allow sources
-sudo sed -i.bak "s/# deb/deb/g" "/etc/apt/sources.list"
+# x64 update:
+#sudo sed -i.bak "s/# deb/deb/g" "/etc/apt/sources.list"
+sudo sed -i.bak "s/#deb/deb/g" "/etc/apt/sources.list"
 set +x
 echo "# If that did not work, control-C, then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
@@ -144,18 +150,15 @@ echo "#-------------------------------------------------------------------------
 echo ""
 echo "Now,"
 echo "# Use sudo raspi-config to check and if need be then set these options"
-echo "# In Advanced Options"
-echo "#   A5 Resolution "
-echo "#      Choose 1920x1080 (and NOT 'default') "
+echo "# In Display Options"
+echo "#   D5 VNC Resolution "
+echo "#      Choose 1920x1080 "
 echo "#      which magically enables VNC server to run even when a screen is not connected to the HDMI port"
-echo "#   AA Video Output Video output options for Pi 4 "
-echo "#      Enable 4Kp60 HDMI"
-echo "#      Enable 4Kp60 resolution on HDMI0 (disables analog)"
 echo "# Then check/change other settings"
 echo "#"
 echo "# (use <tab> and<enter> to move around raspi-config and choose menu items)"
 echo "#"
-read -p "# Press Enter to start sudo raspi-config to do that.  (exiting raspi-config will return here)"
+read -p "# Press Enter to start sudo raspi-config to do the above.  (exiting raspi-config will return here)"
 echo ""
 set -x
 sudo raspi-config
@@ -182,7 +185,7 @@ echo "#-------------------------------------------------------------------------
 
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Fix user rights for user pi so that it has no trouble with mounting external drives."
+echo "# Add 'plugdev' right to user pi so that it has no trouble with mounting external drives."
 echo ""
 set -x
 sudo usermod -a -G plugdev pi
@@ -222,7 +225,7 @@ echo "#-------------------------------------------------------------------------
 
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Just for kicks, see what filesystems are supported by the Pi4"
+echo "# Just for kicks, see what filesystems are supported by the Pi4 (NTFS should be listed)"
 echo ""
 set -x
 sudo ls -al "/lib/modules/$(uname -r)/kernel/fs/"
@@ -242,12 +245,11 @@ echo "# * THIS NEXT BIT IS VERY IMPORTANT - PLEASE LOOK CLOSELY AND ACT IF NECES
 echo "# * THIS NEXT BIT IS VERY IMPORTANT - PLEASE LOOK CLOSELY AND ACT IF NECESSARY                  "
 echo "# "
 echo "# Now we add a line to file '/etc/fstab' so that USB3 drives are installed the same every time"
-echo "# (remember, always be consistent and plugin the main USB3 drive into the bottom USB3 socket)"
+echo "# Remember, always be consistent and plugin "
+echo "#    1. the main      USB3 drive into the bottom USB3 socket"
+echo "#    2. the secondary USB3 drive into the top    USB3 socket (if we have a secondary drive)"
 echo "# https://wiki.debian.org/fstab"
 echo "# "
-echo "# **********************************************************************************************"
-echo "# **********************************************************************************************"
-echo "# **********************************************************************************************"
 echo ""
 read -p "# Press Enter to continue."
 echo ""
@@ -337,7 +339,8 @@ echo "# Install the curl tool to download support files if required"
 read -p "# Press Enter to continue."
 echo ""
 set -x
-sudo apt install -y curl wget
+sudo apt install -y curl
+sudo apt install -y wget
 set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
@@ -383,22 +386,39 @@ echo "# *                                                                       
 echo "# **********************************************************************************************"
 echo "# **********************************************************************************************"
 echo "# **********************************************************************************************"
+echo "# MAIN USB3 DISK"
 echo "#     server_USB3_DISK_NAME=${server_USB3_DISK_NAME}"
 echo "#   server_USB3_DEVICE_NAME=${server_USB3_DEVICE_NAME}"
 echo "#   server_USB3_DEVICE_UUID=${server_USB3_DEVICE_UUID}"
+if [ "${SecondaryDisk}" = "y" ]; then
+	echo "# SECONDARY USB3 DISK"
+	echo "#    server_USB3_DISK_NAME2=${server_USB3_DISK_NAME2}"
+	echo "#  server_USB3_DEVICE_NAME2=${server_USB3_DEVICE_NAME2}"
+	echo "#  server_USB3_DEVICE_UUID2=${server_USB3_DEVICE_UUID2}"
+fi
+
+echo "# MAIN USB3 DISK"
 set -x
 sudo blkid ${server_USB3_DEVICE_NAME}
 sudo df ${server_USB3_DEVICE_NAME}
 sudo lsblk ${server_USB3_DEVICE_NAME}
 set +x
+if [ "${SecondaryDisk}" = "y" ]; then
+	echo "# SECONDARY USB3 DISK"
+	set -x
+	sudo blkid ${server_USB3_DEVICE_NAME2}
+	sudo df ${server_USB3_DEVICE_NAME2}
+	sudo lsblk ${server_USB3_DEVICE_NAME2}
+	set +x
+fi
 echo ""
 echo "# List and Remove any prior hd-idle package"
 echo ""
 set -x
 sudo dpkg -l hd-idle
+sudo dpkg -P hd-idle
 sudo apt purge -y hd-idle
 set +x
-
 #
 #### OLD hd-idle install from sourceforge ... hasn't been updated ina long while
 ###echo "# Install hd-idle and dependencies"
@@ -418,17 +438,23 @@ set +x
 ###echo ""
 #
 echo ""
-echo "# Install hd-idle and dependencies"
+echo "# Install the more up-to-date release of 'adelolmo' version of hd-idle"
 echo ""
 set -x
 cd ~/Desktop
-hdidle_ver=1.11
-hdidle_deb=hd-idle_${hdidle_ver}_armhf.deb
+mkdir -pv hd-idle
+cd hd-idle
+# eg https://github.com/adelolmo/hd-idle/releases/download/v1.16/hd-idle_1.16_arm64.deb
+hdidle_ver=1.16
+# x64 update:
+#hdidle_deb=hd-idle_${hdidle_ver}_armhf.deb
+hdidle_deb=hd-idle_${hdidle_ver}_arm64.deb
 hdidle_url=https://github.com/adelolmo/hd-idle/releases/download/v${hdidle_ver}/${hdidle_deb}
 sudo rm -vf "./${hdidle_deb}"
 wget ${hdidle_url}
 sudo dpkg -i "./${hdidle_deb}"
 sudo dpkg -l hd-idle
+cd ~/Desktop
 set +x
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
@@ -455,6 +481,8 @@ echo ""
 echo "# Modify the hd-idle configuration file to enable the service to automatically start and spin down drives"
 echo ""
 set -x
+# default timeout 300s = 5 mins
+# sda     timeout 900s = 15 mins
 the_default_timeout=300
 the_sda_timeout=900
 set +x
@@ -470,15 +498,29 @@ if [ "${SecondaryDisk}" = "y" ]; then
 fi
 sudo cat "/etc/default/hd-idle"
 sudo diff -U 10 "/etc/default/hd-idle.old" "/etc/default/hd-idle"
+# start and enable start at system boot, per instructions https://github.com/adelolmo/hd-idle/
+sudo systemctl stop hd-idle
+sleep 1s
+sudo systemctl reload hd-idle
+sleep 1s
+sudo systemctl restart hd-idle
+sleep 1s
+sudo systemctl enable hd-idle
+sleep 5s
 set +x
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Restart the hd-idle service to engage the updated config"
+echo "# Restart the hd-idle service to doubly ensure use of the updated config"
+echo ""
+echo "NOTE: hd-idle log file in '/var/log/hd-idle.log'"
 echo ""
 set -x
+sudo systemctl stop hd-idle
+sleep 1s
+sudo systemctl reload hd-idle
+sleep 1s
 sudo systemctl restart hd-idle
-#sudo service hd-idle restart
 sleep 5s
 sudo cat /var/log/hd-idle.log
 set +x

@@ -1,4 +1,6 @@
 # Pi4NAS for x64    
+## update: for Raspberry Pi OS x64 ONLY    
+
 ### a Raspberry Pi4 NAS for use by "Google ChromeCast with Google TV" devices   
 
 ---

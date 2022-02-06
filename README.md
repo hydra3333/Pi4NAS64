@@ -134,10 +134,11 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
          - ```L1 Locale``` language and charater set ```en_AU.UTF-8 UTF-8``` and confirm on next screen as ```en_AU.UTF-8 UTF-8```   
          - ```L2 Timzone``` check/reset to ```Australia``` and ```Adelaide```   
          - ```L4 WLAN``` check/reset to ```AU Australia```   
-         - ```
-         - ```
-         - ```
-         - ```
+      - Under ```6 Advanced Options``` choose   
+         - ```A1 Expand Filesystem``` say ```yes```   
+         - ```A4 Network Interface Names``` say ```yes```   
+         - ```A6 Boot Order``` choose ```B1 SD Card```   
+         - ```A7 Boot Loader Version``` as ```latest```   
          - ```
          - ```
          - ```

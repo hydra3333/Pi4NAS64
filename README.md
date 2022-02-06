@@ -67,7 +67,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 ---
 
-## Pre-Installaton stuff which **must** be setup first    
+## Pre-Installaton stuff which **must** be correctly setup first    
 
 1. Ensure our USB3 drives are *not* yet plugged into the Pi4   
 
@@ -115,7 +115,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
             - ```WiFi Country``` ```WiFi Country Code```=```Au Australia```   
          - Click ```OK```, then for ```Would you like to reboot now ?``` choose ```Yes```   
          - If it does not ask to reboot, then use the Pi gui main menu, choose ```Logout``` and then ```Reboot```   
-   - AFTER REBOOTING and auto-logging into the gui, check/configure the rest of the options.      
+   - AFTER REBOOTING and auto-logging into the gui, check/configure the rest of the options.   
       - start a Terminal to do ```sudo raspi-config``` and see a menu box appear   
       - Under ```1 System Options``` choose
          - ```S4 Hostname``` check/reset to ```PI4NAS64```   
@@ -139,51 +139,28 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
          - ```A4 Network Interface Names``` say ```yes```   
          - ```A6 Boot Order``` choose ```B1 SD Card```   
          - ```A7 Boot Loader Version``` as ```latest```   
-         - ```
-         - ```
-         - ```
-         - ```
-         - ```
-         - ```
-         - ```
-         - ```
-         - ```
-         - ```
-         - ```
-         - ```
-         - ```
+      - Now ```Finish```
+         - If it does not ask to reboot, then use the Pi gui main menu, choose ```Logout``` and then ```Reboot```   
+   - AFTER REBOOTING and auto-logging into the gui, check/configure the software library options.   
+      - start a Terminal to do this to ensure all library sources become available   
+         - ```sudo sed -i.bak "s/#deb/deb/g" "/etc/apt/sources.list"```   
+      - then do   
+         - ```sudo apt -y update```   
+         - ```sudo apt -y full-upgrade```   
 
-
-   - its hostname must be short and easy and has no spaces or special characters (it will be used as the website name) ... ideally choose `Pi4NAS64`   
-   - configure it to boot to GIU and autologin ... it is safe to autologin since the Pi is only visible inside our "secure" home LAN   
-   - configure a screen resolution which enables VNC server/client to run properly when headless   
-     * in a Terminal, using `sudo raspi-config`, `Advanced` 
-     * choose a screen resolution ANYTHING (eg 1920x1080) *other* than "default" so that a framebuffer gets allocated on a Pi4 which magically enables VNC server to run even when a screen is not connected to the HDMI port
-   - the GUI should be left to boot and auto start, even in a headless state 
-
-3. Check, perhaps using the GUI menu item `Raspberry Pi Configuration`,
-   - "login as user pi" is ticked
-   - "wait for network" is unticked
-   - "splash screen" is disabled
-   - VNC is enabled
-   - SSH is enabled
-   - GPU memory is 256Mb
-   - "localisation" tab is used to check/configure our timezone/locale etc... also set local language to `EN-AU` `UTF-8` to avoid issues   
-
-4. If the Pi4 is Wired ethernet (ideally it will be), disable WiFi and BlueTooth on the Pi4
+3. If the Pi4 is Wired ethernet (it should be, so that it halves WiFi traffic/contention eg cuts out the hop from the Pi to Router), disable WiFi and BlueTooth on the Pi4   
    - edit and add these lines into `/boot/config.txt` (perhaps in a Terminal use `sudo nano /boot/config.txt`) and then reboot the Pi4   
      ```
      dtoverlay=disable-wifi
      dtoverlay=disable-bt
      ```
 
-5. Ensure the Pi has a fixed IPv4 address
-   - perhaps by using our home router's DHCP facility to recognise the Pi`s mac address and provide it with an ongoing fixed IPv4 address
-   - ensure the Pi4 is rebooted and the IP address "sticks"
+4. Ensure the Pi has a fixed IPv4 address
+   - ideally by using our home router's DHCP facility to recognise the Pi`s mac address and provide it with an ongoing fixed IPv4 address lease
+   - ensure the Pi4 is rebooted so the new fixed IPv4 address "sticks"
    - then start a Terminal and use `ifconfig` to check the IPv4 address has "stuck"
 
-
-6. Prepare our USB3 drives before we even go near plugging them into the Pi4
+5. Prepare our USB3 drives before we even go near plugging them into the Pi4
    - plug the drive(s) into a Windows PC 
    - format then as NTFS 
    - set security on the drive itself to `Everyone` having `Full Access`

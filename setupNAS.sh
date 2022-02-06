@@ -933,7 +933,7 @@ echo "#directory mask = 0777">>"./smb.conf"
 echo "force create mode = 1777">>"./smb.conf"
 echo "force directory mode = 1777">>"./smb.conf"
 echo "inherit permissions = yes">>"./smb.conf"
-echo "# 2020.08.10">>"./smb.conf"
+echo "# 2022.02.06">>"./smb.conf"
 echo "allow insecure wide links = yes">>"./smb.conf"
 echo "follow symlinks = yes">>"./smb.conf"
 echo "wide links = yes">>"./smb.conf"
@@ -956,13 +956,13 @@ if [ "${SecondaryDisk}" = "y" ]; then
 	echo "force create mode = 1777">>"./smb.conf"
 	echo "force directory mode = 1777">>"./smb.conf"
 	echo "inherit permissions = yes">>"./smb.conf"
-	echo "# 2020.08.10">>"./smb.conf"
+	echo "# 2022.02.06">>"./smb.conf"
 	echo "allow insecure wide links = yes">>"./smb.conf"
 	echo "follow symlinks = yes">>"./smb.conf"
 	echo "wide links = yes">>"./smb.conf"
 	echo "">>"./smb.conf"
 fi
-echo "Finished Adding stuff to file './smb.conf' ..."
+echo "Finished Adding stuff to local file './smb.conf' ..."
 set -x
 sudo chmod -c a=rwx -R *
 #sudo diff -U 10 "./smb.conf.old" "./smb.conf"
@@ -993,8 +993,14 @@ echo ""
 echo "# Restart Samba service"
 echo ""
 set -x
+sudo systemctl enable smbd
+wait 2s
 sudo systemctl stop smbd
+wait 2s
+sudo systemctl reload smbd
+wait 2s
 sudo systemctl restart smbd
+wait 2s
 #sudo service smbd restart
 sleep 10s
 set +x

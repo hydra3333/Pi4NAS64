@@ -501,11 +501,12 @@ sudo diff -U 10 "/etc/default/hd-idle.old" "/etc/default/hd-idle"
 # start and enable start at system boot, per instructions https://github.com/adelolmo/hd-idle/
 sudo systemctl stop hd-idle
 sleep 1s
+sudo systemctl enable hd-idle
+sleep 1s
 sudo systemctl reload hd-idle
 sleep 1s
 sudo systemctl restart hd-idle
-sleep 1s
-sudo systemctl enable hd-idle
+
 sleep 5s
 set +x
 echo ""
@@ -599,9 +600,9 @@ set -x
 sudo apt install -y nfs-kernel-server 
 sudo apt install -y nfs-common
 sleep 3s
-sudo systemctl enable nfs-kernel-server
-sleep 3s
 sudo systemctl stop nfs-kernel-server
+sleep 3s
+sudo systemctl enable nfs-kernel-server
 sleep 3s
 set +x
 echo "# First check that uid=1000 and gid=1000 match the user pi "
@@ -638,8 +639,12 @@ echo ""
 echo "# Mount the new NFS shares"
 echo ""
 set -x
-sudo systemctl start nfs-kernel-server
+sudo systemctl stop nfs-kernel-server
+sleep 3s
+sudo systemctl reload nfs-kernel-server
+sleep 3s
 sudo systemctl restart nfs-kernel-server
+sleep 3s
 sudo df -h
 sudo mount -v --bind "${server_root_folder}" "${nfs_export_full}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
 sudo ls -al "${server_root_folder}" 
@@ -769,6 +774,8 @@ set -x
 sudo exportfs -rav
 sudo systemctl stop nfs-kernel-server
 sleep 3s
+sudo systemctl reload nfs-kernel-server
+sleep 3s
 sudo systemctl restart nfs-kernel-server
 sleep 3s
 set +x
@@ -778,7 +785,7 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Now list the content of the shexport the definitions to make them available"
+echo "# Now list the content of the exported the definitions to check they are available"
 echo ""
 set -x
 sudo ls -al "${server_root_folder}" 
@@ -794,7 +801,7 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "Now cleanup ..."
+echo "Now cleanup NFS stuff ..."
 echo ""
 set -x
 cd ~/Desktop
@@ -837,11 +844,11 @@ if [ "${SecondaryDisk}" = "y" ]; then
 	echo sudo umount -f "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
 fi
 #sudo rm -vf "/tmp-NFS-mountpoint"
-# do NOT remove it as it may accidentally wipe the mounted drive !!!
+# do NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!
 set +x
 #
 echo ""
-echo "# If the cleanup did not work, control-C then fix any issues, then re-start this script."
+echo "# If theNFS  cleanup did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "################################################################################################################################"

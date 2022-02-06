@@ -152,9 +152,11 @@ echo "Now,"
 echo "# Use sudo raspi-config to check and if need be then set these options"
 echo "# In Display Options"
 echo "#   D5 VNC Resolution "
-echo "#      Choose 1920x1080 "
-echo "#      which magically enables VNC server to run even when a screen is not connected to the HDMI port"
-echo "# Then check/change other settings"
+echo "#      Choose 1920x1080 # which magically enables VNC server to run even when a screen is not connected to the HDMI port"
+echo "#"
+echo "# Then ALSO check/change other settings"
+echo "# eg server-name=PI4NAS64, no overscan, locale, keyboard, WiFi location, SSH on, VNC on, gpu-memory 256, "
+echo "#"
 echo "#"
 echo "# (use <tab> and<enter> to move around raspi-config and choose menu items)"
 echo "#"
@@ -198,12 +200,14 @@ echo "#-------------------------------------------------------------------------
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# OK ... PLEASE RE-CONNECT THE EXTERNALLY-POWERED USB3 HARD DRIVE(S) INTO THE Pi4 NOW."
-echo "#"
 echo "# OK ... PLEASE RE-CONNECT THE EXTERNALLY-POWERED USB3 HARD DRIVE(S) INTO THE Pi4 NOW."
 echo ""
+echo " THEN in a new Terminal, do"
+echo "      sudo reboot now"
+echo " and then re-start this procedure".
 echo ""
 echo "# Always use the same USB socket on the Pi."
-echo "# Always use an externally-powered  USB3 drive, so that we have "
+echo "# Always use an externally-powered USB3 drive, so that we have "
 echo "# sufficient power and sufficient data transfer bandwidth."
 echo "# Once it spins up, the USB3 drive(s) will auto-mount with NTFS."
 echo ""
@@ -341,7 +345,7 @@ echo "#-------------------------------------------------------------------------
 
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Install the curl tool to download support files if required"
+echo "# Install the curl and wget tools to download support files if required"
 read -p "# Press Enter to continue."
 echo ""
 set -x
@@ -421,6 +425,8 @@ echo ""
 echo "# List and Remove any prior hd-idle package"
 echo ""
 set -x
+sudo systemctl disable hd-idle
+sleep 1s
 sudo dpkg -l hd-idle
 sudo dpkg -P hd-idle
 sudo apt purge -y hd-idle
@@ -498,18 +504,16 @@ sudo cp -fv "/etc/default/hd-idle" "/etc/default/hd-idle.old"
 sudo sed -i "s;START_HD_IDLE=;#START_HD_IDLE=;g" "/etc/default/hd-idle"
 sudo sed -i "s;HD_IDLE_OPTS=;#HD_IDLE_OPTS=;g" "/etc/default/hd-idle"
 sudo sed -i "2 i START_HD_IDLE=true" "/etc/default/hd-idle" # insert at line 2
-sudo sed -i "$ a HD_IDLE_OPTS=\"-i ${the_default_timeout} -a ${server_USB3_DISK_NAME} -i ${the_sda_timeout} -l /var/log/hd-idle.log\"" "/etc/default/hd-idle" # insert as last line
+sudo sed -i "$ a HD_IDLE_OPTS=\"-i ${the_default_timeout} -a ${server_USB3_DISK_NAME} -i ${the_sda_timeout} -l /var/log/hd-idle.log\n\"" "/etc/default/hd-idle" # insert as last line
 if [ "${SecondaryDisk}" = "y" ]; then
-	sudo sed -i "$ a HD_IDLE_OPTS=\"-i ${the_default_timeout} -a ${server_USB3_DISK_NAME2} -i ${the_sda_timeout} -l /var/log/hd-idle.log\"" "/etc/default/hd-idle" # insert as last line
+	sudo sed -i "$ a HD_IDLE_OPTS=\"-i ${the_default_timeout} -a ${server_USB3_DISK_NAME2} -i ${the_sda_timeout} -l /var/log/hd-idle.log\n\"" "/etc/default/hd-idle" # insert as last line
 fi
-sudo cat "/etc/default/hd-idle"
+#sudo cat "/etc/default/hd-idle"
 sudo diff -U 10 "/etc/default/hd-idle.old" "/etc/default/hd-idle"
 # start and enable start at system boot, per instructions https://github.com/adelolmo/hd-idle/
 sudo systemctl stop hd-idle
 sleep 1s
 sudo systemctl enable hd-idle
-sleep 1s
-sudo systemctl reload hd-idle
 sleep 1s
 sudo systemctl restart hd-idle
 
@@ -524,8 +528,6 @@ echo "NOTE: hd-idle log file in '/var/log/hd-idle.log'"
 echo ""
 set -x
 sudo systemctl stop hd-idle
-sleep 1s
-sudo systemctl reload hd-idle
 sleep 1s
 sudo systemctl restart hd-idle
 sleep 5s

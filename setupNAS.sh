@@ -1042,12 +1042,13 @@ echo "#-------------------------------------------------------------------------
 echo ""
 echo "################################################################################################################################"
 echo ""
-echo "# Install and configure minDLNA"
+echo "# Install and configure minDLNA (ReadyMedia ReadyDLNA)"
 echo ""
 # not strictly necessary to install, however it makes the server more "rounded" and accessible
-# https://unixblogger.com/dlna-server-raspberry-pi-linux/
-# https://www.youtube.com/watch?v=Vry0NpFjn5w
-# https://www.deviceplus.com/how-tos/setting-up-raspberry-pi-as-a-home-media-server/
+## old # https://unixblogger.com/dlna-server-raspberry-pi-linux/
+## old # https://www.youtube.com/watch?v=Vry0NpFjn5w
+## old # https://www.deviceplus.com/how-tos/setting-up-raspberry-pi-as-a-home-media-server/
+# https://wiki.archlinux.org/title/ReadyMedia
 read -p "# Press Enter to continue."
 echo ""
 echo ""

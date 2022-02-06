@@ -150,11 +150,13 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
          ```   
 
 3. If the Pi4 is Wired ethernet (it should be, so that it halves WiFi traffic/contention eg cuts out the hop from the Pi to Router), disable WiFi and BlueTooth on the Pi4   
-   - edit and add these lines into `/boot/config.txt` (perhaps in a Terminal use `sudo nano /boot/config.txt`) and then reboot the Pi4   
-     ```
-     dtoverlay=disable-wifi
-     dtoverlay=disable-bt
-     ```
+   - edit and add these lines at the end into `/boot/config.txt`   
+      (perhaps in a Terminal use `sudo nano /boot/config.txt`)   
+      ```
+      dtoverlay=disable-wifi   
+      dtoverlay=disable-bt   
+      ```   
+      and then reboot the Pi4   
 
 4. Ensure the Pi has a fixed IPv4 address   
    - ideally by using our home router's DHCP facility to recognise the Pi`s mac address and provide it with an ongoing fixed IPv4 address lease   
@@ -175,7 +177,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      * a folder at the root level of the first USB3 drive must be `mp4library` (same as the first drive) and have security set to `Everyone` having `Full Access` to this folder and all subfolders and files 
    - copy media files into the folder tree one created, and check security permissikons on them is set correctly	 
 
-6. Cross-check **eveything** and Reboot the Pi4 one last time to ensure all settings are good
+6. Cross-check **eveything** and Reboot the Pi4 one last time to ensure all settings are good and being used !
 
 ---
 

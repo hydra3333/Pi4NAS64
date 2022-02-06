@@ -97,9 +97,9 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
             - ```Network at Boot``` as ```OFF```   
             - ```Splash Screen``` as ```OFF```   
          - In ```Display``` tab choose
-            - ```Overscan``` is ````OFF```   
-            - ```Pixed Doubing``` is ````OFF```   
-            - ```Screen Blanking``` is ````OFF```   
+            - ```Overscan``` is ```OFF```   
+            - ```Pixed Doubing``` is ```OFF```   
+            - ```Screen Blanking``` is ```OFF```   
             - ```Headless Resolution``` is ```1920x1080```   
          - In ```Interfaces``` tab choose
             - ```SSH``` is ````ON```   

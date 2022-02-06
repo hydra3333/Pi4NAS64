@@ -424,7 +424,7 @@ set +x
 ###echo "# Install hd-idle and dependencies"
 ###echo ""
 ###set -x
-###sudo apt-get install build-essential fakeroot debhelper -y
+###sudo apt install build-essential fakeroot debhelper -y
 ###cd ~/Desktop
 ###wget http://sourceforge.net/projects/hd-idle/files/hd-idle-1.05.tgz
 ###tar -xvf hd-idle-1.05.tgz
@@ -868,20 +868,23 @@ echo "# First Un-Install any previous SAMBA install and then Install it ..."
 echo ""
 set -x
 #sudo systemctl stop smbd
-sudo apt-get purge -y --allow-unauthenticated --allow-remove-essential winbind
-sudo apt-get purge -y --allow-unauthenticated --allow-remove-essential samba-common
-sudo apt-get purge -y --allow-unauthenticated --allow-remove-essential samba
+sudo apt purge -y --allow-unauthenticated --allow-remove-essential winbind
+sudo apt purge -y --allow-unauthenticated --allow-remove-essential samba-common
+sudo apt purge -y --allow-unauthenticated --allow-remove-essential samba
 sudo apt autoremove -y
-sudo apt-get check -y samba
+sudo apt check -y samba
 sudo rm -vf "/etc/samba/smb.conf"
 sudo rm -vf "/etc/samba/smb.conf.old"
 sudo rm -vfR "/etc/samba"
 sudo rm -vfR "/var/lib/samba"
 sudo rm -vfR "/usr/share/samba"
 #sudo rm -vf "/etc/rc*.d/*samba" "/etc/init.d/samba"
-sudo apt-get install -y --reinstall --fix-broken --fix-missing --allow-unauthenticated winbind
-sudo apt-get install -y             --fix-broken --fix-missing --allow-unauthenticated samba
-sudo apt-get install -y --reinstall --fix-broken --fix-missing --allow-unauthenticated samba
+sudo apt install -y             --fix-broken --fix-missing --allow-unauthenticated winbind
+sudo apt install -y --reinstall --fix-broken --fix-missing --allow-unauthenticated winbind
+sudo apt install -y             --fix-broken --fix-missing --allow-unauthenticated samba-common
+sudo apt install -y --reinstall --fix-broken --fix-missing --allow-unauthenticated samba-common
+sudo apt install -y             --fix-broken --fix-missing --allow-unauthenticated samba
+sudo apt install -y --reinstall --fix-broken --fix-missing --allow-unauthenticated samba
 set +x
 echo ""
 echo "# If the Un-Install/Install did not work, control-C then fix any issues, then re-start this script."

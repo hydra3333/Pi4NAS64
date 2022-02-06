@@ -1022,13 +1022,13 @@ echo "# Restart Samba service"
 echo ""
 set -x
 sudo systemctl enable smbd
-wait 2s
+sleep 2s
 sudo systemctl stop smbd
-wait 2s
+sleep 2s
 sudo systemctl reload smbd
-wait 2s
+sleep 2s
 sudo systemctl restart smbd
-wait 2s
+sleep 2s
 #sudo service smbd restart
 sleep 10s
 set +x
@@ -1262,16 +1262,23 @@ echo ""
 # └───────────────────────── min (0 - 59)
 # https://stackoverflow.com/questions/610839/how-can-i-programmatically-create-a-new-cron-job
 # <minute> <hour> <day> <month> <dow> <tags and command>
+echo "# list BEFORE contab ADD:"
 set -x
 sudo crontab -l # before
 crontab -l # before
 set +x
-echo ""
+echo "# Adding crontab as user pi (no sudo):"
+set -x
 ( crontab -l ; echo "0 2 * * * ${sh_file} 2>&1 >> ${log_file}" ) 2>&1 | sed "s/no crontab for $(whoami)//g" | sort - | uniq - | crontab -
-echo ""
+set +x
+echo "#"
+echo "# List AFTER contab ADD:"
 set -x
 sudo crontab -l # after
 crontab -l # before
+set +x
+echo "# syslog AFTER contab ADD:"
+set -x
 sudo grep CRON /var/log/syslog
 set +x
 echo ""

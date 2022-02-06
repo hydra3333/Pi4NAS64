@@ -148,16 +148,16 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 3. Clone the Pi4NAS Github respository to the Desktop of the Pi and copy the setup files to the Desktop
    - start a Terminal and do this:
      '''
-     cd ~/Desktop
-     sudo apt install -y git
-     sudo rm -vfR ./Pi4NAS
-     git clone https://github.com/hydra3333/Pi4NAS.git
-     cp -fv ./Pi4NAS/*.sh ./
-     sudo chmod +777 *.sh
-	 # check the uid and gid for user pi 
-	 id -u pi
-	 id -g pi
-	 echo "uid=$(id -r -u pi) gid=$(id -r -g pi)" 
+     cd ~/Desktop    
+     sudo apt install -y git    
+     sudo rm -vfR ./Pi4NAS    
+     git clone https://github.com/hydra3333/Pi4NAS.git    
+     cp -fv ./Pi4NAS/*.sh ./    
+     sudo chmod +777 *.sh    
+	 # check the uid and gid for user pi    
+	 id -u pi    
+	 id -g pi    
+	 echo "uid=$(id -r -u pi) gid=$(id -r -g pi)"    
      '''
 
 4. Now, start a Terminal and start the install/configure process:

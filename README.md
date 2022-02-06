@@ -51,8 +51,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 7. The Pi4 will *not* perform any *external* network connections outside our home LAN at runtime, other than for normal Raspberry Pi O/S operations and its software updates   
 
-8. We will run the *32-bit* version of Raspberry Pi O/S and apps    
-   - as at 2020.11.07, we haven`t moved over to the 64-bit version of hd-idle (although eveything else should install/work under 64bit)      
+8. We will run the *64-bit* version of Raspberry Pi O/S and apps    
 
 9. Of probable interest, playable .mp4 files are    
    - not interlaced (a `Chromecast Ultra` device will not play them, and probably not the "Google ChromeCast with Google TV" either)    
@@ -63,7 +62,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
    - Google's *probably out-of-date list* of acceptable .mp4 codecs for the `Chromecast Ultra` is at https://developers.google.com/cast/docs/media but as yet we can`t find one for the "Google ChromeCast with Google TV"
 
 10. We could try using a Raspberry Pi 3b+ instead of a Pi 4, it would build fine, however 
-    - it only has USB2 ports with which to attach the external drives, which may not provide enough bandwidth one needs to deliver uninterrupted streams
+    - it only has USB2 ports to attach the external drives, which may not provide enough bandwidth one needs to deliver uninterrupted streams
     - its "limited" ethernet interface may not provide enough bandwidth one needs to deliver uninterrupted streams
 
 ---
@@ -72,8 +71,61 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 1. Ensure our USB3 drives are *not* yet plugged into the Pi4   
 
-2. Install and configure our Raspberry Pi4 4Gb or 8Gb
-   - Install 32-bit Raspberry Pi O/S and configure it to how we like it    
+2. Install and configure our Raspberry Pi4 4Gb or 8Gb   
+   - Install 64-bit Raspberry Pi O/S and configure it to how we like it   
+   - AFTER BOOTING 64-bit Raspberry Pi O/S FOR THE FIRST TIME, and it having auto-re-sized the disk etc:   
+      - it will ask for the Country etc. Choose
+         - Country ```Australia```   
+         - Language ```Australian English```   
+         - TimeZone ```Adelaide```   
+         - for Keyboard tick both ```Use English Language``` and ```Use US Keyboard```   
+      - it will ask for a new password, so set one   
+      - it will ask for Set Up Screen, set your options   
+      - it will ask to choose WiFi network, choose the ```Skip``` button (we use hard-wired ethernet to not flood the WiFi toward the Router)   
+      - it will ask to Update Software, choose ```Next```   
+      - then the first-time setup will exit   
+      - NOW PLUG IN THE USB3 DISKS
+         - if there are prompts about the USB3 disks, choose ```cancel```   
+      - Now use the Pi gui main menu, choose ```Logout``` and then ```Reboot```   
+   - AFTER REBOOTING and auto-logging into the gui   
+      - if there are prompts about the USB3 disks, choose ```cancel```   
+      - Use the Pi gui main menu, choose Preferences, Raspberry Pi Configuration and a dialogue box with tabs will appear   
+         - In ```System``` tab choose   
+            - ```Hostname``` as ```PI4NAS64```   
+            - ```Boot``` as ```To Desktop```   
+            - ```Auto login``` as ```ON```   
+            - ```Network at Boot``` as ```OFF```   
+            - ```Splash Screen``` as ```OFF```   
+         - In ```Display``` tab choose
+            - ```Overscan``` is ````OFF```   
+            - ```Pixed Doubing``` is ````OFF```   
+            - ```Screen Blanking``` is ````OFF```   
+            - ```Headless Resolution``` is ```1920x1080```   
+         - In ```Interfaces``` tab choose
+            - ```SSH``` is ````ON```   
+            - ```VNC``` is ````ON```   
+            - the other settings are ```OFF```   
+         - In ```Performance``` tab choose   
+            - ```GPU Memory``` is ```256```   
+            - ignore the other settings   
+         - In ```Localisation``` tab choose   
+            - ```Locale``` ```Language```=```en (English)``` ```Country```=```AU (Australia)``` ```Character Set```=```UTF-8```   
+            - ```Timezone``` ```Area```=```Australia``` ```Location```=````Adelaide```   
+            - ```Keyboard``` ```Model```=```Generic 105 (intl)``` ```Layout```=```English (Australian)``` ```Variant```=```English (Australian)```   
+            - ```WiFi Country``` ```WiFi Country Code```=```Au Australia```   
+         - Click ```OK```, then for ```Would you like to reboot now ?``` choose ```Yes```   
+         - If it does not ask to reboot, then use the Pi gui main menu, choose ```Logout``` and then ```Reboot```   
+   - AFTER REBOOTING and auto-logging into the gui, check/configure the rest of the options.      
+      - start a Terminal to do ```sudo raspi-config``` and see a menu box appear   
+      - Under ```1 System Options``` choose
+         - ```S4 Hostname``` and check/set it to ```PI4NAS64```   
+         - ```
+         - ```
+         - ```
+         - ```
+         - ```
+
+
    - its hostname must be short and easy and has no spaces or special characters (it will be used as the website name) ... ideally choose `Pi4NAS64`   
    - configure it to boot to GIU and autologin ... it is safe to autologin since the Pi is only visible inside our "secure" home LAN   
    - configure a screen resolution which enables VNC server/client to run properly when headless   

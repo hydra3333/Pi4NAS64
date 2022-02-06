@@ -69,7 +69,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 ## Pre-Installaton stuff which **must** be correctly setup first    
 
-1. Ensure our USB3 drives are *not* yet plugged into the Pi4   
+1. Ensure our USB3 drives are **not** yet plugged into the Pi4   
 
 2. Install and configure our Raspberry Pi4 4Gb or 8Gb   
    - Install 64-bit Raspberry Pi O/S and configure it to how we like it   

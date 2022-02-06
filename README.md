@@ -160,7 +160,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
    - ensure the Pi4 is rebooted so the new fixed IPv4 address "sticks"
    - then start a Terminal and use `ifconfig` to check the IPv4 address has "stuck"   
 
-5. Prepare our USB3 drives before we even go near plugging them into the Pi4
+5. Prepare our USB3 drives - before we even go near plugging them into the Pi4
    - plug the drive(s) into a Windows PC 
    - format then as NTFS 
    - set security on the drive itself to `Everyone` having `Full Access`
@@ -183,8 +183,8 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 1. Re-check that the Pi4 has been pre-configured correctly, particularly the server-name and fixed IPv4 address    
 
 2. Prepare our USB3 drives on the Pi4
-   - plug the USB3 external hard drive(s) into the Pi4 (always use the same drives in the same USB3 slots !)
-   - wait 15 to 30 seconds for the USB3 external hard drives to spin up and be mounted automatically
+   - plug the USB3 external hard drive(s) into the Pi4 (always plug the same drives into the same USB3 slots !)
+   - wait 15 to 30 seconds for the USB3 external hard drives to spin up and be mounted automatically; ignore/cancel any prompts at thie time   
    - find and note EXACTLY the correct `UUID=` string of letters and numbers for the USB3 external hard drive(s) ... start a Terminal and do this:
      ```
      sudo df

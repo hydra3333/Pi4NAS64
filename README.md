@@ -170,8 +170,8 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
    - `This server_name` it's best to choose the Pi4's hostname of the Pi4 here (we use Pi4NAS64) - it will be used as the network service name by `Kodi` and `VLC` etc
    - `This server_alias (will become a Virtual Folder for mounting purposes)` - recommend leave it as `mp4library` so it matches the top level folder name on the USB3 drive
      * ... it will be used as the top-level folder name on our external USB3 drive, so put our video files in there
-   - `Designate the mount point for the USB3 external hard drive` it`s a "virtual" place used everywhere to access the top level of the USB3 external hard drive when mounted, eg `/mnt/mp4library`
-   - `Designate the root folder on the USB3 external hard drive` it`s the top level folder on the USB3 external hard drive containing .mp4 files and subfolders containing .mp4 files, eg `/mnt/mp4library/mp4library`
+   - `Designate the mount point for the USB3 external hard drive` it's a "virtual" place used everywhere to access the top level of the USB3 external hard drive when mounted, eg `/mnt/mp4library`
+   - `Designate the root folder on the USB3 external hard drive` it's the top level folder on the USB3 external hard drive containing .mp4 files and subfolders containing .mp4 files, eg `/mnt/mp4library/mp4library`
 
 6. Answer more prompts    
    - when we see something like this:

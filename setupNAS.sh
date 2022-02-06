@@ -551,10 +551,14 @@ echo "# Un-Install any previous NFS install ... no, just stop it instead."
 echo ""
 nfs_export_top="/NFS-shares"
 nfs_export_full="${nfs_export_top}/mp4library"
-nfs_export_full2="${nfs_export_top}/mp4library2"
+if [ "${SecondaryDisk}" = "y" ]; then
+	nfs_export_full2="${nfs_export_top}/mp4library2"
+fi
 set -x
 #sudo umount -f "${nfs_export_full}"
+#sudo umount -f "${nfs_export_full2}"
 cd ~/Desktop
+# The first time around, this "stop nfs-kernel-server" may fail since nfs is not yet installed.
 sudo systemctl stop nfs-kernel-server
 sleep 3s
 # Purge seems to cause it to fail on the subsequent re-install, so let's not purge.
@@ -577,9 +581,10 @@ echo ""
 set -x
 sudo rm -fv "/etc/fstab.pre-nfs.old"
 sudo sed -i "s;${server_root_folder} ${nfs_export_full};#${server_root_folder} ${nfs_export_full};g" "/etc/fstab"
-if [ "${SecondaryDisk}" = "y" ]; then
+# always try to comment out secondary NFS mount point, just in case we are going from 2 disks to 1
+#if [ "${SecondaryDisk}" = "y" ]; then
 	sudo sed -i "s;${server_root_folder2} ${nfs_export_full2};#${server_root_folder2} ${nfs_export_full2};g" "/etc/fstab"
-fi
+#fi
 set +x
 echo ""
 echo "# If modifying file '/etc/fstab' did not work, control-C then fix any issues, then re-start this script."

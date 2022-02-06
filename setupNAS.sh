@@ -576,7 +576,7 @@ echo ""
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Comment out any prior NFS mount points in '/etc/fstab'"
+echo "# Comment out any prior NFS mount points in '/etc/fstab' ... yes do it here as well as again below."
 echo ""
 set -x
 sudo rm -fv "/etc/fstab.pre-nfs.old"
@@ -598,6 +598,8 @@ echo ""
 set -x
 sudo apt install -y nfs-kernel-server 
 sudo apt install -y nfs-common
+sleep 3s
+sudo systemctl enable nfs-kernel-server
 sleep 3s
 sudo systemctl stop nfs-kernel-server
 sleep 3s
@@ -633,9 +635,11 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Mount the new shares"
+echo "# Mount the new NFS shares"
 echo ""
 set -x
+sudo systemctl start nfs-kernel-server
+sudo systemctl restart nfs-kernel-server
 sudo df -h
 sudo mount -v --bind "${server_root_folder}" "${nfs_export_full}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
 sudo ls -al "${server_root_folder}" 
@@ -658,7 +662,7 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Now add lines to file '/etc/fstab' so that the NFS shares are mounted the same way every time"
+echo "# Now add NFS lines to file '/etc/fstab' so that the NFS shares are mounted the same way every time"
 echo ""
 set -x
 sudo cp -fv "/etc/fstab" "/etc/fstab.pre-nfs.old"

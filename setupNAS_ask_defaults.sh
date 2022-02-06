@@ -33,10 +33,10 @@ if [[ -f "$setup_config_file" ]]; then  # config file already exists
     server_root_folder="${input_string:-$server_root_folder_default}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 	#
 	SecondaryDisk=n
-	if [[ "${server_root_USBmountpoint2_default}" = "" ]];
+	if [[ "${server_root_USBmountpoint2_default}" = "" ]]; then
       server_root_USBmountpoint2_default="${server_root_USBmountpoint}2"
    fi
-	if [[ "${server_root_folder2_default}" = "" ]];
+	if [[ "${server_root_folder2_default}" = "" ]]; then
 	   server_root_folder2_default="${server_root_folder}"
    fi
 	while true; do

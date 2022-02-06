@@ -1,4 +1,4 @@
-# Pi4NAS for x64    
+# Pi4NAS64 for x64    
 ## update: for Raspberry Pi OS x64 ONLY    
 
 ### a Raspberry Pi4 NAS for use by "Google ChromeCast with Google TV" devices   
@@ -14,7 +14,7 @@ Configure a Raspberry Pi4 with attached USB3 drives to create an NAS on our loca
 - a DLNA server (`miniDLNA`)   
 - the `hd-idle` app to spin down drives when not used   
 
-The newly released "Google ChromeCast with Google TV" devices can connect to the Pi4NAS 
+The newly released "Google ChromeCast with Google TV" devices can connect to the Pi4NAS64 
 with apps like `Kodi` and `VLC` in order to play our collections of home media files.    
 
 A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely reliable, and has decent thoughput to handle multiple streams.
@@ -60,7 +60,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
    - ideally encoded with codecs `h.264(avc)/aac` ... or `h.265(hevc)/aac`
    - videos encoded with `hevc/avc` won`t play in a Chrome browser, but they *will* cast to and play on a Chromecast device 
      * (... neither type of video plays inside a Pi`s Chromium browser, unfortunately) 
-   - Google`s *probably out-of-date list* of acceptable .mp4 codecs for the `Chromecast Ultra` is at https://developers.google.com/cast/docs/media but as yet we can`t find one for the "Google ChromeCast with Google TV"
+   - Google's *probably out-of-date list* of acceptable .mp4 codecs for the `Chromecast Ultra` is at https://developers.google.com/cast/docs/media but as yet we can`t find one for the "Google ChromeCast with Google TV"
 
 10. We could try using a Raspberry Pi 3b+ instead of a Pi 4, it would build fine, however 
     - it only has USB2 ports with which to attach the external drives, which may not provide enough bandwidth one needs to deliver uninterrupted streams
@@ -74,7 +74,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 2. Install and configure our Raspberry Pi4 4Gb or 8Gb
    - Install 32-bit Raspberry Pi O/S and configure it to how we like it    
-   - its hostname must be short and easy and has no spaces or special characters (it will be used as the website name) ... ideally choose `Pi4NAS`   
+   - its hostname must be short and easy and has no spaces or special characters (it will be used as the website name) ... ideally choose `Pi4NAS64`   
    - configure it to boot to GIU and autologin ... it is safe to autologin since the Pi is only visible inside our "secure" home LAN   
    - configure a screen resolution which enables VNC server/client to run properly when headless   
      * in a Terminal, using `sudo raspi-config`, `Advanced` 
@@ -98,7 +98,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      ```
 
 5. Ensure the Pi has a fixed IPv4 address
-   - perhaps by using our home router`s DHCP facility to recognise the Pi`s mac address and provide it with an ongoing fixed IPv4 address
+   - perhaps by using our home router's DHCP facility to recognise the Pi`s mac address and provide it with an ongoing fixed IPv4 address
    - ensure the Pi4 is rebooted and the IP address "sticks"
    - then start a Terminal and use `ifconfig` to check the IPv4 address has "stuck"
 
@@ -167,7 +167,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      ./setupNAS.sh 2>&1 | tee setupNAS.log
      ```
 5. Answer the prompts (it will save most of these answers for use later)
-   - `This server_name` it`s best to choose the Pi4`s hostname of the Pi4 here (we use Pi4NAS) - it will be used as the network service name by `Kodi` and `VLC` etc
+   - `This server_name` it's best to choose the Pi4's hostname of the Pi4 here (we use Pi4NAS64) - it will be used as the network service name by `Kodi` and `VLC` etc
    - `This server_alias (will become a Virtual Folder for mounting purposes)` - recommend leave it as `mp4library` so it matches the top level folder name on the USB3 drive
      * ... it will be used as the top-level folder name on our external USB3 drive, so put our video files in there
    - `Designate the mount point for the USB3 external hard drive` it`s a "virtual" place used everywhere to access the top level of the USB3 external hard drive when mounted, eg `/mnt/mp4library`

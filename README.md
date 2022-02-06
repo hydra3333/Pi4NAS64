@@ -155,10 +155,10 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      dtoverlay=disable-bt
      ```
 
-4. Ensure the Pi has a fixed IPv4 address
-   - ideally by using our home router's DHCP facility to recognise the Pi`s mac address and provide it with an ongoing fixed IPv4 address lease
+4. Ensure the Pi has a fixed IPv4 address   
+   - ideally by using our home router's DHCP facility to recognise the Pi`s mac address and provide it with an ongoing fixed IPv4 address lease   
    - ensure the Pi4 is rebooted so the new fixed IPv4 address "sticks"
-   - then start a Terminal and use `ifconfig` to check the IPv4 address has "stuck"
+   - then start a Terminal and use `ifconfig` to check the IPv4 address has "stuck"   
 
 5. Prepare our USB3 drives before we even go near plugging them into the Pi4
    - plug the drive(s) into a Windows PC 

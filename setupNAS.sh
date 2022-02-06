@@ -1292,9 +1292,9 @@ echo ""
 set -x
 sudo ls -al "/run/minidlna"
 sudo systemctl stop minidlna
-wait 5s
+sleep 5s
 sudo systemctl start minidlna
-wait 5s
+sleep 5s
 #sudo service minidlna start
 sleep 5s
 set +x

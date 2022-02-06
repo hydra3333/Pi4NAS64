@@ -1331,6 +1331,7 @@ set -x
 cd ~/Desktop
 sudo kill -TERM `cat /run/proftpd.pid`
 sudo rm -fv "/etc/shutmsg"
+sudo systemctl disable proftpd
 sudo apt purge -y proftpd proftpd-basic proftpd-mod-case proftpd-doc 
 sudo chmod -c a=rwx -R "/etc/proftpd/proftpd.conf"
 sudo rm -vf "/etc/proftpd/proftpd.conf" "/etc/proftpd/proftpd.conf.old"

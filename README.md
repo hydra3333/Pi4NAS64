@@ -157,7 +157,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 	  # determine the user and group numbers (both should be 1000)
 	  id -u pi    
 	  id -g pi    
-	  echo "uid=$(id -r -u pi) gid=$(id -r -g pi)"    
+	  echo "uid=$(id -r -u pi) gid=$(id -r -g pi)"   
      ```
 
 4. Now, start a Terminal and start the install/configure process:

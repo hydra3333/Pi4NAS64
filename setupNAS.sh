@@ -1116,7 +1116,6 @@ echo ""
 echo "# Add Groups, then Create a folder for minidlna logs and db - place the folder in the root of the USB3 drive"
 echo ""
 set -x
-#sudo usermod -a -G www-data minidlna
 sudo usermod -a -G pi minidlna
 sudo usermod -a -G minidlna pi
 sudo usermod -a -G minidlna root
@@ -1344,7 +1343,7 @@ read -p "# Otherwise - Press Enter to continue."
 echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Configure proFTPd"
+echo "# Configure proFTPd (1.3.7a)"
 echo ""
 # https://htmlpreview.github.io/?https://github.com/Castaglia/proftpd-mod_case/blob/master/mod_case.html
 # Use directives
@@ -1373,13 +1372,13 @@ CaseIgnore on
 EOF
 sudo cat "/etc/proftpd/proftpd.conf">>"./tmp.tmp"
 #
-sudo sed -i "s;ServerName\t\t\t\"Debian\";ServerName\t\t\t\"Pi4CC\";g" "./tmp.tmp"
+sudo sed -i "s;ServerName\t\t\t\"Debian\";ServerName\t\t\t\"${server_name}\";g" "./tmp.tmp"
 sudo sed -i "s;DisplayLogin;#DisplayLogin;g" "./tmp.tmp"
 sudo sed -i "s;DisplayChdir;#DisplayChdir;g" "./tmp.tmp"
 sudo sed -i "s;# RequireValidShell\t\toff;RequireValidShell\t\toff;g" "./tmp.tmp"
 sudo sed -i "s;User\t\t\t\tproftpd;User\t\t\t\tpi;g" "./tmp.tmp"
 sudo sed -i "s;Group\t\t\t\tnogroup;Group\t\t\t\tpi;g" "./tmp.tmp"
-sudo sed -i "s;Group\t\t\t\tpi;Group\t\t\t\tpi\nDefaultRoot \~ \!pi,\!www-data;g" "./tmp.tmp"
+sudo sed -i "s;Group\t\t\t\tpi;Group\t\t\t\tpi\nDefaultRoot \~ \!pi;g" "./tmp.tmp"
 sudo sed -i "s;Umask\t\t\t\t022  022;Umask\t\t\t\t000  000;g" "./tmp.tmp"
 #"/boot_delay/d"
 sudo sed -i "/# Include other custom configuration files/d" "./tmp.tmp"
@@ -1388,7 +1387,7 @@ sudo sed -i "/Include \/etc\/proftpd\/conf.d\//d" "./tmp.tmp"
 #<Anonymous ~pi>
 #User pi
 #Group pi
-#DefaultRoot ~ !pi,!www-data
+#DefaultRoot ~ !pi
 #UserAlias anonymous pi
 #RequireValidShell off
 #MaxClients 30

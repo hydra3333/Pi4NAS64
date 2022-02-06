@@ -1052,20 +1052,21 @@ echo ""
 read -p "# Press Enter to continue."
 echo ""
 echo ""
+# increase fs.inotify.max_user_watches from default 8192
+max_u_w=262144
 echo "# Get ready for miniDLNA. "
-echo "# Per https://wiki.debian.org/minidlna"
+echo "# Per https://wiki.debian.org/minidlna and https://wiki.archlinux.org/title/ReadyMedia"
 echo "# To avoid Inotify errors, Increase the number for the system :"
-echo "# In /etc/sysctl.conf Add: 'fs.inotify.max_user_watches=262144' in a blank line by itself."
+echo "# In /etc/sysctl.conf Add: 'fs.inotify.max_user_watches=${max_u_w}' in a blank line by itself."
 echo "# Increase system max_user_watches to avoid this error:"
 echo "# WARNING: Inotify max_user_watches [8192] is low or close to the number of used watches [2] and I do not have permission to increase this limit.  Please do so manually by writing a higher value into /proc/sys/fs/inotify/max_user_watches."
-max_u_w=262144
 set -x
 # sudo sed -i.bak "s;8182;${max_u_w};g" "/proc/sys/fs/inotify/max_user_watches" # this fails with no permissions
 sudo cat /proc/sys/fs/inotify/max_user_watches
-# set a new temporary limit with:
+# set a new TEMPORARY limit with:
 sudo sysctl fs.inotify.max_user_watches=${max_u_w}
 sudo sysctl -p
-# set a new permanent limit with:
+# set a new PERMANENT limit with:
 sudo sed -i.bak "s;fs.inotify.max_user_watches=;#fs.inotify.max_user_watches=;g" "/etc/sysctl.conf"
 echo fs.inotify.max_user_watches=${max_u_w} | sudo tee -a "/etc/sysctl.conf"
 sudo sysctl -p
@@ -1101,6 +1102,7 @@ set -x
 sudo apt install -y minidlna
 sleep 3s
 sudo systemctl enable minidlna
+sleep 1s
 sudo systemctl stop minidlna
 #sudo service minidlna stop
 sleep 5s
@@ -1149,9 +1151,9 @@ db_dir=${server_root_USBmountpoint}/minidlna
 sh_dir=${server_root_USBmountpoint}/minidlna
 sudo cp -fv "/etc/minidlna.conf" "/etc/minidlna.conf.old"
 sudo sed -i "s;#user=minidlna;#user=minidlna\n#user=pi;g" "/etc/minidlna.conf"
-sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\nmedia_dir=PV,${server_root_folder};g" "/etc/minidlna.conf"
+sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\nmedia_dir=PVA,${server_root_folder};g" "/etc/minidlna.conf"
 if [ "${SecondaryDisk}" = "y" ]; then
-	sudo sed -i "s;media_dir=PV,${server_root_folder};media_dir=PV,${server_root_folder}\nmedia_dir=PV,${server_root_folder2};g" "/etc/minidlna.conf"
+	sudo sed -i "s;media_dir=PVA,${server_root_folder};media_dir=PVA,${server_root_folder}\nmedia_dir=PVA,${server_root_folder2};g" "/etc/minidlna.conf"
 fi
 sudo sed -i "s;#db_dir=/var/cache/minidlna;#db_dir=/var/cache/minidlna\ndb_dir=${db_dir};g" "/etc/minidlna.conf"
 sudo sed -i "s;#log_dir=/var/log;#log_dir=/var/log\nlog_dir=${log_dir};g" "/etc/minidlna.conf"

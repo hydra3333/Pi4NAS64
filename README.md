@@ -143,10 +143,11 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
          - If it does not ask to reboot, then use the Pi gui main menu, choose ```Logout``` and then ```Reboot```   
    - AFTER REBOOTING and auto-logging into the gui, check/configure the software library options.   
       - start a Terminal to do this to ensure all library sources become available   
-         - ```sudo sed -i.bak "s/#deb/deb/g" "/etc/apt/sources.list"```   
-      - then do   
-         - ```sudo apt -y update```   
-         - ```sudo apt -y full-upgrade```   
+         ```
+         sudo sed -i.bak "s/#deb/deb/g" "/etc/apt/sources.list"
+         sudo apt -y update   
+         sudo apt -y full-upgrade
+         ```   
 
 3. If the Pi4 is Wired ethernet (it should be, so that it halves WiFi traffic/contention eg cuts out the hop from the Pi to Router), disable WiFi and BlueTooth on the Pi4   
    - edit and add these lines into `/boot/config.txt` (perhaps in a Terminal use `sudo nano /boot/config.txt`) and then reboot the Pi4   

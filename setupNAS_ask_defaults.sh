@@ -13,8 +13,8 @@ host_name=$(hostname --fqdn)
 host_ip=$(hostname -I | cut -f1 -d' ')
 setup_config_file=./Pi4CC_setup.config
 if [[ -f "$setup_config_file" ]]; then  # config file already exists
-    echo "Using prior answers as defaults..."
-    set -x
+   echo "Using prior answers as defaults..."
+   set -x
 	cat "$setup_config_file"
 	set +x
 	source "$setup_config_file" # use "source" to retrieve the previous answers and use those as  the defaults in prompting
@@ -33,8 +33,12 @@ if [[ -f "$setup_config_file" ]]; then  # config file already exists
     server_root_folder="${input_string:-$server_root_folder_default}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 	#
 	SecondaryDisk=n
-	server_root_USBmountpoint2=""
-	server_root_folder2=""
+	if [[ "${server_root_USBmountpoint2_default}" = "" ]];
+      server_root_USBmountpoint2_default="${server_root_USBmountpoint}2"
+   fi
+	if [[ "${server_root_folder2_default}" = "" ]];
+	   server_root_folder2_default="${server_root_folder}"
+   fi
 	while true; do
 		read -p "Do you have a SECONDARY Media Disk attached [y/n]? " yn
 		case $yn in

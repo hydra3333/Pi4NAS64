@@ -1156,14 +1156,15 @@ if [ "${SecondaryDisk}" = "y" ]; then
 	sudo sed -i "s;media_dir=PVA,${server_root_folder};media_dir=PVA,${server_root_folder}\nmedia_dir=PVA,${server_root_folder2};g" "/etc/minidlna.conf"
 fi
 sudo sed -i "s;#db_dir=/var/cache/minidlna;#db_dir=/var/cache/minidlna\ndb_dir=${db_dir};g" "/etc/minidlna.conf"
-sudo sed -i "s;#log_dir=/var/log;#log_dir=/var/log\nlog_dir=${log_dir};g" "/etc/minidlna.conf"
+sudo sed -i "s;#log_dir=/var/log/minidlna;#log_dir=/var/log/minidlna\nlog_dir=${log_dir};g" "/etc/minidlna.conf"
 sudo sed -i "s;#friendly_name=;#friendly_name=\nfriendly_name=${server_name}-minidlna;g" "/etc/minidlna.conf"
 sudo sed -i "s;#inotify=yes;#inotify=yes\ninotify=yes;g" "/etc/minidlna.conf"
 sudo sed -i "s;#strict_dlna=no;#strict_dlna=no\nstrict_dlna=yes;g" "/etc/minidlna.conf"
 sudo sed -i "s;#notify_interval=895;#notify_interval=895\nnotify_interval=900;g" "/etc/minidlna.conf"
 sudo sed -i "s;#max_connections=50;#max_connections=50\nmax_connections=6;g" "/etc/minidlna.conf"
-sudo sed -i "s;#log_level=general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn;#log_level=general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn\nlog_level=artwork,database,general,http,inotify,metadata,scanner,ssdp,tivo=info;g" "/etc/minidlna.conf"
+sudo sed -i "s;#log_level=general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn;#log_level=general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn\nlog_level=general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=info;g" "/etc/minidlna.conf"
 sudo sed -i "s;#wide_links=no;wide_links=yes;g" "/etc/minidlna.conf"
+sudo sed -i "s;album_art_names=;#album_art_names=;g" "/etc/minidlna.conf"
 sudo diff -U 10 "/etc/minidlna.conf.old" "/etc/minidlna.conf"
 set +x
 echo ""

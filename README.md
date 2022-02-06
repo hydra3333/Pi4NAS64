@@ -102,15 +102,15 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
             - ```Screen Blanking``` is ```OFF```   
             - ```Headless Resolution``` is ```1920x1080```   
          - In ```Interfaces``` tab choose
-            - ```SSH``` is ````ON```   
-            - ```VNC``` is ````ON```   
+            - ```SSH``` is ```ON```   
+            - ```VNC``` is ```ON```   
             - the other settings are ```OFF```   
          - In ```Performance``` tab choose   
             - ```GPU Memory``` is ```256```   
             - ignore the other settings   
          - In ```Localisation``` tab choose   
             - ```Locale``` ```Language```=```en (English)``` ```Country```=```AU (Australia)``` ```Character Set```=```UTF-8```   
-            - ```Timezone``` ```Area```=```Australia``` ```Location```=````Adelaide```   
+            - ```Timezone``` ```Area```=```Australia``` ```Location```=```Adelaide```   
             - ```Keyboard``` ```Model```=```Generic 105 (intl)``` ```Layout```=```English (Australian)``` ```Variant```=```English (Australian)```   
             - ```WiFi Country``` ```WiFi Country Code```=```Au Australia```   
          - Click ```OK```, then for ```Would you like to reboot now ?``` choose ```Yes```   

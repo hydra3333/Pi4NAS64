@@ -1196,14 +1196,14 @@ echo "#!/bin/bash" >> "${sh_file}"
 echo "set -x" >> "${sh_file}"
 echo "sudo systemctl stop minidlna" >> "${sh_file}"
 echo "#sudo service minidlna stop" >> "${sh_file}"
-echo "sleep 10s" >> "${sh_file}"
+echo "sleep 5s" >> "${sh_file}"
 echo "sudo systemctl start minidlna" >> "${sh_file}"
 echo "#sudo service minidlna start" >> "${sh_file}"
-echo "sleep 10s" >> "${sh_file}"
+echo "sleep 5s" >> "${sh_file}"
 echo "sudo systemctl reload-or-restart minidlna" >> "${sh_file}"
 echo "#sudo service minidlna force-reload # same as systemctl reload-or-restart" >> "${sh_file}"
 echo "echo 'Wait 15 minutes for minidlna to index media files'" >> "${sh_file}"
-echo "echo 'For progress do: cat ${main_log_dir}'" >> "${sh_file}"
+echo "echo 'For progress do in another terminal window: cat ${main_log_dir}'" >> "${sh_file}"
 echo "sleep 900s" >> "${sh_file}"
 echo "set +x" >> "${sh_file}"
 set -x
@@ -1220,7 +1220,7 @@ echo "cat ${main_log_dir}" >> "${Restart_sh_file}"
 echo "#" >> "${Restart_sh_file}"
 # https://stackoverflow.com/questions/610839/how-can-i-programmatically-create-a-new-cron-job
 echo ""
-echo "Adding the 4:00am nightly crontab job to re-index minidlna"
+echo "Adding the 2:00 am nightly crontab job to re-index miniDLNA"
 echo ""
 #The layout for a cron entry is made up of six components: minute, hour, day of month, month of year, day of week, and the command to be executed.
 # m h  dom mon dow   command
@@ -1240,7 +1240,7 @@ sudo crontab -l # before
 crontab -l # before
 set +x
 echo ""
-( crontab -l ; echo "0 4 * * * ${sh_file} 2>&1 >> ${log_file}" ) 2>&1 | sed "s/no crontab for $(whoami)//g" | sort - | uniq - | crontab -
+( crontab -l ; echo "0 2 * * * ${sh_file} 2>&1 >> ${log_file}" ) 2>&1 | sed "s/no crontab for $(whoami)//g" | sort - | uniq - | crontab -
 echo ""
 set -x
 sudo crontab -l # after
@@ -1257,9 +1257,12 @@ echo "# Start miniDLNA."
 echo ""
 set -x
 sudo ls -al "/run/minidlna"
+sudo systemctl stop minidlna
+wait 5s
 sudo systemctl start minidlna
+wait 5s
 #sudo service minidlna start
-sleep 10s
+sleep 5s
 set +x
 echo "#"
 echo "# The minidlna service comes with a small webinterface. "
@@ -1268,7 +1271,7 @@ echo "# You will not be able to configure anything here. "
 echo "# However, it gives you a nice and short information screen how many files have been found by minidlna. "
 echo "# minidlna comes with it’s own webserver integrated. "
 echo "# This means that no additional webserver is needed in order to use the webinterface."
-echo "# To access the webinterface, open your browser of choice and enter "
+echo "# To access the webinterface, open your browser of choice and enter url http://127.0.0.1:8200"
 echo ""
 set -x
 curl -i http://127.0.0.1:8200

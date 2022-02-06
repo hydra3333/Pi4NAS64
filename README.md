@@ -118,7 +118,34 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
    - AFTER REBOOTING and auto-logging into the gui, check/configure the rest of the options.      
       - start a Terminal to do ```sudo raspi-config``` and see a menu box appear   
       - Under ```1 System Options``` choose
-         - ```S4 Hostname``` and check/set it to ```PI4NAS64```   
+         - ```S4 Hostname``` check/reset to ```PI4NAS64```   
+         - ```S5 Boot/Auto Login``` check/reset to ```B4 Desktop GUI, automatically logged in as pi```   
+         - ```S6 Network at Boot``` check/reset to ```No```   
+         - ```S7 Splash Screen``` check/reset to ```No```   
+      - Under ```2 Display Options``` choose
+         - ```D4 Screen Blanking``` check/reset to ```No```   
+         - ```D5 VNC Resolution``` check/reset to ```1920x1080```   
+      - Under ```3 Interface Options``` choose   
+         - ```I2 SSH``` check/reset to ```Yes```   
+         - ```I3 VNC``` check/reset to ```Yes```   
+      - Under ```4 Performance Options``` choose   
+         - ```GPU Memory``` check/reset to ```256```   
+      - Under ```5 Localisation Options``` choose   
+         - ```L1 Locale``` language and charater set ```en_AU.UTF-8 UTF-8``` and confirm on next screen as ```en_AU.UTF-8 UTF-8```   
+         - ```L2 Timzone``` check/reset to ```Australia``` and ```Adelaide```   
+         - ```L4 WLAN``` check/reset to ```AU Australia```   
+         - ```
+         - ```
+         - ```
+         - ```
+         - ```
+         - ```
+         - ```
+         - ```
+         - ```
+         - ```
+         - ```
+         - ```
          - ```
          - ```
          - ```

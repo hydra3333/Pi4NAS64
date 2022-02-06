@@ -11,6 +11,38 @@ set -x
 cd ~/Desktop
 set +x
 echo ""
+
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo "#"
+echo "# Using the Pi gui main menu, in Pi Configuration settings (for x64, as at 2022.02.06) set:"
+echo "#"
+echo "# server-name=PI4NAS64"
+echo "# boot to SD card=on"
+echo "# auto boot to gui and autologin=on"
+echo "# locale=EN-AU"
+echo "# characterset=UTF-8"
+echo "# keyboard=AU"
+echo "# WiFi location=AU"
+echo "# Overscan=off"
+echo "# SSH=on"
+echo "# VNC=on"
+echo "# gpu-memory=256"
+
+
+echo "#"
+
+echo "# Then use 'sudo raspi-config' to check and if need be (re)set these options"
+
+echo "# server-name=PI4NAS64"
+
+echo "# In Display Options"
+echo "#   D5 VNC Resolution "
+echo "#      Choose 1920x1080 # which magically enables VNC server to run even when a screen is not connected to the HDMI port"
+echo "#"
+
+
+
+
 echo "# Have we completed the pre-Install set of instructions per the Readme on this GIT ?"
 echo "# If not, control-C then do them, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
@@ -147,16 +179,20 @@ echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-echo ""
-echo "Now,"
+echo "#"
+echo "# Now: using the Pimain  menu, set Pi Conficuration 
+echo "#"
+
+echo "# Then ALSO check/change settings, i.e."
+echo "# i.e. server-name=PI4NAS64, Overscan=off, locale=EN-AU, characterset=UTF-8,keyboard=AU, WiFi location, SSH on, VNC on, gpu-memory=256, "
+echo "#"
+
 echo "# Use sudo raspi-config to check and if need be then set these options"
 echo "# In Display Options"
 echo "#   D5 VNC Resolution "
 echo "#      Choose 1920x1080 # which magically enables VNC server to run even when a screen is not connected to the HDMI port"
 echo "#"
-echo "# Then ALSO check/change other settings"
-echo "# eg server-name=PI4NAS64, Overscan=off, locale=EN-AU, characterset=UTF-8,keyboard=AU, WiFi location, SSH on, VNC on, gpu-memory=256, "
-echo "#"
+
 echo "#"
 echo "# (use <tab> and<enter> to move around raspi-config and choose menu items)"
 echo "#"

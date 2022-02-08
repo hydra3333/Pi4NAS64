@@ -336,7 +336,7 @@ echo ""
 # note: id 1000 is user pi $(id -r -u pi) and group pi $(id -r -g pi)
 set -x
 sudo cp -fv "/etc/exports" "/etc/exports.old"
-#... START of comment out prior entries, inclouding sxecond ones in case they exist previously
+#... START of comment out prior NFS export entries, including second ones in case they exist previously
 sudo sed -i "s;${nfs_export_top} ${server_ip}/24;#${nfs_export_top} ${server_ip}/24;g" "/etc/exports"
 sudo sed -i "s;${nfs_export_top} 127.0.0.1;#${nfs_export_top}127.0.0.1;g" "/etc/exports"
 sudo sed -i "s;${nfs_export_full_1} ${server_ip}/24;#${nfs_export_full_1} ${server_ip}/24;g" "/etc/exports"
@@ -344,19 +344,27 @@ sudo sed -i "s;${nfs_export_full_1} 127.0.0.1;#${nfs_export_full_1} 127.0.0.1;g"
 sudo sed -i "s;${nfs_export_full_2} ${server_ip}/24;#${nfs_export_full_1} ${server_ip}/24;g" "/etc/exports"
 sudo sed -i "s;${nfs_export_full_2} 127.0.0.1;#${nfs_export_full_1} 127.0.0.1;g" "/etc/exports"
 set +x
-#... END of comment out prior entries
+#... END of comment out prior NFS export entries
 #... START of add entries for the LAN IP range
 #sudo sed -i "$ a ${nfs_export_top} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+set -x
 sudo sed -i "$ a ${nfs_export_full_1} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+set +x
 if [ "${SecondDisk}" = "y" ]; then
+	set -x
 	sudo sed -i "$ a ${nfs_export_full_2} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+	set +x
 fi
 #... END OF add entries for the LAN IP range
 #... START of add entries for localhost 127.0.0.1
 #sudo sed -i "$ a ${nfs_export_top} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+set -x
 sudo sed -i "$ a ${nfs_export_full_1} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+set +x
 if [ "${SecondDisk}" = "y" ]; then
+	set -x
 	sudo sed -i "$ a ${nfs_export_full_2} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+	set +x
 fi
 #... END of add entries for localhost 127.0.0.1
 set -x
@@ -364,12 +372,7 @@ sudo cat "/etc/exports"
 sudo diff -U 10 "/etc/exports.old" "/etc/exports"
 set +x
 echo ""
-echo "# If adding the lines to '/etc/exports' did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-echo ""
-echo "# Now modify file '/etc/default/nfs-kernel-server' to change a paramter"
+echo "# Now modify file '/etc/default/nfs-kernel-server' to add parameter NEED_SVCGSSD"
 echo ""
 #then check
 # The only important option in /etc/default/nfs-kernel-server for now is NEED_SVCGSSD. 
@@ -378,24 +381,18 @@ echo ""
 set -x
 sudo sed -i 's;NEED_SVCGSSD="";NEED_SVCGSSD="no";g' "/etc/default/nfs-kernel-server"
 set +x
-echo "Check /etc/default/nfs-kernel-server has parameter:"
-echo 'NEED_SVCGSSD="no"'
 echo ""
 set -x
 sudo cat "/etc/default/nfs-kernel-server"
 set +x
 echo ""
-echo "# If modifying file '/etc/default/nfs-kernel-server' did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-##
+#
 # In order for the ID names to be automatically mapped, the file /etc/idmapd.conf 
 # must exist on both the client and the server with the same contents and with the correct domain names. 
 # Furthermore, this file should have the following lines in the Mapping section:
 #[Mapping]
 #Nobody-User = nobody
 #Nobody-Group = nogroup
-echo ""
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Now check file '/etc/idmapd.conf' has the following 3 lines (it should) "
 echo "[Mapping]"
@@ -406,44 +403,36 @@ set -x
 sudo cat "/etc/idmapd.conf"
 set +x
 echo ""
-echo "# If '/etc/idmapd.conf' did no have those 3 lines, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-echo "# Now export the definitions to make them available"
+echo "# Now export the NFS definitions to make them available, then re-start NFS"
 echo ""
 set -x
 sudo exportfs -rav
+sleep 2s
 sudo systemctl stop nfs-kernel-server
-sleep 3s
-sudo systemctl reload nfs-kernel-server
-sleep 3s
+sleep 2s
 sudo systemctl restart nfs-kernel-server
-sleep 3s
+sleep 2s
 set +x
-echo ""
-echo "# If the exportfs did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Now list the content of the exported the definitions to check they are available"
 echo ""
 set -x
-sudo ls -al "${server_root_folder}" 
+sudo ls -al "${root_folder_1}" 
 sudo ls -al "${nfs_export_full_1}" 
+set +x
 if [ "${SecondDisk}" = "y" ]; then
-	sudo ls -al "${server_root_folder2}" 
+	set -x
+	sudo ls -al "${root_folder_2}" 
 	sudo ls -al "${nfs_export_full_2}" 
+	set +x
 fi
 set +x
 echo ""
-echo "# If the listing did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-echo ""
 echo "Now cleanup NFS stuff ..."
 echo ""
+
+
+
 set -x
 cd ~/Desktop
 f_ls_nsf=~/Desktop/ls-nsf.sh

@@ -191,7 +191,10 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 1. Re-check that the Pi4 has been pre-configured correctly, particularly the server-name and fixed IPv4 address    
 
 2. Prepare our USB3 drives on the Pi4
-   - plug the USB3 external hard drive(s) into the Pi4 (always plug the same drives into the same USB3 slots !)
+   - plug the USB3 external hard drive(s) into the Pi4 
+      - always plug the FIRST drive into the "TOP" USB3 slot
+      - always plug the SECOND drive into the "BOTTOM" USB3 slot
+      - always plug the same drives into the same USB3 slots !
    - wait 15 to 30 seconds for the USB3 external hard drives to spin up and be mounted automatically; ignore/cancel any prompts at thie time   
    - find and note EXACTLY the correct `UUID=` string of letters and numbers for the USB3 external hard drive(s) ... start a Terminal and do this:
      ```

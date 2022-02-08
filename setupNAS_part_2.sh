@@ -153,7 +153,7 @@ sudo cp -fv "/etc/default/hd-idle" "/etc/default/hd-idle.old"
 sudo sed -i "s;START_HD_IDLE=;#START_HD_IDLE=;g" "/etc/default/hd-idle"
 sudo sed -i "s;HD_IDLE_OPTS=;#HD_IDLE_OPTS=;g" "/etc/default/hd-idle"
 sudo sed -i "2 i START_HD_IDLE=true" "/etc/default/hd-idle" # insert at line 2
-sudo sed -i "$ a ${idle_opts}"# insert as last line
+sudo sed -i "$ a ${idle_opts}" "/etc/default/hd-idle" # insert as last line
 set +x
 
 

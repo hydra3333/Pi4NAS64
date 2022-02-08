@@ -6,9 +6,7 @@
 # Call this .sh like:
 # . "./setupNAS_ask_defaults.sh"
 #
-#set +x
-
-set -x
+set +x
 cd ~/Desktop
 echo "# ------------------------------------------------------------------------------------------------------------------------"
 host_name=$(hostname --fqdn)

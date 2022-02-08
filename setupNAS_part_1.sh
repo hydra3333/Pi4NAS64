@@ -68,6 +68,57 @@ echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
+echo "# Install a remote-printing feature so we can print from the Pi via the Windows 10 PC."
+echo ""
+set -x
+sudo apt install -y cups
+set +x
+echo ""
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
+echo "# Install https for distros, although it is not strictly needed"
+echo ""
+set -x
+sudo apt install -y apt-transport-https
+set +x
+echo ""
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
+echo "# Install the tool which can be used to turn EOL inside text files from windows type to unix type"
+echo ""
+set -x
+sudo apt install -y dos2unix
+set +x
+echo ""
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
+echo "# Install the curl and wget tools to download support files if required"
+echo ""
+set -x
+sudo apt install -y curl
+sudo apt install -y wget
+set +x
+echo "# If that did not work, control-C then fix any issues, then re-start this script."
+echo ""
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
+echo "# Get ready for IPv4 only, by disabling IPv6"
+echo ""
+set -x
+sudo sysctl net.ipv6.conf.all.disable_ipv6=1 
+sudo sysctl -p
+sudo sed -i.bak "s;net.ipv6.conf.all.disable_ipv6;#net.ipv6.conf.all.disable_ipv6;g" "/etc/sysctl.conf"
+echo net.ipv6.conf.all.disable_ipv6=1 | sudo tee -a "/etc/sysctl.conf"
+sudo sysctl -p
+set +x
+echo ""
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
 echo "OK, check some settings on the Pi4"
 echo ""
 set -x

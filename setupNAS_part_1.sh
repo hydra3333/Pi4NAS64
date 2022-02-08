@@ -49,6 +49,25 @@ echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
+echo "# Re-Update the Rasbperry Pi4 Operating System with the latest patches, given we now have more Sources."
+echo ""
+set -x
+sudo apt update -y
+sudo apt full-upgrade -y
+set +x
+echo ""
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
+echo "# Add 'plugdev' right to user pi so that it has no trouble with mounting USB3 external disk(s)."
+echo ""
+set -x
+sudo usermod -a -G plugdev pi
+set +x
+echo ""
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
 echo "OK, check some settings on the Pi4"
 echo ""
 set -x
@@ -66,7 +85,6 @@ echo ""
 set -x
 sudo ls -al "/lib/modules/$(uname -r)/kernel/fs/"
 set +x
-echo ""
 echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
@@ -119,16 +137,6 @@ cat "/etc/apt/sources.list"
 set +x
 echo ""
 #
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-echo ""
-echo "# Re-Update the Rasbperry Pi4 Operating System with the latest patches, given we now have more Sources."
-echo ""
-set -x
-sudo apt update -y
-sudo apt full-upgrade -y
-set +x
-echo ""
-#
 ### echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 ### echo ""
 ### echo "# Add 30 seconds for the USB3 drive to spin up during startup."
@@ -159,16 +167,6 @@ echo ""
 ### echo "# If that did not work, control-C then fix any issues, then re-start this script."
 ### read -p "# Otherwise - Press Enter to continue."
 ### echo ""
-#
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-echo ""
-echo "# Add 'plugdev' right to user pi so that it has no trouble with mounting USB3 external disk(s)."
-echo ""
-set -x
-sudo usermod -a -G plugdev pi
-set +x
-echo "# If that did not work, control-C then fix any issues, then re-start this script."
-echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""

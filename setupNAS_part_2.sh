@@ -139,13 +139,6 @@ the_default_timeout=300
 the_sda_timeout=900
 set +x
 echo ""
-set -x
-sudo cp -fv "/etc/default/hd-idle" "/etc/default/hd-idle.old"
-sudo sed -i "s;START_HD_IDLE=;#START_HD_IDLE=;g" "/etc/default/hd-idle"
-sudo sed -i "s;HD_IDLE_OPTS=;#HD_IDLE_OPTS=;g" "/etc/default/hd-idle"
-sudo sed -i "2 i START_HD_IDLE=true" "/etc/default/hd-idle" # insert at line 2
-
-
 idle_opts="HD_IDLE_OPTS=\"-i ${the_default_timeout} "
 idle_opts=idle_opts+" -a ${USB3_DISK_NAME_1} -i ${the_sda_timeout} "
 if [ "${SecondDisk}" = "y" ]; then
@@ -153,14 +146,25 @@ if [ "${SecondDisk}" = "y" ]; then
 fi
 idle_opts=idle_opts+" -l /var/log/hd-idle.log\n\""
 
-sudo sed -i "$ a "$(idle_opts)# insert as last line
+echo ""
+
+set -x
+sudo cp -fv "/etc/default/hd-idle" "/etc/default/hd-idle.old"
+sudo sed -i "s;START_HD_IDLE=;#START_HD_IDLE=;g" "/etc/default/hd-idle"
+sudo sed -i "s;HD_IDLE_OPTS=;#HD_IDLE_OPTS=;g" "/etc/default/hd-idle"
+sudo sed -i "2 i START_HD_IDLE=true" "/etc/default/hd-idle" # insert at line 2
+sudo sed -i "$ a ${idle_opts}"# insert as last line
+set +x
 
 
 #if [ "${SecondDisk}" = "y" ]; then
 #	sudo sed -i "$ a HD_IDLE_OPTS=\"-i ${the_default_timeout} -a ${USB3_DISK_NAME_2} -i ${the_sda_timeout} -l /var/log/hd-idle.log\n\"" "/etc/default/hd-idle" # insert as last line
 #fi
-#sudo cat "/etc/default/hd-idle"
+
+set -x
+sudo cat "/etc/default/hd-idle"
 sudo diff -U 10 "/etc/default/hd-idle.old" "/etc/default/hd-idle"
+set +x
 # start and enable start at system boot, per instructions https://github.com/adelolmo/hd-idle/
 
 

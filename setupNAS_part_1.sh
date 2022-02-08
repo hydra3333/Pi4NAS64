@@ -204,7 +204,7 @@ set +x
 if [ "${SecondDisk}" = "y" ]; then
 	set -x
 	sudo sed -i.bak "s/UUID=${USB3_DEVICE_UUID_2}/#UUID=${USB3_DEVICE_UUID_2}/g" "/etc/fstab"
-	sudo sed -i.bak "$ a UUID=${USB3_DEVICE_UUID_2} ${server_root_USBmountpoint2} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+	sudo sed -i.bak "$ a UUID=${USB3_DEVICE_UUID_2} ${USB3_mountpoint_2} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 	set +x
 fi
 set +x

@@ -11,7 +11,7 @@ cd ~/Desktop
 echo "# ------------------------------------------------------------------------------------------------------------------------"
 host_name=$(hostname --fqdn)
 host_ip=$(hostname -I | cut -f1 -d' ')
-setup_config_file=./Pi4CC_setup.config
+setup_config_file=./PI4NAS64_setup.config
 #
 ### UPDATES:
 ### 2022.02.08	variable server_alias -> virtual_folder_name

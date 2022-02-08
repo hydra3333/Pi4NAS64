@@ -150,7 +150,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
          ```   
 
 3. If the Pi4 is Wired ethernet (it should be, so that it halves WiFi traffic/contention eg cuts out the hop from the Pi to Router), disable WiFi and BlueTooth on the Pi4   
-   - ... perhaps in a Terminal use `sudo nano /boot/config.txt` to erdit the file.   
+   - ... perhaps in a Terminal use `sudo nano /boot/config.txt` to edit the file.   
    - add this line at the TOP into `/boot/config.txt` to force time for the USB3 disks to spin up   
       ```
       boot_delay=30

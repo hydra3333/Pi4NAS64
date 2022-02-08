@@ -83,7 +83,6 @@ set -x
 sudo blkid
 sudo df
 sudo lsblk
-#
 sudo blkid -U ${USB3_DEVICE_UUID_1}
 sudo df -l /dev/${USB3_DISK_NAME_1}
 sudo lsblk /dev/${USB3_DISK_NAME_1}
@@ -173,41 +172,18 @@ sudo cat "/etc/default/hd-idle"
 set +x
 #sudo diff -U 10 "/etc/default/hd-idle.old" "/etc/default/hd-idle"
 # start and enable start at system boot, per instructions https://github.com/adelolmo/hd-idle/
-
-
-exit
-
-
-
+sudo systemctl stop hd-idle
 sudo systemctl enable hd-idle
-sleep 2s
 sudo systemctl restart hd-idle
 sleep 2s
 set +x
 echo ""
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-echo ""
-echo "# Restart the hd-idle service to doubly ensure use of the updated config"
-echo ""
-echo "NOTE: hd-idle log file in '/var/log/hd-idle.log'"
-echo ""
-set -x
-sudo systemctl stop hd-idle
-sleep 1s
-sudo systemctl restart hd-idle
 sleep 5s
 sudo cat /var/log/hd-idle.log
 set +x
 echo ""
-echo "# Finished installation of hd-idle so that external USB3 disks spin dowwn when idle and not wear out quickly."
+echo "# Finished installation of hd-idle so that external USB3 disks spin down when idle and not wear out quickly."
 echo ""
-echo "# If that did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-echo "################################################################################################################################"
-echo ""
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-
 
 
 

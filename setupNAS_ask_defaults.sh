@@ -60,7 +60,7 @@ if [ "${virtual_folder_name_default_1}" = "" ]; then virtual_folder_name_default
 if [ "${USB3_mountpoint_default_1}" = "" ]; then  USB3_mountpoint_default_1=/mnt/${virtual_folder_name_1}; fi
 if [ "${root_folder_default_1}" = "" ]; then root_folder_default_1=${USB3_mountpoint_1}/${virtual_folder_name_1}; fi
 #
-read -e -p "Designate the FIRST virtual_folder_name (will become the FIRST Virtual Folder share name) [${virtual_folder_name_default_2}]: " -i "${virtual_folder_name_default_2}" input_string
+read -e -p "Designate the FIRST virtual_folder_name (will become the FIRST Virtual Folder share name) [${virtual_folder_name_default_1}]: " -i "${virtual_folder_name_default_1}" input_string
 virtual_folder_name_1="${input_string:-$virtual_folder_name_default_1}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 #
 read -e -p "Designate the mount point for the FIRST USB3 external hard drive [${USB3_mountpoint_default_1}]: " -i "${USB3_mountpoint_default_1}" input_string

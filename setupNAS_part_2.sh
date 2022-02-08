@@ -150,6 +150,7 @@ echo ""
 
 set -x
 sudo cp -fv "/etc/default/hd-idle" "/etc/default/hd-idle.old"
+
 sudo sed -i "s;START_HD_IDLE=;#START_HD_IDLE=;g" "/etc/default/hd-idle"
 sudo sed -i "s;HD_IDLE_OPTS=;#HD_IDLE_OPTS=;g" "/etc/default/hd-idle"
 sudo sed -i "2 i START_HD_IDLE=true" "/etc/default/hd-idle" # insert at line 2
@@ -163,7 +164,7 @@ set +x
 
 set -x
 sudo cat "/etc/default/hd-idle"
-sudo diff -U 10 "/etc/default/hd-idle.old" "/etc/default/hd-idle"
+#sudo diff -U 10 "/etc/default/hd-idle.old" "/etc/default/hd-idle"
 set +x
 # start and enable start at system boot, per instructions https://github.com/adelolmo/hd-idle/
 

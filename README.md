@@ -29,11 +29,11 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 1. We have One or perhaps Two USB3 external hard drives full of videos, to attach to the Raspbetty Pi    
    - these USB3 drives must be formatted as NTFS by Windows, and have security set to `Everyone` having `Full Access` to the top level and all subfolders and files
    - first USB3 drive has characteristics:    
-     * Drive label `mp4library`    
-     * a folder at the root level of the first USB3 drive must be `mp4library` and have security set to `Everyone` having `Full Access` to this folder and all subfolders    
+     * Drive label `mp4library1`    
+     * a folder at the root level of the first USB3 drive must be `mp4library1` and have security set to `Everyone` having `Full Access` to this folder and all subfolders    
    - second USB3 drive has characteristics:    
      * Drive label `mp4library2`    
-     * a folder at the root level of the first USB3 drive must be `mp4library` (same as the first drive) and have security set to `Everyone` having `Full Access` to this folder and all subfolders    
+     * a folder at the root level of the first USB3 drive must be `mp4library2` (NOT the same as the first drive) and have security set to `Everyone` having `Full Access` to this folder and all subfolders    
 
 2. We choose to sometimes detach the USB3 drives from the Raspberry Pi4 and temporarily attach them to a Windows 10 PC to copy large media files onto them    
    - as we all know, USB3 file copy speeds will be *much* greater for locally attached drives vs copying cross the network    
@@ -175,11 +175,11 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
    - set security on the top level and all subfolders and files to `Everyone` having `Full Access`
      * hint: one may need to change "inherited permissions"
    - first USB3 drive has characteristics:    
-     * Drive label `mp4library`    
-     * a folder at the root level of the first USB3 drive must be `mp4library` and have security set to `Everyone` having `Full Access` to this folder and all subfolders and files    
+     * Drive label `mp4library1`    
+     * a folder at the root level of the first USB3 drive must be `mp4library1` and have security set to `Everyone` having `Full Access` to this folder and all subfolders and files    
    - (if one has one) second USB3 drive has characteristics:    
      * Drive label `mp4library2`    
-     * a folder at the root level of the first USB3 drive must be `mp4library` (same as the first drive) and have security set to `Everyone` having `Full Access` to this folder and all subfolders and files 
+     * a folder at the root level of the first USB3 drive must be `mp4library2` (NOT the same as the first drive) and have security set to `Everyone` having `Full Access` to this folder and all subfolders and files 
    - copy media files into the folder tree one created, and check security permissikons on them is set correctly	 
 
 6. Cross-check **eveything** and Reboot the Pi4 one last time to ensure all settings are good and being used !
@@ -233,10 +233,10 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      ```
 5. Answer the prompts (it will save most of these answers for use later)
    - `This server_name` it's best to choose the Pi4's hostname of the Pi4 here (we use Pi4NAS64) - it will be used as the network service name by `Kodi` and `VLC` etc
-   - `This server_alias (will become a Virtual Folder for mounting purposes)` - recommend leave it as `mp4library` so it matches the top level folder name on the USB3 drive
+   - `This server_alias (will become a Virtual Folder for mounting purposes)` - recommend leave it as `mp4library1` so it matches the top level folder name on the USB3 drive
      * ... it will be used as the top-level folder name on our external USB3 drive, so put our video files in there
-   - `Designate the mount point for the USB3 external hard drive` it's a "virtual" place used everywhere to access the top level of the USB3 external hard drive when mounted, eg `/mnt/mp4library`
-   - `Designate the root folder on the USB3 external hard drive` it's the top level folder on the USB3 external hard drive containing .mp4 files and subfolders containing .mp4 files, eg `/mnt/mp4library/mp4library`
+   - `Designate the mount point for the USB3 external hard drive` it's a "virtual" place used everywhere to access the top level of the USB3 external hard drive when mounted, eg `/mnt/mp4library1`
+   - `Designate the root folder on the USB3 external hard drive` it's the top level folder on the USB3 external hard drive containing .mp4 files and subfolders containing .mp4 files, eg `/mnt/mp4library1/mp4library1`
 
 6. Answer more prompts    
    - when we see something like this:

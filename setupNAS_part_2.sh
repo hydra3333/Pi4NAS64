@@ -205,7 +205,7 @@ echo "#-------------------------------------------------------------------------
 echo ""
 echo "We have now completed PART 2 of the setup."
 echo ""
-echo "Now we will reboot the Pi4, so that the USB3 external disk(s) are recognisd by fstab and mounted correctly, etc."
+echo "Now we will now reboot the Pi4, so that things are running cleanly."
 echo ""
 read -p "# Press Enter to continue."
 echo ""

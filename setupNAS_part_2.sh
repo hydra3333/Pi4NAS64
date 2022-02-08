@@ -149,14 +149,14 @@ sleep 2s
 # sda     timeout 900s = 15 mins
 the_default_timeout=300
 the_sda_timeout=900
-set +x
+#set +x
 echo ""
-idle_opts = "HD_IDLE_OPTS=\"-i ${the_default_timeout} "
-idle_opts += " -a ${USB3_DISK_NAME_1} -i ${the_sda_timeout} "
+idle_opts="HD_IDLE_OPTS=\"-i ${the_default_timeout} "
+idle_opts+=" -a ${USB3_DISK_NAME_1} -i ${the_sda_timeout} "
 if [ "${SecondDisk}" = "y" ]; then
-	idle_opts += " -a ${USB3_DISK_NAME_2} -i ${the_sda_timeout} "
+	idle_opts+=" -a ${USB3_DISK_NAME_2} -i ${the_sda_timeout} "
 fi
-idle_opts += " -l /var/log/hd-idle.log\n\""
+idle_opts+=" -l /var/log/hd-idle.log\n\""
 echo "Setting idle_opts=${idle_opts}"
 echo ""
 set -x

@@ -175,6 +175,24 @@ set -x
 set +x
 echo ""
 #
+set -x
+sudo blkid
+sudo df
+sudo lsblk
+sudo blkid -U ${USB3_DEVICE_UUID_1}
+sudo df -l /dev/${USB3_DISK_NAME_1}
+sudo lsblk /dev/${USB3_DISK_NAME_1}
+set +x
+if [ "${SecondDisk}" = "y" ]; then
+	echo "# Attributes of SECOND USB3 DISK"
+	set -x
+	sudo blkid -U ${USB3_DEVICE_UUID_2}
+	sudo df -l /dev/${USB3_DISK_NAME_2}
+	sudo lsblk /dev/${USB3_DISK_NAME_2}
+	set +x
+fi
+echo ""
+#
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Update /etc/apt/sources.list so that all standard repositories for x64 o/s updates are allowed."

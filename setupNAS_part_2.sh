@@ -80,16 +80,20 @@ if [ "${SecondDisk}" = "y" ]; then
 fi
 echo "# Attributes of FIRST USB3 DISK"
 set -x
-sudo blkid ${USB3_DISK_NAME_1}
-sudo df ${USB3_DISK_NAME_1}
-sudo lsblk ${USB3_DISK_NAME_1}
+sudo blkid
+sudo df
+sudo lsblk
+#
+sudo blkid -U ${USB3_DEVICE_UUID_1}
+sudo df -l /dev/${USB3_DISK_NAME_1}
+sudo lsblk /dev/${USB3_DISK_NAME_1}
 set +x
 if [ "${SecondDisk}" = "y" ]; then
 	echo "# Attributes of SECOND USB3 DISK"
 	set -x
-	sudo blkid ${USB3_DISK_NAME_2}
-	sudo df ${USB3_DISK_NAME_2}
-	sudo lsblk ${USB3_DISK_NAME_2}
+	sudo blkid -U ${USB3_DEVICE_UUID_2}
+	sudo df -l /dev/${USB3_DISK_NAME_2}
+	sudo lsblk /dev/${USB3_DISK_NAME_2}
 	set +x
 fi
 echo ""
@@ -149,7 +153,7 @@ sleep 2s
 # sda     timeout 900s = 15 mins
 the_default_timeout=300
 the_sda_timeout=900
-#set +x
+set +x
 echo ""
 idle_opts="HD_IDLE_OPTS=\"-i ${the_default_timeout} "
 idle_opts+=" -a ${USB3_DISK_NAME_1} -i ${the_sda_timeout} "

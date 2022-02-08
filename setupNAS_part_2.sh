@@ -49,6 +49,18 @@ echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
+echo "# Ask for and setup default settings and try to remember them."
+echo ""
+sdname=./setupNAS_ask_defaults.sh
+echo . "${sdname}"
+# Yes there's a ". " at the start of the line '. "${sdname}"'
+set -x
+. "${sdname}"
+set +x
+echo ""
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
 echo "# Install 'hd-idle' so that external USB3 disks spin down when idle and not wear out quickly."
 echo ""
 echo "# Some WD external USB3 disks won't spin down on idle and HDPARM and SDPARM don't work on them."

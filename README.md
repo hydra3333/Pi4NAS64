@@ -210,14 +210,14 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      * then look for its physical mount point ... in this case it is `/dev/sda2` ... copy and paste the string somewhere as we must use it later
      * with a second USB3 drive, both these would be obvious as well ... also copy and paste these strings somewhere as we must use them later 
 
-3. Clone the Pi4NAS Github respository to the Desktop of the Pi and copy the setup files to the Desktop
+3. Clone the Pi4NAS64 Github respository to the Desktop of the Pi and copy the setup files to the Desktop
    - start a Terminal and do this:
      ```
      cd ~/Desktop   
      sudo apt install -y git   
-     sudo rm -vfR ./Pi4NAS   
-     git clone https://github.com/hydra3333/Pi4NAS.git   
-     cp -fv ./Pi4NAS/*.sh ./   
+     sudo rm -vfR ./Pi4NAS64   
+     git clone https://github.com/hydra3333/Pi4NAS64.git   
+     cp -fv ./Pi4NAS64/*.sh ./   
      sudo chmod +777 *.sh   
      # determine the user and group numbers (both should be 1000)   
      id -u pi   

@@ -29,6 +29,25 @@ fi
 echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+while true; do
+	read -p "Have you plugged in the USB3 external disks into the correct USB3 slots yet ? [y/n]? " yn
+	case $yn in
+		[Yy]* ) OK=y; break;;
+		[Nn]* ) OK=n; break;;
+		* ) echo "Please answer y or n only.";;
+	esac
+done
+if [ "${OK}" = "n" ]; then
+	echo ""
+	echo ""
+	echo "You MUST plug in the USB3 external disks into the correct USB3 slots first"
+	echo ""
+	echo ""
+	exit
+fi
+echo ""
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "OK, check some settings on the Pi4"
 echo ""
@@ -41,6 +60,13 @@ sudo hostname
 sudo hostname --fqdn
 sudo hostname --all-ip-addresses
 set +x
+echo ""
+echo "# Just for kicks, see what filesystems are supported by the Pi4 (NTFS should be listed)"
+echo ""
+set -x
+sudo ls -al "/lib/modules/$(uname -r)/kernel/fs/"
+set +x
+echo ""
 echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
@@ -143,54 +169,25 @@ set -x
 sudo usermod -a -G plugdev pi
 set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
 echo ""
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-
+#
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# OK ... PLEASE RE-CONNECT THE EXTERNALLY-POWERED USB3 HARD DRIVE(S) INTO THE Pi4 NOW."
-echo "# OK ... PLEASE RE-CONNECT THE EXTERNALLY-POWERED USB3 HARD DRIVE(S) INTO THE Pi4 NOW."
-echo ""
-echo " THEN in a new Terminal, do"
-echo "      sudo reboot now"
-echo " and then re-start this procedure".
-echo ""
-echo "# Always use the same USB socket on the Pi."
-echo "# Always use an externally-powered USB3 drive, so that we have "
-echo "# sufficient power and sufficient data transfer bandwidth."
-echo "# Once it spins up, the USB3 drive(s) will auto-mount with NTFS."
-echo ""
-read -p "# Press Enter to continue, after you have plugged them in and waited 30 seconds for them to auto-mount."
-echo ""
-echo "# Create a mount point folder(s) for the USB3 drive(s), which we'll use in a minute."
-echo "# In this case I want to call it 'mp4library'"
+echo "# Create mount point folder(s) for the USB3 drive(s), which we'll use in a minute."
 echo ""
 set -x
-sudo mkdir -p ${server_root_USBmountpoint}
-sudo chmod -c a=rwx -R ${server_root_USBmountpoint}
+sudo mkdir -p ${USB3_mountpoint_1}
+sudo chmod -c a=rwx -R ${USB3_mountpoint_1}
 if [ "${SecondaryDisk}" = "y" ]; then
-	sudo mkdir -p ${server_root_USBmountpoint2}
-	sudo chmod -c a=rwx -R ${server_root_USBmountpoint2}
+	sudo mkdir -p ${USB3_mountpoint_2}
+	sudo chmod -c a=rwx -R ${USB3_mountpoint_2}
 fi
 set +x
 echo "# If that did not work, control-C then fix any issues, then re-start this script."
 read -p "# Otherwise - Press Enter to continue."
 echo ""
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-echo ""
-echo "# Just for kicks, see what filesystems are supported by the Pi4 (NTFS should be listed)"
-echo ""
-set -x
-sudo ls -al "/lib/modules/$(uname -r)/kernel/fs/"
-set +x
-echo "# If that did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-
+#
+#
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# **********************************************************************************************"

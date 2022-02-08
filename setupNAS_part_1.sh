@@ -117,7 +117,6 @@ set -x
 sudo sed -i.bak "s/#deb/deb/g" "/etc/apt/sources.list"
 cat "/etc/apt/sources.list"
 set +x
-read -p "# Otherwise - Press Enter to continue."
 echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
@@ -178,7 +177,7 @@ echo ""
 set -x
 sudo mkdir -p ${USB3_mountpoint_1}
 sudo chmod -c a=rwx -R ${USB3_mountpoint_1}
-if [ "${SecondaryDisk}" = "y" ]; then
+if [ "${SecondDisk}" = "y" ]; then
 	sudo mkdir -p ${USB3_mountpoint_2}
 	sudo chmod -c a=rwx -R ${USB3_mountpoint_2}
 fi
@@ -189,8 +188,8 @@ echo "#-------------------------------------------------------------------------
 echo ""
 echo "# Now we add a line to file '/etc/fstab' so that USB3 drives are installed the same every time"
 echo "# Remember, always be consistent and plugin "
-echo "#    1. the main      USB3 drive into the bottom USB3 socket"
-echo "#    2. the secondary USB3 drive into the top    USB3 socket (if we have a secondary drive)"
+echo "#    1. the FIRST   USB3 drive into the bottom USB3 socket"
+echo "#    2. the SECOND  USB3 drive into the top    USB3 socket (if we have a second drive)"
 echo "# https://wiki.debian.org/fstab"
 echo ""
 set -x
@@ -204,7 +203,7 @@ sudo sed -i.bak "/ntfs defaults,auto/s/^/#/" "/etc/fstab"
 sudo sed -i.bak "s/UUID=${USB3_DEVICE_UUID_1}/#UUID=${USB3_DEVICE_UUID_1}/g" "/etc/fstab"
 sudo sed -i.bak "$ a UUID=${USB3_DEVICE_UUID_1} ${USB3_mountpoint_1} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
-if [ "${SecondaryDisk}" = "y" ]; then
+if [ "${SecondDisk}" = "y" ]; then
 	set -x
 	sudo sed -i.bak "s/UUID=${USB3_DEVICE_UUID_2}/#UUID=${USB3_DEVICE_UUID_2}/g" "/etc/fstab"
 	sudo sed -i.bak "$ a UUID=${USB3_DEVICE_UUID_2} ${server_root_USBmountpoint2} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"

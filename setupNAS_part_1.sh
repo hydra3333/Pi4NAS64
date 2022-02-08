@@ -270,8 +270,7 @@ echo "#-------------------------------------------------------------------------
 echo ""
 echo "We have now completed PART 1 of the setup."
 echo ""
-echo "Now we will reboot the Pi4, so that the USB3 external disk(s) are recognisd by fstab"
-echo "and mounted correctly for you to execute PART 2"
+echo "Now we will reboot the Pi4, so that the USB3 external disk(s) are recognisd by fstab and mounted correctly for you to execute 'setupNAS_part_2.sh'"
 echo ""
 read -p "# Press Enter to continue."
 echo ""
@@ -279,4 +278,3 @@ set -x
 sudo reboot now
 set +x
 exit
-

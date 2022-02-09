@@ -14,13 +14,13 @@ do_setup_NFS=true
 do_setup_SAMBA=false
 
 echo "do_setup_hdidle=${do_setup_hdidle}"
-if [[ ${do_setup_hdidle} ]]; then
+if [[ ${do_setup_hdidle} = true ]]; then
 	echo "true: if [[ ${do_setup_hdidle} ]]; then"
 else
 	echo "false: if [[ ${do_setup_hdidle} ]]; then"
 fi
 
-if [ ${do_setup_hdidle} ]; then
+if [ ${do_setup_hdidle} = true ]; then
 	echo "true: if [ ${do_setup_hdidle} ]; then"
 else
 	echo "false: if [ ${do_setup_hdidle} ]; then"

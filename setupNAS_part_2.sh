@@ -10,6 +10,8 @@ echo "#-------------------------------------------------------------------------
 echo "#"
 set -x
 do_setup_hdidle=true
+do_setup_NFS=true
+do_setup_hdidle=true
 set +x
 echo "#"
 set -x
@@ -23,7 +25,7 @@ while true; do
 		* ) echo "Please answer y or n only.";;
 	esac
 done
-if [ "${OK}" = "n" ]; then
+if [[ "${OK}" = "n" ]]; then
 	echo ""
 	echo ""
 	echo "You MUST first complete the pre-Install instructions per README.md AND run 'setupNAS_part_1.sh' "
@@ -43,7 +45,7 @@ while true; do
 		* ) echo "Please answer y or n only.";;
 	esac
 done
-if [ "${OK}" = "n" ]; then
+if [[ "${OK}" = "n" ]]; then
 	echo ""
 	echo ""
 	echo "You MUST plug in the USB3 external disk(s) into the correct USB3 slots first"
@@ -65,6 +67,8 @@ set -x
 source "${sdname}"
 set +x
 echo ""
+#############################################################################################################################################
+IF [[ ${do_setup_hdidle} ]]; then
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
@@ -80,7 +84,7 @@ echo "# FIRST USB3 DISK"
 echo "#     USB3_DISK_NAME_1=${USB3_DISK_NAME_1}"
 echo "#   USB3_DEVICE_NAME_1=${USB3_DEVICE_NAME_1}"
 echo "#   USB3_DEVICE_UUID_1=${USB3_DEVICE_UUID_1}"
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	echo "# SECOND USB3 DISK"
 	echo "#    USB3_DISK_NAME_2=${USB3_DISK_NAME_2}"
 	echo "#  USB3_DEVICE_NAME_2=${USB3_DEVICE_NAME_2}"
@@ -95,7 +99,7 @@ sudo blkid -U ${USB3_DEVICE_UUID_1}
 sudo df -l /dev/${USB3_DISK_NAME_1}
 sudo lsblk /dev/${USB3_DISK_NAME_1}
 set +x
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	echo "# Attributes of SECOND USB3 DISK"
 	set -x
 	sudo blkid -U ${USB3_DEVICE_UUID_2}
@@ -149,7 +153,6 @@ echo ""
 ## observe output
 ##Use Ctrl+C to stop hd-idle in the terminal
 echo ""
-echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Modify the hd-idle configuration file to enable the service to automatically start and spin down drives"
 echo ""
@@ -164,7 +167,7 @@ set +x
 echo ""
 idle_opts="HD_IDLE_OPTS=\"-i ${the_default_timeout} "
 idle_opts+=" -a ${USB3_DISK_NAME_1} -i ${the_sda_timeout} "
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	idle_opts+=" -a ${USB3_DISK_NAME_2} -i ${the_sda_timeout} "
 fi
 idle_opts+=" -l /var/log/hd-idle.log\n\""
@@ -204,7 +207,7 @@ echo ""
 #
 nfs_export_top="/NFS-shares"
 nfs_export_full_1="${nfs_export_top}/${virtual_folder_name_1}"
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	nfs_export_full_2="${nfs_export_top}/${virtual_folder_name_2}"
 else
 	nfs_export_full_2=""
@@ -263,7 +266,7 @@ sudo chmod -c a=rwx -R "${nfs_export_top}"
 sudo mkdir -pv "${nfs_export_full_1}"
 sudo chmod -c a=rwx -R "${nfs_export_full_1}"
 set +x
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	sudo mkdir -pv "${nfs_export_full_2}"
 	sudo chmod -c a=rwx -R "${nfs_export_full_2}"
@@ -295,7 +298,7 @@ sudo mount -v --bind "${root_folder_1}" "${nfs_export_full_1}" --options default
 sudo ls -al "${root_folder_1}" 
 sudo ls -al "${nfs_export_full_1}" 
 set +x
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	sudo mount -v --bind "${root_folder_2}" "${nfs_export_full_2}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
 	sudo ls -al "${root_folder_2}" 
@@ -323,7 +326,7 @@ sudo sed -iBAK   "s;##;#;g" "/etc/fstab"
 ## physical logical
 sudo sed -iBAK "$ a ${root_folder_1} ${nfs_export_full_1} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	## physical logical
 	sudo sed -iBAK "$ a ${root_folder_2} ${nfs_export_full_2} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
@@ -354,7 +357,7 @@ set -x
 ##sudo sed -i "$ a ${nfs_export_top} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 sudo sed -i "$ a ${nfs_export_full_1} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	sudo sed -i "$ a ${nfs_export_full_2} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 	set +x
@@ -365,7 +368,7 @@ fi
 set -x
 sudo sed -i "$ a ${nfs_export_full_1} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	sudo sed -i "$ a ${nfs_export_full_2} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 	set +x
@@ -424,7 +427,7 @@ set -x
 sudo ls -al "${root_folder_1}" 
 sudo ls -al "${nfs_export_full_1}" 
 set +x
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	sudo ls -al "${root_folder_2}" 
 	sudo ls -al "${nfs_export_full_2}" 
@@ -453,7 +456,7 @@ echo "#">>"${f_ls_nsf}"
 echo "# Dismount the connections to the remote NFS share(s) in case they area already mounted">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
 echo "sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	echo "sudo umount -f \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
 echo "#">>"${f_ls_nsf}"
@@ -461,7 +464,7 @@ echo "# Create the local files to be used as temporary share mount points to con
 echo "#">>"${f_ls_nsf}"
 echo "sudo mkdir -pv \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 echo "sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	echo "sudo mkdir -pv \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 	echo "sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
@@ -479,7 +482,7 @@ echo "# dismount the temporary NFS share">>"${f_ls_nsf}"
 echo "sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 echo "# do NOT NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!">>"${f_ls_nsf}"
 echo "###sudo rm -vf \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	echo "sudo mount -v -t nfs ${server_ip}:${nfs_export_full_2} \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 	echo "# list files in the local folder ">>"${f_ls_nsf}"
 	echo "sudo ls -al \"${root_folder_2}\"">>"${f_ls_nsf}"

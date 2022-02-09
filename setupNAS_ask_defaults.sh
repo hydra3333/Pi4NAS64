@@ -57,15 +57,15 @@ fi
 #
 #---
 #
-if [ "${virtual_folder_name_default_1}" = "" ]; then virtual_folder_name_default_1=mp4library1; fi;
+if [[ "${virtual_folder_name_default_1}" = "" ]]; then virtual_folder_name_default_1=mp4library1; fi;
 read -e -p "Designate the FIRST virtual_folder_name (will become the FIRST Virtual Folder share name) [${virtual_folder_name_default_1}]: " -i "${virtual_folder_name_default_1}" input_string
 virtual_folder_name_1="${input_string:-$virtual_folder_name_default_1}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 #
-if [ "${USB3_mountpoint_default_1}" = "" ]; then  USB3_mountpoint_default_1=/mnt/${virtual_folder_name_1}; fi
+if [[ "${USB3_mountpoint_default_1}" = "" ]]; then  USB3_mountpoint_default_1=/mnt/${virtual_folder_name_1}; fi
 read -e -p "Designate the mount point for the FIRST USB3 external hard drive [${USB3_mountpoint_default_1}]: " -i "${USB3_mountpoint_default_1}" input_string
 USB3_mountpoint_1="${input_string:-$USB3_mountpoint_default_1}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 #
-if [ "${root_folder_default_1}" = "" ]; then root_folder_default_1=${USB3_mountpoint_1}/${virtual_folder_name_1}; fi
+if [[ "${root_folder_default_1}" = "" ]]; then root_folder_default_1=${USB3_mountpoint_1}/${virtual_folder_name_1}; fi
 read -e -p "Designate the physical root folder on the FIRST USB3 external hard drive [${root_folder_default_1}]: " -i "${root_folder_default_1}" input_string
 root_folder_1="${input_string:-$root_folder_default_1}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 #
@@ -82,25 +82,25 @@ while true; do
 		* ) echo "Please answer y or n only.";;
 	esac
 done
-if [ "${SecondDisk}" = "y" ]; then
-	if [ "${virtual_folder_name_default_2}" = "" ]; then virtual_folder_name_default_2=mp4library2; fi;
+if [[ "${SecondDisk}" = "y" ]]; then
+	if [[ "${virtual_folder_name_default_2}" = "" ]]; then virtual_folder_name_default_2=mp4library2; fi;
 	read -e -p "Designate the SECOND virtual_folder_name (will become the SECOND Virtual Folder share name) [${virtual_folder_name_default_2}]: " -i "${virtual_folder_name_default_2}" input_string
 	virtual_folder_name_2="${input_string:-$virtual_folder_name_default_2}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 	#
-	if [ "${USB3_mountpoint_default_2}" = "" ]; then USB3_mountpoint_default_2=mnt/${virtual_folder_name_2}; fi;
+	if [[ "${USB3_mountpoint_default_2}" = "" ]]; then USB3_mountpoint_default_2=mnt/${virtual_folder_name_2}; fi;
 	read -e -p "Designate the mount point for the SECOND USB3 external hard drive [${USB3_mountpoint_default_2}]: " -i "${USB3_mountpoint_default_2}" input_string
 	USB3_mountpoint_2="${input_string:-$USB3_mountpoint_default_2}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 	#
-	if [ "${root_folder_default_2}" = "" ]; then root_folder_default_2=${USB3_mountpoint_2}/${virtual_folder_name_2}; fi;
+	if [[ "${root_folder_default_2}" = "" ]]; then root_folder_default_2=${USB3_mountpoint_2}/${virtual_folder_name_2}; fi;
 	read -e -p "Designate the physical root folder on the SECOND USB3 external hard drive [${root_folder_default_2}]: " -i "${root_folder_default_2}" input_string
 	root_folder_2="${input_string:-$root_folder_default_2}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 else
-	if [ "${virtual_folder_name_default_2}" = "" ]; then virtual_folder_name_default_2=mp4library2; fi;
-	if [ "${USB3_mountpoint_default_2}" = "" ]; then USB3_mountpoint_default_2=mnt/${virtual_folder_name_default_2}; fi;
-	if [ "${root_folder_default_2}" = "" ]; then root_folder_default_2=${USB3_mountpoint_2}/${virtual_folder_name_default_2}; fi;
-	if [ "${virtual_folder_name_2}" = "" ]; then virtual_folder_name_2=virtual_folder_name_default_2; fi
-	if [ "${USB3_mountpoint_2}" = "" ]; then USB3_mountpoint_2=USB3_mountpoint_default_2; fi
-	if [ "${root_folder_2}" = "" ]; then root_folder_2=root_folder_default_2; fi
+	if [[ "${virtual_folder_name_default_2}" = "" ]]; then virtual_folder_name_default_2=mp4library2; fi;
+	if [[ "${USB3_mountpoint_default_2}" = "" ]]; then USB3_mountpoint_default_2=mnt/${virtual_folder_name_default_2}; fi;
+	if [[ "${root_folder_default_2}" = "" ]]; then root_folder_default_2=${USB3_mountpoint_2}/${virtual_folder_name_default_2}; fi;
+	if [[ "${virtual_folder_name_2}" = "" ]]; then virtual_folder_name_2=virtual_folder_name_default_2; fi
+	if [[ "${USB3_mountpoint_2}" = "" ]]; then USB3_mountpoint_2=USB3_mountpoint_default_2; fi
+	if [[ "${root_folder_2}" = "" ]]; then root_folder_2=root_folder_default_2; fi
 fi
 #
 # ALWAYS choose a USB3 Disk device and find it's UUID
@@ -189,8 +189,8 @@ menu_from_array () {
  select item; do
    # Check the selected menu item number
    #echo "*** REPLY=${REPLY} *** item=${item}"
-   if [ 1 -le "$REPLY" ] && [ "$REPLY" -le $# ]; then
-      if [ "$REPLY" -eq $# ]; then
+   if [[ 1 -le "$REPLY" ]] && [[ "$REPLY" -le $# ]]; then
+      if [[ "$REPLY" -eq $# ]]; then
 		let "selected_index=-1"
 		selected_item=""
 		echo "EXITING: selected_index:${selected_index} selected_item:${selected_item}..."
@@ -212,20 +212,20 @@ echo "Choose which device is the FIRST USB3 hard drive/partition containing the 
 echo ""
 exit_string="It isn't displayed, Exit immediately"
 menu_from_array "${device_string[@]}" "${exit_string}"
-if [ "${selected_index}" -eq "-1" ]; then
+if [[ "${selected_index}" -eq "-1" ]]; then
 	exit
 fi
 USB3_DISK_NAME_1="${disk_name[${selected_index}]}"
 USB3_DEVICE_NAME_1="${device_name[${selected_index}]}"
 USB3_DEVICE_UUID_1="${device_uuid[${selected_index}]}"
 #
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	echo ""
 	echo "Choose which device is the SECOND USB3 hard drive/partition containing the .mp4 files ! "
 	echo ""
 	exit_string="It isn't displayed, Exit immediately"
 	menu_from_array "${device_string[@]}" "${exit_string}"
-	if [ "${selected_index}" -eq "-1" ]; then
+	if [[ "${selected_index}" -eq "-1" ]]; then
 		SecondDisk=n
 		USB3_DISK_NAME_2=""
 		USB3_DEVICE_NAME_2=""
@@ -282,7 +282,7 @@ echo "             USB3_DISK_NAME_1=${USB3_DISK_NAME_1}"
 echo "           USB3_DEVICE_NAME_1=${USB3_DEVICE_NAME_1}"
 echo "           USB3_DEVICE_UUID_1=${USB3_DEVICE_UUID_1}"
 echo ""
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	echo "             SecondDisk=${SecondDisk}"
 	echo " SECOND virtual_folder_name_2=${virtual_folder_name_2}"
 	echo "            USB3_mountpoint_2=${USB3_mountpoint_2}"

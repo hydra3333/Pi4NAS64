@@ -18,7 +18,7 @@ while true; do
 		* ) echo "Please answer y or n only.";;
 	esac
 done
-if [ "${OK}" = "n" ]; then
+if [[ "${OK}" = "n" ]]; then
 	echo ""
 	echo ""
 	echo "You MUST first complete the pre-Install instructions per README.md on this GIT"
@@ -37,7 +37,7 @@ while true; do
 		* ) echo "Please answer y or n only.";;
 	esac
 done
-if [ "${OK}" = "n" ]; then
+if [[ "${OK}" = "n" ]]; then
 	echo ""
 	echo ""
 	echo "You MUST plug in the USB3 external disk(s) into the correct USB3 slots first"
@@ -183,7 +183,7 @@ sudo blkid -U ${USB3_DEVICE_UUID_1}
 sudo df -l /dev/${USB3_DISK_NAME_1}
 sudo lsblk /dev/${USB3_DISK_NAME_1}
 set +x
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	echo "# Attributes of SECOND USB3 DISK"
 	set -x
 	sudo blkid -U ${USB3_DEVICE_UUID_2}
@@ -244,7 +244,7 @@ echo ""
 set -x
 sudo mkdir -p ${USB3_mountpoint_1}
 sudo chmod -c a=rwx -R ${USB3_mountpoint_1}
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	sudo mkdir -p ${USB3_mountpoint_2}
 	sudo chmod -c a=rwx -R ${USB3_mountpoint_2}
 fi
@@ -270,7 +270,7 @@ sudo sed -i.bak "/ntfs defaults,auto/s/^/#/" "/etc/fstab"
 sudo sed -i.bak "s/UUID=${USB3_DEVICE_UUID_1}/#UUID=${USB3_DEVICE_UUID_1}/g" "/etc/fstab"
 sudo sed -i.bak "$ a UUID=${USB3_DEVICE_UUID_1} ${USB3_mountpoint_1} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
-if [ "${SecondDisk}" = "y" ]; then
+if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	sudo sed -i.bak "s/UUID=${USB3_DEVICE_UUID_2}/#UUID=${USB3_DEVICE_UUID_2}/g" "/etc/fstab"
 	sudo sed -i.bak "$ a UUID=${USB3_DEVICE_UUID_2} ${USB3_mountpoint_2} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"

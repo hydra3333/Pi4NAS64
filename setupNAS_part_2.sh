@@ -463,6 +463,7 @@ echo "# to get rid of MSDOS format do this to this file: sudo sed -i.bak s/\\r//
 echo "# or, open in nano, control-o and then then alt-M a few times to toggle msdos format off and then save" >>"${f_ls_nsf}"
 echo "#" >>"${f_ls_nsf}"
 echo "set -x" >>"${f_ls_nsf}"
+echo "#" >>"${f_ls_nsf}"
 echo "# Connect to and list the content of local NFS file shares " >>"${f_ls_nsf}"
 echo "#" >>"${f_ls_nsf}"
 echo "cd ~/Desktop">>"${f_ls_nsf}"

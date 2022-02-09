@@ -242,10 +242,10 @@ echo ""
 echo "# Create mount point folder(s) for the USB3 drive(s), which we'll use in a minute."
 echo ""
 set -x
-sudo mkdir -p ${USB3_mountpoint_1}
+sudo mkdir -pv ${USB3_mountpoint_1}
 sudo chmod -c a=rwx -R ${USB3_mountpoint_1}
 if [[ "${SecondDisk}" = "y" ]]; then
-	sudo mkdir -p ${USB3_mountpoint_2}
+	sudo mkdir -pv ${USB3_mountpoint_2}
 	sudo chmod -c a=rwx -R ${USB3_mountpoint_2}
 fi
 set +x

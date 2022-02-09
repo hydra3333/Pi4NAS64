@@ -12,6 +12,24 @@ set -x
 do_setup_hdidle=false
 do_setup_NFS=true
 do_setup_SAMBA=false
+
+echo "do_setup_hdidle=${do_setup_hdidle}"
+if [[ ${do_setup_hdidle} ]]; then
+	echo "true: if [[ ${do_setup_hdidle} ]]; then"
+else
+	echo "false: if [[ ${do_setup_hdidle} ]]; then"
+fi
+
+if [ ${do_setup_hdidle} ]; then
+	echo "true: if [ ${do_setup_hdidle} ]; then"
+else
+	echo "false: if [ ${do_setup_hdidle} ]; then"
+fi
+
+
+
+exit
+
 set +x
 echo "#"
 set -x
@@ -454,6 +472,9 @@ f_ls_nsf=./test-nsf.sh
 set -x
 cd ~/Desktop
 sudo rm -vf "${f_ls_nsf}"
+temp_remote_nfs_share_1="/temp_remote_nfs_share_1"
+temp_remote_nfs_share_2="/temp_remote_nfs_share_2"
+set +x
 echo "#!/bin/bash:" >>"${f_ls_nsf}"
 echo "# to get rid of MSDOS format do this to this file: sudo sed -i.bak s/\\r//g ./filename" >>"${f_ls_nsf}"
 echo "# or, open in nano, control-o and then then alt-M a few times to toggle msdos format off and then save" >>"${f_ls_nsf}"
@@ -461,9 +482,6 @@ echo "#" >>"${f_ls_nsf}"
 echo "# Connect to and list the content of local NFS file shares " >>"${f_ls_nsf}"
 echo "#" >>"${f_ls_nsf}"
 echo "cd ~/Desktop">>"${f_ls_nsf}"
-echo "#">>"${f_ls_nsf}"
-echo "temp_remote_nfs_share_1=\"/temp_remote_nfs_share_1\"">>"${f_ls_nsf}"
-echo "temp_remote_nfs_share_2=\"/temp_remote_nfs_share_2\"">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
 echo "# Dismount the connections to the remote NFS share(s) in case they area already mounted">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"

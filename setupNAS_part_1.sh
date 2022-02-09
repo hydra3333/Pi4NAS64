@@ -168,10 +168,10 @@ echo ""
 echo "# Ask for and setup default settings and try to remember them."
 echo ""
 sdname=./setupNAS_ask_defaults.sh
-echo . "${sdname}"
-# Yes there's a ". " at the start of the line '. "${sdname}"'
+echo source "${sdname}"
+##. "${sdname}" ### Yes there's a ". " at the start of the line '. "${sdname}"'
 set -x
-. "${sdname}"
+source "${sdname}"
 set +x
 echo ""
 #

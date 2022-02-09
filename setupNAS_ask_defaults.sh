@@ -4,7 +4,8 @@
 #
 # Determine the settings to apply, based in prior answers.
 # Call this .sh like:
-# . "./setupNAS_ask_defaults.sh"
+## . "./setupNAS_ask_defaults.sh"
+# source "./setupNAS_ask_defaults.sh"
 #
 set +x
 cd ~/Desktop

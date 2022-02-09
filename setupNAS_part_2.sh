@@ -7,6 +7,11 @@ echo "#-------------------------------------------------------------------------
 echo "# THis is now the x64 version for Raspberry Pi OS x64 - and ONLY the x64 version"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo "#"
+set -x
+do_setup_hdidle=true
+set +x
+echo "#"
 set -x
 cd ~/Desktop
 set +x
@@ -29,6 +34,7 @@ fi
 echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 while true; do
 	read -p "Have you plugged in the USB3 external disk(s) into the correct USB3 slots yet ? [y/n]? " yn
 	case $yn in
@@ -48,17 +54,19 @@ fi
 echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Ask for and setup default settings and try to remember them."
 echo ""
 sdname=./setupNAS_ask_defaults.sh
-echo . "${sdname}"
-# Yes there's a ". " at the start of the line '. "${sdname}"'
+echo source "${sdname}"
+##. "${sdname}" ### Yes there's a ". " at the start of the line '. "${sdname}"'
 set -x
-. "${sdname}"
+source "${sdname}"
 set +x
 echo ""
 #
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Install 'hd-idle' so that external USB3 disks spin down when idle and not wear out quickly."
@@ -184,14 +192,7 @@ set +x
 echo ""
 echo "# Finished installation of hd-idle so that external USB3 disks spin down when idle and not wear out quickly."
 echo ""
-
-
-
-
-
-
-
-
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "# Install NFS and create the NFS shares"
@@ -289,6 +290,7 @@ echo ""
 set -x
 sudo df -h
 sudo mount -l
+## mount physical logical
 sudo mount -v --bind "${root_folder_1}" "${nfs_export_full_1}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
 sudo ls -al "${root_folder_1}" 
 sudo ls -al "${nfs_export_full_1}" 
@@ -318,11 +320,13 @@ sudo sed -iBAK "s;${root_folder_1} ${nfs_export_full_1};#${root_folder_1} ${nfs_
 sudo sed -iBAK "s;${root_folder_2} ${nfs_export_full_2};#${root_folder_2} ${nfs_export_full_2};g" "/etc/fstab" # do the SECOND just in case there was one previously
 sudo sed -iBAK   "s;##;#;g" "/etc/fstab"
 # add the new shares
+## physical logical
 sudo sed -iBAK "$ a ${root_folder_1} ${nfs_export_full_1} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
 if [ "${SecondDisk}" = "y" ]; then
 	set -x
-	sudo sed -iBAK "$ a ${server_root_folder2} ${nfs_export_full_2} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+	## physical logical
+	sudo sed -iBAK "$ a ${root_folder_2} ${nfs_export_full_2} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 	set +x
 fi
 echo ""
@@ -346,8 +350,8 @@ sudo sed -i "s;${nfs_export_full_2} 127.0.0.1;#${nfs_export_full_1} 127.0.0.1;g"
 set +x
 #... END of comment out prior NFS export entries
 #... START of add entries for the LAN IP range
-#sudo sed -i "$ a ${nfs_export_top} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set -x
+##sudo sed -i "$ a ${nfs_export_top} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 sudo sed -i "$ a ${nfs_export_full_1} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 if [ "${SecondDisk}" = "y" ]; then
@@ -427,15 +431,13 @@ if [ "${SecondDisk}" = "y" ]; then
 	set +x
 fi
 set +x
+#++++++++++
 echo ""
-echo "Now cleanup NFS stuff ..."
+echo "Create a .sh to test NFS stuff at any time, mounting and dismounting shares ..."
 echo ""
-
-
-
+f_ls_nsf=./test-nsf.sh
 set -x
 cd ~/Desktop
-f_ls_nsf=~/Desktop/ls-nsf.sh
 sudo rm -vf "${f_ls_nsf}"
 echo "#!/bin/bash:" >>"${f_ls_nsf}"
 echo "# to get rid of MSDOS format do this to this file: sudo sed -i.bak s/\\r//g ./filename" >>"${f_ls_nsf}"
@@ -443,61 +445,54 @@ echo "# or, open in nano, control-o and then then alt-M a few times to toggle ms
 echo "#" >>"${f_ls_nsf}"
 echo "# Connect to and list the content of local NFS file shares " >>"${f_ls_nsf}"
 echo "#" >>"${f_ls_nsf}"
-sudo umount -f "/tmp-NFS-mountpoint"
-echo sudo umount -f "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
-sudo mkdir -p "/tmp-NFS-mountpoint"
-echo sudo mkdir -p "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
-sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint"
-echo sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
-#sudo ls -al "/tmp-NFS-mountpoint"
-sudo mount -v -t nfs ${server_ip}:/${nfs_export_full_1} "/tmp-NFS-mountpoint"
-echo sudo mount -v -t nfs ${server_ip}:/${nfs_export_full_1} "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
-sudo ls -al "/tmp-NFS-mountpoint/"
-echo # list files in the main share ">>"${f_ls_nsf}"
-echo sudo ls -al "/tmp-NFS-mountpoint/">>"${f_ls_nsf}"
-sudo umount -f "/tmp-NFS-mountpoint"
-echo sudo umount -f "/tmp-NFS-mountpoint">>"${f_ls_nsf}"
+echo "cd ~/Desktop">>"${f_ls_nsf}"
+echo "#">>"${f_ls_nsf}"
+echo "temp_remote_nfs_share_1=\"/temp_remote_nfs_share_1\"">>"${f_ls_nsf}"
+echo "temp_remote_nfs_share_2=\"/temp_remote_nfs_share_2\"">>"${f_ls_nsf}"
+echo "#">>"${f_ls_nsf}"
+echo "# Dismount the connections to the remote NFS share(s) in case they area already mounted">>"${f_ls_nsf}"
+echo "#">>"${f_ls_nsf}"
+echo "sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 if [ "${SecondDisk}" = "y" ]; then
-	sudo umount -f "/tmp-NFS-mountpoint2"
-	echo sudo umount -f "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
-	sudo mkdir -p "/tmp-NFS-mountpoint2"
-	echo sudo mkdir -p "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
-	sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint2"
-	echo sudo chmod -c a=rwx -R "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
-	#sudo ls -al "/tmp-NFS-mountpoint2"
-	sudo mount -v -t nfs ${server_ip}:/${nfs_export_full_2} "/tmp-NFS-mountpoint2"
-	echo sudo mount -v -t nfs ${server_ip}:/${nfs_export_full_2} "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
-	sudo ls -al "/tmp-NFS-mountpoint2/"
-	echo # list files in the secondary share ">>"${f_ls_nsf}"
-	echo sudo ls -al "/tmp-NFS-mountpoint2/">>"${f_ls_nsf}"
-	sudo umount -f "/tmp-NFS-mountpoint2"
-	echo sudo umount -f "/tmp-NFS-mountpoint2">>"${f_ls_nsf}"
+	echo "sudo umount -f \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
-#sudo rm -vf "/tmp-NFS-mountpoint"
-# do NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!
-set +x
+echo "#">>"${f_ls_nsf}"
+echo "# Create the local files to be used as temporary share mount points to connect to the remote NFS shares">>"${f_ls_nsf}"
+echo "#">>"${f_ls_nsf}"
+echo "sudo mkdir -pv \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+echo "sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+if [ "${SecondDisk}" = "y" ]; then
+	echo "sudo mkdir -pv \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+	echo "sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+fi
+echo "#">>"${f_ls_nsf}"
+echo "# Connect to the remote NFS share(s) using the temporary mount points">>"${f_ls_nsf}"
+echo "#">>"${f_ls_nsf}"
+echo "sudo df -h">>"${f_ls_nsf}"
+echo "sudo mount -l">>"${f_ls_nsf}"
+echo "sudo mount -v -t nfs ${server_ip}:${nfs_export_full_1} \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+echo "# list files in the local folder ">>"${f_ls_nsf}"
+echo "sudo ls -al \"${root_folder_1}\"">>"${f_ls_nsf}"
+echo "# list files in the NFS share, which SHOULD be the same as in the local folder ">>"${f_ls_nsf}"
+echo "sudo ls -al \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+echo "# dismount the temporary NFS share">>"${f_ls_nsf}"
+echo "sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+echo "# do NOT NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!">>"${f_ls_nsf}"
+echo "###sudo rm -vf \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+if [ "${SecondDisk}" = "y" ]; then
+	echo "sudo mount -v -t nfs ${server_ip}:${nfs_export_full_2} \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+	echo "# list files in the local folder ">>"${f_ls_nsf}"
+	echo "sudo ls -al \"${root_folder_2}\"">>"${f_ls_nsf}"
+	echo "# list files in the NFS share, which SHOULD be the same as in the local folder ">>"${f_ls_nsf}"
+	echo "sudo ls -al \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+	echo "# dismount the temporary NFS share">>"${f_ls_nsf}"
+	echo "sudo umount -f \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+	echo "# do NOT NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!">>"${f_ls_nsf}"
+	echo "###sudo rm -vf \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+fi
+echo ""
 #
-echo ""
-echo "# If theNFS  cleanup did not work, control-C then fix any issues, then re-start this script."
-read -p "# Otherwise - Press Enter to continue."
-echo ""
-echo "################################################################################################################################"
-echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "We have now completed PART 2 of the setup."

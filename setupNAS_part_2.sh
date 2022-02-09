@@ -649,11 +649,11 @@ sudo pdbedit -L -v
 sudo net usershare info --long
 sudo smbstatus
 sudo smbstatus --shares # Will retrieve what's being shared and which machine (if any) is connected to what.
-sudo net rpc share list -U pi
-sudo net rpc share list -U root
-sudo smbclient -L host
-sudo smbclient -L ${server_ip} -U pi
-sudo smbclient -L ${server_ip} -U root
+#sudo net rpc share list -U pi
+#sudo net rpc share list -U root
+#sudo smbclient -L host
+#sudo smbclient -L ${server_ip} -U pi
+#sudo smbclient -L ${server_ip} -U root
 set +x
 echo ""
 echo "You can now access the defined shares from a Windows machine or from an app that supports the SMB protocol"

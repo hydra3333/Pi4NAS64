@@ -83,24 +83,24 @@ while true; do
 	esac
 done
 if [ "${SecondDisk}" = "y" ]; then
-   if [ "${virtual_folder_name_default_2}" = "" ]; then virtual_folder_name_default_2=mp4library2; fi;
+	if [ "${virtual_folder_name_default_2}" = "" ]; then virtual_folder_name_default_2=mp4library2; fi;
 	read -e -p "Designate the SECOND virtual_folder_name (will become the SECOND Virtual Folder share name) [${virtual_folder_name_default_2}]: " -i "${virtual_folder_name_default_2}" input_string
 	virtual_folder_name_2="${input_string:-$virtual_folder_name_default_2}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 	#
-   if [ "${USB3_mountpoint_default_2}" = "" ]; then USB3_mountpoint_default_2=mnt/${virtual_folder_name_2}; fi;
+	if [ "${USB3_mountpoint_default_2}" = "" ]; then USB3_mountpoint_default_2=mnt/${virtual_folder_name_2}; fi;
 	read -e -p "Designate the mount point for the SECOND USB3 external hard drive [${USB3_mountpoint_default_2}]: " -i "${USB3_mountpoint_default_2}" input_string
 	USB3_mountpoint_2="${input_string:-$USB3_mountpoint_default_2}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 	#
-   if [ "${root_folder_default_2}" = "" ]; then root_folder_default_2=${USB3_mountpoint_2}/${virtual_folder_name_2}; fi;
+	if [ "${root_folder_default_2}" = "" ]; then root_folder_default_2=${USB3_mountpoint_2}/${virtual_folder_name_2}; fi;
 	read -e -p "Designate the physical root folder on the SECOND USB3 external hard drive [${root_folder_default_2}]: " -i "${root_folder_default_2}" input_string
 	root_folder_2="${input_string:-$root_folder_default_2}" # forces the name to be the original default if the user erases the input or default (submitting a null).
 else
-   if [ "${virtual_folder_name_default_2}" = "" ]; then virtual_folder_name_default_2=mp4library2; fi;
-   if [ "${USB3_mountpoint_default_2}" = "" ]; then USB3_mountpoint_default_2=mnt/${virtual_folder_name_default_2}; fi;
-   if [ "${root_folder_default_2}" = "" ]; then root_folder_default_2=${USB3_mountpoint_2}/${virtual_folder_name_default_2}; fi;
-   if [ "${virtual_folder_name_2}" = "" ]; then virtual_folder_name_2=virtual_folder_name_default_2; fi
-   if [ "${USB3_mountpoint_2}" = "" ]; then USB3_mountpoint_2=USB3_mountpoint_default_2; fi
-   if [ "${root_folder_2}" = "" ]; then root_folder_2=root_folder_default_2; fi
+	if [ "${virtual_folder_name_default_2}" = "" ]; then virtual_folder_name_default_2=mp4library2; fi;
+	if [ "${USB3_mountpoint_default_2}" = "" ]; then USB3_mountpoint_default_2=mnt/${virtual_folder_name_default_2}; fi;
+	if [ "${root_folder_default_2}" = "" ]; then root_folder_default_2=${USB3_mountpoint_2}/${virtual_folder_name_default_2}; fi;
+	if [ "${virtual_folder_name_2}" = "" ]; then virtual_folder_name_2=virtual_folder_name_default_2; fi
+	if [ "${USB3_mountpoint_2}" = "" ]; then USB3_mountpoint_2=USB3_mountpoint_default_2; fi
+	if [ "${root_folder_2}" = "" ]; then root_folder_2=root_folder_default_2; fi
 fi
 #
 # ALWAYS choose a USB3 Disk device and find it's UUID

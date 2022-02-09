@@ -451,7 +451,7 @@ set +x
 echo ""
 echo "Create a .sh to test NFS stuff at any time, mounting and dismounting shares ..."
 echo ""
-f_ls_nsf=./test-nsf.sh
+f_ls_nsf=./test_nsf.sh
 set -x
 cd ~/Desktop
 sudo rm -vf "${f_ls_nsf}"

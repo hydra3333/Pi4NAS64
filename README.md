@@ -228,11 +228,11 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      echo "uid=$(id -r -u pi) gid=$(id -r -g pi)"   
      ```
 
-4. Now, start a Terminal and start the install/configure process:
+4. Now, start a Terminal and start Part_1 of the install/configure process:
      ```
      cd ~/Desktop
      chmod +777 *.sh
-     ./setupNAS.sh 2>&1 | tee setupNAS.log
+     ./setupNAS_part_1.sh 2>&1 | tee setupNAS_part_1.log
      ```
 5. Answer the prompts (it will save most of these answers for use later)
    - `This server_name` it's best to choose the Pi4's hostname of the Pi4 here (we use Pi4NAS64) - it will be used as the network service name by `Kodi` and `VLC` etc
@@ -241,14 +241,26 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
    - `Designate the mount point for the USB3 external hard drive` it's a "virtual" place used everywhere to access the top level of the USB3 external hard drive when mounted, eg `/mnt/mp4library1`
    - `Designate the root folder on the USB3 external hard drive` it's the top level folder on the USB3 external hard drive containing .mp4 files and subfolders containing .mp4 files, eg `/mnt/mp4library1/mp4library1`
 
-6. Answer more prompts    
+7. Answer more prompts    
+   - sometimes we will be asked to visually scan and check setup results for issues, and to press Enter to continue
+
+8. When the process completes, it will Reboot the Pi4 so that Part_1 settings take effect, before ytou can successfully start Part_2
+
+9. After the reboot from Part_1, start a Terminal and start Part_2 the install/configure process, to install hd-idle, NFS, SAMBA:
+     ```
+     cd ~/Desktop
+     chmod +777 *.sh
+     ./setupNAS_part_2.sh 2>&1 | tee setupNAS_part_2.log
+     ```
+
+6. Answer more prompts , similar to Part_1   
    - when we see something like this:
      ```
      Before we start the server, we’ll want to set a Samba password. Enter we pi password.
      + sudo smbpasswd -a pi
      New SMB password:
      ```
-     enter the password we had set for the pi login,    
+     enter the password we had set for the 'pi' login,    
      then enter it again when we see `Retype new SMB password:`    
    - then when we see something like this,    
      ```
@@ -256,13 +268,8 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      + sudo smbpasswd -a root
      New SMB password:
      ```
-     enter the password we had set for the pi login,    
-     then enter it when we see `Retype new SMB password:`    
-
-7. Answer more prompts    
-   - sometimes we will be asked to visually scan and check setup results for issues, and to press Enter to continue
-
-8. When the process completes, Reboot the Pi4 so that the new settings take effect
+     enter the password we had set for the 'pi' login,    
+     then enter it when we see `Retype new SMB password:`   
 
 ---
 
@@ -273,3 +280,6 @@ https://www.raspberrypi.org/forums/viewtopic.php?f=91&t=289118&p=1751528#p175152
 
 How to setup a Raspberry Pi 4 as a NAS using SAMBA with an external USB3 disk    
 https://www.raspberrypi.org/forums/viewtopic.php?f=91&t=289943    
+
+Guide to setup a Raspberry Pi 4 as a NAS using NFS and Samba    
+https://github.com/thagrol/Guides/blob/main/nas.pdf    

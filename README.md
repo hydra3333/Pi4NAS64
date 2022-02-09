@@ -262,13 +262,14 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      ```
      enter the password we had set for the 'pi' login,    
      then enter it again when we see `Retype new SMB password:`    
-   - then when we see something like this,    
+   
+   - then when we see something like this AGAIN,    
      ```
      Before we start the server, we’ll want to set a Samba password. Enter we pi password.
      + sudo smbpasswd -a root
      New SMB password:
      ```
-     enter the password we had set for the 'pi' login,    
+     again enter the password we had set for the 'pi' login,    
      then enter it when we see `Retype new SMB password:`   
 
 ---

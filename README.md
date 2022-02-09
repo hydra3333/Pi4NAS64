@@ -51,7 +51,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 7. The Pi4 will *not* perform any *external* network connections outside our home LAN at runtime, other than for normal Raspberry Pi O/S operations and its software updates   
 
-8. We will run the *64-bit* version of Raspberry Pi O/S and apps    
+8. We will run the **64-bit** version of Raspberry Pi O/S and apps    
 
 9. Of probable interest, playable .mp4 files are    
    - not interlaced (a `Chromecast Ultra` device will not play them, and probably not the "Google ChromeCast with Google TV" either)    
@@ -69,7 +69,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 ## Pre-Installaton stuff which **must** be correctly setup first    
 
-1. Ensure our USB3 drives are **not** yet plugged into the Pi4   
+1. Ensure our USB3 drives are plugged into the Pi4   
 
 2. Install and configure our Raspberry Pi4 4Gb or 8Gb   
    - Install 64-bit Raspberry Pi O/S and configure it to how we like it   
@@ -182,7 +182,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      * a folder at the root level of the first USB3 drive must be `mp4library2` (NOT the same as the first drive) and have security set to `Everyone` having `Full Access` to this folder and all subfolders and files 
    - copy media files into the folder tree one created, and check security permissikons on them is set correctly	 
 
-6. Cross-check **eveything** and Reboot the Pi4 one last time to ensure all settings are good and being used !
+6. Cross-check **eveything** and **Reboot the Pi4** one last time to ensure all settings are good and being used !
 
 ---
 
@@ -191,10 +191,10 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 1. Re-check that the Pi4 has been pre-configured correctly, particularly the server-name and fixed IPv4 address    
 
 2. Prepare our USB3 drives on the Pi4
-   - plug the USB3 external hard drive(s) into the Pi4 
+   - **plug the USB3 external hard drive(s)** into the Pi4 
       - always plug the FIRST drive into the "TOP" USB3 slot
       - always plug the SECOND drive into the "BOTTOM" USB3 slot
-      - always plug the same drives into the same USB3 slots !
+      - always plug the same drives into the same USB3 slots every time !
    - wait 15 to 30 seconds for the USB3 external hard drives to spin up and be mounted automatically; ignore/cancel any prompts at thie time   
    - find and note EXACTLY the correct `UUID=` string of letters and numbers for the USB3 external hard drive(s) ... start a Terminal and do this:
      ```
@@ -228,7 +228,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      echo "uid=$(id -r -u pi) gid=$(id -r -g pi)"   
      ```
 
-4. Now, start a Terminal and start Part_1 of the install/configure process:
+4. Now, start a Terminal and start **Part_1** of the install/configure process:
      ```
      cd ~/Desktop
      chmod +777 *.sh
@@ -246,7 +246,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 8. When the process completes, it will Reboot the Pi4 so that Part_1 settings take effect, before ytou can successfully start Part_2
 
-9. After the reboot from Part_1, start a Terminal and start Part_2 the install/configure process, to install hd-idle, NFS, SAMBA:
+9. After the reboot from Part_1, start a Terminal and start **Part_2** of the install/configure process, to install hd-idle, NFS, SAMBA:
      ```
      cd ~/Desktop
      chmod +777 *.sh

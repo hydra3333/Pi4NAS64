@@ -10,8 +10,9 @@ echo "#-------------------------------------------------------------------------
 echo "#"
 set -x
 do_setup_hdidle=false
-do_setup_NFS=true
-do_setup_SAMBA=false
+do_setup_NFS=false
+do_setup_SAMBA=true
+do_setup_miniDLNA=false
 set +x
 echo "#"
 set -x
@@ -517,6 +518,187 @@ echo ""
 fi ### if [[ ${do_setup_NFS} ]]; then
 #############################################################################################################################################
 #
+#
+#############################################################################################################################################
+if [[ ${do_setup_SAMBA} = true ]]; then
+#############################################################################################################################################
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
+echo "# Install SAMBA and create the smb file shares accessible by Windows"
+echo ""
+echo "# First Un-Install any previous SAMBA install and then Install it ..."
+echo ""
+set -x
+sudo systemctl stop smbd nmdb
+sudo apt purge -y --allow-unauthenticated --allow-remove-essential winbind samba-common samba cifs-utils smbclient
+sudo apt autoremove -y
+sudo apt-cache show samba
+sudo rm -vf "/etc/samba/smb.conf"
+sudo rm -vf "/etc/samba/smb.conf.old"
+sudo rm -vfR "/etc/samba"
+sudo rm -vfR "/var/lib/samba"
+sudo rm -vfR "/usr/share/samba"
+#sudo rm -vf "/etc/rc*.d/*samba" "/etc/init.d/samba"
+sudo apt install -y             --fix-broken --fix-missing --allow-unauthenticated winbind samba-common samba cifs-utils smbclient
+sudo apt install -y --reinstall --fix-broken --fix-missing --allow-unauthenticated winbind samba-common samba cifs-utils smbclient
+sudo apt-cache show samba
+set +x
+echo ""
+echo "# Create a SAMBA password for user 'pi' and for user 'root'"
+echo ""
+echo "# Before we start the server, you’ll want to set a Samba password. Enter your pi password."
+echo "# Before we start the server, you’ll want to set a Samba password. Enter your pi password."
+set -x
+sudo smbpasswd -a pi
+sudo smbpasswd -a root
+set +x
+echo ""
+set -x
+cd ~/Desktop
+sudo rm -vf "./smb.conf"
+# copy the modified version of smb.conf from github to ./
+url="https://raw.githubusercontent.com/hydra3333/Pi4NAS/master/smb.conf"
+curl -4 -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' -H 'Cache-Control: max-age=0' "$url" --retry 50 -L --output "./smb.conf" --fail # -L means "allow redirection" or some odd :|
+sudo cp -fv "./smb.conf"  "./smb.conf.old"
+set +x
+echo "Start appending stuff to temporary local file copy of 'smb.conf' ..."
+echo "[${virtual_folder_name_1}]">>"./smb.conf"
+echo "comment=${server_name} ${virtual_folder_name_1} home">>"./smb.conf"
+echo "#force group = users">>"./smb.conf"
+echo "#guest only = Yes">>"./smb.conf"
+echo "guest ok = Yes">>"./smb.conf"
+echo "public = yes">>"./smb.conf"
+echo "#valid users = @users">>"./smb.conf"
+echo "path = ${server_root_folder}">>"./smb.conf"
+echo "available = yes">>"./smb.conf"
+echo "read only = no">>"./smb.conf"
+echo "browsable = yes">>"./smb.conf"
+echo "writeable = yes">>"./smb.conf"
+echo "#create mask = 0777">>"./smb.conf"
+echo "#directory mask = 0777">>"./smb.conf"
+echo "force create mode = 1777">>"./smb.conf"
+echo "force directory mode = 1777">>"./smb.conf"
+echo "inherit permissions = yes">>"./smb.conf"
+echo "# 2022.02.06">>"./smb.conf"
+echo "allow insecure wide links = yes">>"./smb.conf"
+echo "follow symlinks = yes">>"./smb.conf"
+echo "wide links = yes">>"./smb.conf"
+echo "">>"./smb.conf"
+if [ "${SecondDisk}" = "y" ]; then
+	echo "[${virtual_folder_name_2}]">>"./smb.conf"
+	echo "comment=${server_name} ${virtual_folder_name_2} home">>"./smb.conf"
+	echo "#force group = users">>"./smb.conf"
+	echo "#guest only = Yes">>"./smb.conf"
+	echo "guest ok = Yes">>"./smb.conf"
+	echo "public = yes">>"./smb.conf"
+	echo "#valid users = @users">>"./smb.conf"
+	echo "path = ${server_root_folder2}">>"./smb.conf"
+	echo "available = yes">>"./smb.conf"
+	echo "read only = no">>"./smb.conf"
+	echo "browsable = yes">>"./smb.conf"
+	echo "writeable = yes">>"./smb.conf"
+	echo "#create mask = 0777">>"./smb.conf"
+	echo "#directory mask = 0777">>"./smb.conf"
+	echo "force create mode = 1777">>"./smb.conf"
+	echo "force directory mode = 1777">>"./smb.conf"
+	echo "inherit permissions = yes">>"./smb.conf"
+	echo "# 2022.02.06">>"./smb.conf"
+	echo "allow insecure wide links = yes">>"./smb.conf"
+	echo "follow symlinks = yes">>"./smb.conf"
+	echo "wide links = yes">>"./smb.conf"
+	echo "">>"./smb.conf"
+fi
+echo "Finished appending stuff to temporary local file copy of 'smb.conf' ..."
+echo "Copy the updated 'smb.conf' to '/etc/samba/smb.conf' ..."
+set -x
+sudo chmod -c a=rwx -R *
+sudo rm -vf "/etc/samba/smb.conf.old"
+sudo cp -vf "/etc/samba/smb.conf" "/etc/samba/smb.conf.old"
+sudo cp -vf "./smb.conf" "/etc/samba/smb.conf"
+sudo chmod -c a=rwx -R "/etc/samba"
+sudo cat "/etc/samba/smb.conf"
+sudo diff -U 10 "/etc/samba/smb.conf.old" "/etc/samba/smb.conf"
+set +x
+echo ""
+echo "# Test that the samba config is OK"
+echo "# ignore this: # rlimit_max: increasing rlimit_max (1024) to minimum Windows limit (16384) ..."
+echo ""
+set -x
+sudo testparm
+set +x
+echo ""
+echo "# Restart Samba service"
+echo ""
+set -x
+sudo systemctl enable smbd nmdb
+sleep 2s
+sudo systemctl stop smbd nmdb
+sleep 2s
+sudo systemctl restart smbd nmdb
+sleep 2s
+set +x
+echo ""
+echo "# List the new Samba users (which can have different passwords to the Pi itself) and shares"
+echo ""
+set -x
+sudo pdbedit -L -v
+sudo net usershare info --long
+sudo smbstatus
+sudo smbstatus --shares # Will retrieve what's being shared and which machine (if any) is connected to what.
+sudo net rpc share list -U pi
+sudo smbclient -L host
+sudo smbclient -L ${server_ip} -U pi
+sudo ls -al /var/lib/samba/usershares/*
+set +x
+echo ""
+echo "You can now access the defined shares from a Windows machine or from an app that supports the SMB protocol"
+echo "eg from Win10 PC in Windows Explorer use the IP address of ${server_name} like ... \\\\${server_ip}\\ "
+set -x
+sudo hostname
+sudo hostname --fqdn
+sudo hostname --all-ip-addresses
+set +x
+#
+#############################################################################################################################################
+fi ### if [[ ${do_setup_SAMBA} ]]; then
+#############################################################################################################################################
+#
+#
+#############################################################################################################################################
+if [[ ${do_setup_miniDLNA} = true ]]; then
+#############################################################################################################################################
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+
+
+
+
+#
+#############################################################################################################################################
+fi ### if [[ ${do_setup_miniDLNA} ]]; then
+#############################################################################################################################################
+#
+
+
+
+do_setup_miniDLNA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""

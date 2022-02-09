@@ -533,7 +533,7 @@ echo ""
 echo "# First Un-Install any previous SAMBA install and then Install it ..."
 echo ""
 set -x
-sudo systemctl stop smbd nmdb
+sudo systemctl stop smbd
 sudo apt purge -y --allow-unauthenticated --allow-remove-essential winbind samba-common samba cifs-utils smbclient
 sudo apt autoremove -y
 sudo apt-cache show samba
@@ -573,7 +573,7 @@ echo "#guest only = Yes">>"./smb.conf"
 echo "guest ok = Yes">>"./smb.conf"
 echo "public = yes">>"./smb.conf"
 echo "#valid users = @users">>"./smb.conf"
-echo "path = ${server_root_folder}">>"./smb.conf"
+echo "path = ${USB3_mountpoint_1}">>"./smb.conf"
 echo "available = yes">>"./smb.conf"
 echo "read only = no">>"./smb.conf"
 echo "browsable = yes">>"./smb.conf"
@@ -596,7 +596,7 @@ if [ "${SecondDisk}" = "y" ]; then
 	echo "guest ok = Yes">>"./smb.conf"
 	echo "public = yes">>"./smb.conf"
 	echo "#valid users = @users">>"./smb.conf"
-	echo "path = ${server_root_folder2}">>"./smb.conf"
+	echo "path = ${USB3_mountpoint_2}">>"./smb.conf"
 	echo "available = yes">>"./smb.conf"
 	echo "read only = no">>"./smb.conf"
 	echo "browsable = yes">>"./smb.conf"
@@ -634,11 +634,11 @@ echo ""
 echo "# Restart Samba service"
 echo ""
 set -x
-sudo systemctl enable smbd nmdb
+sudo systemctl enable smbd
 sleep 2s
-sudo systemctl stop smbd nmdb
+sudo systemctl stop smbd
 sleep 2s
-sudo systemctl restart smbd nmdb
+sudo systemctl restart smbd
 sleep 2s
 set +x
 echo ""
@@ -650,9 +650,10 @@ sudo net usershare info --long
 sudo smbstatus
 sudo smbstatus --shares # Will retrieve what's being shared and which machine (if any) is connected to what.
 sudo net rpc share list -U pi
+sudo net rpc share list -U root
 sudo smbclient -L host
 sudo smbclient -L ${server_ip} -U pi
-sudo ls -al /var/lib/samba/usershares/*
+sudo smbclient -L ${server_ip} -U root
 set +x
 echo ""
 echo "You can now access the defined shares from a Windows machine or from an app that supports the SMB protocol"
@@ -662,6 +663,7 @@ sudo hostname
 sudo hostname --fqdn
 sudo hostname --all-ip-addresses
 set +x
+echo ""
 #
 #############################################################################################################################################
 fi ### if [[ ${do_setup_SAMBA} ]]; then
@@ -678,29 +680,12 @@ echo "#-------------------------------------------------------------------------
 
 
 
+echo ""
 #
 #############################################################################################################################################
 fi ### if [[ ${do_setup_miniDLNA} ]]; then
 #############################################################################################################################################
 #
-
-
-
-do_setup_miniDLNA
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""

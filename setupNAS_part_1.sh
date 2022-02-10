@@ -4,7 +4,7 @@
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
-echo "# THis is now the x64 version for Raspberry Pi OS x64 - and ONLY the x64 version"
+echo "# This is now the x64 version for Raspberry Pi OS x64 - and ONLY the x64 version"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 set -x
@@ -117,6 +117,31 @@ sudo sysctl -p
 set +x
 echo ""
 #
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
+echo "# Increase fs.inotify.max_user_watches from default 8192 (Get ready for miniDLNA)"
+max_u_w=262144
+echo "# Per https://wiki.debian.org/minidlna and https://wiki.archlinux.org/title/ReadyMedia"
+echo "# To avoid Inotify errors, Increase the number for the system :"
+echo "# In /etc/sysctl.conf Add: 'fs.inotify.max_user_watches=${max_u_w}' in a blank line by itself."
+echo "# Increase system max_user_watches to avoid this error:"
+echo "# WARNING: Inotify max_user_watches [8192] is low or close to the number of used watches [2] and I do not have permission to increase this limit.  Please do so manually by writing a higher value into /proc/sys/fs/inotify/max_user_watches."
+echo ""
+echo "# set a new TEMPORARY limit with:"
+# sudo sed -i.bak "s;8192;${max_u_w};g" "/proc/sys/fs/inotify/max_user_watches" # this fails with no permissions
+set -x
+sudo cat /proc/sys/fs/inotify/max_user_watches
+sudo sysctl fs.inotify.max_user_watches=${max_u_w}
+sudo sysctl -p
+set +x
+echo ""
+echo "# set a new PERMANENT limit with:"
+set -x
+sudo sed -i.bak "s;fs.inotify.max_user_watches=;#fs.inotify.max_user_watches=;g" "/etc/sysctl.conf"
+echo fs.inotify.max_user_watches=${max_u_w} | sudo tee -a "/etc/sysctl.conf"
+sudo sysctl -p
+set +x
+echo ""
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
 echo "OK, check some settings on the Pi4"

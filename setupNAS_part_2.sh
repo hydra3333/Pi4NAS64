@@ -689,26 +689,148 @@ echo "NOTE: this miniDLNA setup is SPECIFIC to my media drive(s) sets of folders
 echo "NOTE: this miniDLNA setup is SPECIFIC to my media drive(s) sets of folders !!!"
 echo "NOTE: this miniDLNA setup is SPECIFIC to my media drive(s) sets of folders !!!"
 echo ""
-# increase fs.inotify.max_user_watches from default 8192
-max_u_w=262144
-echo "# Get ready for miniDLNA. "
-echo "# Per https://wiki.debian.org/minidlna and https://wiki.archlinux.org/title/ReadyMedia"
-echo "# To avoid Inotify errors, Increase the number for the system :"
-echo "# In /etc/sysctl.conf Add: 'fs.inotify.max_user_watches=${max_u_w}' in a blank line by itself."
-echo "# Increase system max_user_watches to avoid this error:"
-echo "# WARNING: Inotify max_user_watches [8192] is low or close to the number of used watches [2] and I do not have permission to increase this limit.  Please do so manually by writing a higher value into /proc/sys/fs/inotify/max_user_watches."
+echo ""
+echo "# Un-Install any prior minDLNA"
+echo ""
 set -x
-# sudo sed -i.bak "s;8192;${max_u_w};g" "/proc/sys/fs/inotify/max_user_watches" # this fails with no permissions
-sudo cat /proc/sys/fs/inotify/max_user_watches
-# set a new TEMPORARY limit with:
-sudo sysctl fs.inotify.max_user_watches=${max_u_w}
-sudo sysctl -p
-# set a new PERMANENT limit with:
-sudo sed -i.bak "s;fs.inotify.max_user_watches=;#fs.inotify.max_user_watches=;g" "/etc/sysctl.conf"
-echo fs.inotify.max_user_watches=${max_u_w} | sudo tee -a "/etc/sysctl.conf"
-sudo sysctl -p
+sudo apt purge minidlna -y
+sudo apt autoremove -y
+sudo rm -vfR "/etc/minidlna.conf"
+sudo rm -vfR "/var/log/minidlna.log"
+sudo rm -vfR "/run/minidlna"
+sudo rm -vfR "${server_root_USBmountpoint}/minidlna"
 set +x
 echo ""
+echo "# Do the minidlna install and the stop the service so we can configure it"
+echo ""
+set -x
+sudo apt install -y minidlna
+sleep 2s
+sudo systemctl enable minidlna
+sleep 2s
+sudo systemctl stop minidlna
+sleep 2s
+set +x
+echo ""
+echo "# Add Groups, then Create a folder for minidlna logs and db - place the folder in the root of the FIRST external USB3 disk"
+echo ""
+set -x
+set minidlna_root_folder="${USB3_mountpoint_1}/minidlna"
+sudo usermod -a -G pi minidlna
+sudo usermod -a -G minidlna pi
+sudo usermod -a -G minidlna root
+sudo mkdir -p "${minidlna_root_folder}"
+sudo chmod -c a=rwx -R "${minidlna_root_folder}"
+sudo chown -c -R pi:minidlna "${minidlna_root_folder}"
+sudo chmod -c a=rwx -R "/run/minidlna"
+sudo chown -c -R pi:minidlna "/run/minidlna"
+#sudo chmod -c a=rwx -R "/run/minidlna/minidlna.pid"
+#sudo chown -c -R pi:minidlna "/run/minidlna/minidlna.pid"
+sudo ls -al "/run/minidlna"
+sudo chmod -c a=rwx -R "/etc/minidlna.conf"
+sudo chown -c -R pi:minidlna "/etc/minidlna.conf"
+sudo chmod -c a=rwx -R "/var/cache/minidlna"
+sudo chown -c -R pi:minidlna "/var/cache/minidlna"
+sudo chmod -c a=rwx -R "/var/log/minidlna.log"
+sudo chown -c -R pi:minidlna "/var/log/minidlna.log"
+#sudo cat "/var/log/minidlna.log"
+#sudo rm -vfR "/var/log/minidlna.log"
+set +x
+echo ""
+echo "# Change miniDLNA config settings"
+echo ""
+set -x
+minidlna_db_dir="${minidlna_root_folder}"
+minidlna_log_dir="${minidlna_root_folder}"
+minidlna_sh_dir="${minidlna_root_folder}"
+minidlna_main_log_file=${minidlna_log_dir}/minidlna.log
+minidlna_refresh_log_file=${minidlna_log_dir}/minidlna_refresh.log
+minidlna_refresh_sh_file=${minidlna_sh_dir}/minidlna_refresh.sh
+minidlna_restart_refresh_sh_file=~/Desktop/minidlna_restart_refresh.sh
+
+sudo cp -fv "/etc/minidlna.conf" "/etc/minidlna.conf.old"
+sudo sed -i "s;#user=minidlna;#user=minidlna\n#user=pi;g" "/etc/minidlna.conf"
+sudo sed -i "s;#db_dir=/var/cache/minidlna;#db_dir=/var/cache/minidlna\ndb_dir=${minidlna_db_dir};g" "/etc/minidlna.conf"
+sudo sed -i "s;#log_dir=/var/log/minidlna;#log_dir=/var/log/minidlna\nlog_dir=${minidlna_log_dir};g" "/etc/minidlna.conf"
+sudo sed -i "s;#friendly_name=;#friendly_name=\nfriendly_name=${server_name}-minidlna;g" "/etc/minidlna.conf"
+sudo sed -i "s;#inotify=yes;#inotify=yes\ninotify=yes;g" "/etc/minidlna.conf"
+sudo sed -i "s;#strict_dlna=no;#strict_dlna=no\nstrict_dlna=yes;g" "/etc/minidlna.conf"
+sudo sed -i "s;#notify_interval=895;#notify_interval=895\nnotify_interval=900;g" "/etc/minidlna.conf"
+sudo sed -i "s;#max_connections=50;#max_connections=50\nmax_connections=6;g" "/etc/minidlna.conf"
+sudo sed -i "s;#log_level=general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn;#log_level=general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn\nlog_level=general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=info;g" "/etc/minidlna.conf"
+sudo sed -i "s;#wide_links=no;wide_links=yes;g" "/etc/minidlna.conf"
+sudo sed -i "s;album_art_names=;#album_art_names=;g" "/etc/minidlna.conf"
+set +x
+echo ""
+echo "# Change miniDLNA folders SPECIFIC to my media drive(s) sets of folders !!! For me only !!!"
+echo "# Change miniDLNA folders SPECIFIC to my media drive(s) sets of folders !!! For me only !!!"
+echo "# Change miniDLNA folders SPECIFIC to my media drive(s) sets of folders !!! For me only !!!"
+echo ""
+set -x
+sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\n###---###'g" "/etc/minidlna.conf"
+sudo sed '/^###---###$/r'<(
+	echo "media_dir=PVA,${root_folder_1}/2015.11.29-Jess-21st-birthday-party"
+	echo "media_dir=PVA,${root_folder_1}/BigIdeas"
+	echo "media_dir=PVA,${root_folder_1}/CharlieWalsh"
+	echo "media_dir=PVA,${root_folder_1}/ClassicDocumentaries"
+	echo "media_dir=PVA,${root_folder_1}/ClassicMovies"
+	echo "media_dir=PVA,${root_folder_1}/Documentaries"
+	echo "media_dir=PVA,${root_folder_1}/movies"
+	echo "media_dir=PVA,${root_folder_1}/OldMovies"
+	echo "media_dir=PVA,${root_folder_1}/OldSciFi"
+	echo "media_dir=PVA,${root_folder_2}/movies"
+	echo "media_dir=PVA,${root_folder_2}/MusicVideos"
+	echo "media_dir=PVA,${root_folder_2}/Railway_Journeys"
+	echo "media_dir=PVA,${root_folder_2}/Series"
+) -i -- "/etc/minidlna.conf"
+sudo cat "/etc/minidlna.conf"
+sudo diff -U 10 "/etc/minidlna.conf.old" "/etc/minidlna.conf"
+set +x
+echo ""
+sudo rm -vf "${minidlna_main_log_file}"
+sudo rm -vf "${minidlna_refresh_log_file}"
+sudo touch "${minidlna_refresh_log_file}"
+
+echo ""
+sudo rm -vf "${minidlna_refresh_sh_file}"
+sudo touch "${minidlna_refresh_sh_file}"
+sudo chmod -c a=rwx "${minidlna_refresh_sh_file}"
+echo "#!/bin/bash" >> "${minidlna_refresh_sh_file}"
+echo "# used by crontab to refresh the the db every night" >> "${minidlna_refresh_sh_file}"
+echo "set -x" >> "${minidlna_refresh_sh_file}"
+echo "sudo systemctl stop minidlna" >> "${minidlna_refresh_sh_file}"
+echo "sleep 5s" >> "${minidlna_refresh_sh_file}"
+echo "sudo systemctl start minidlna" >> "${minidlna_refresh_sh_file}"
+echo "sleep 5s" >> "${minidlna_refresh_sh_file}"
+echo "sudo systemctl reload-or-restart minidlna" >> "${minidlna_refresh_sh_file}"
+echo "echo 'Wait 15 minutes for minidlna to index media files'" >> "${minidlna_refresh_sh_file}"
+echo "echo 'For progress do in another terminal window: cat ${main_log_dir}'" >> "${minidlna_refresh_sh_file}"
+echo "sleep 900s" >> "${minidlna_refresh_sh_file}"
+echo "set +x" >> "${minidlna_refresh_sh_file}"
+
+
+echo ""
+sudo rm -vf "${minidlna_restart_refresh_sh_file}"
+sudo touch "${minidlna_restart_refresh_sh_file}"
+sudo chmod -c a=rwx "${minidlna_restart_refresh_sh_file}"
+echo "#!/bin/bash" >> "${minidlna_restart_refresh_sh_file}"
+echo "# used in ~/Desktop for a user to manually refresh the the db" >> "${minidlna_restart_refresh_sh_file}"
+echo "set -x" >> "${minidlna_restart_refresh_sh_file}"
+echo "sudo systemctl stop minidlna" >> "${minidlna_restart_refresh_sh_file}"
+echo "sleep 5s" >> "${minidlna_restart_refresh_sh_file}"
+echo "sudo systemctl start minidlna" >> "${minidlna_restart_refresh_sh_file}"
+echo "sleep 5s" >> "${minidlna_restart_refresh_sh_file}"
+echo "sudo systemctl reload-or-restart minidlna" >> "${minidlna_restart_refresh_sh_file}"
+echo "echo 'Wait 15 minutes for minidlna to index media files'" >> "${minidlna_restart_refresh_sh_file}"
+echo "echo 'For progress do in another terminal window: cat ${main_log_dir}'" >> "${minidlna_restart_refresh_sh_file}"
+echo "sleep 900s" >> "${minidlna_restart_refresh_sh_file}"
+echo "set +x" >> "${minidlna_restart_refresh_sh_file}"
+echo "#" >> "${minidlna_restart_refresh_sh_file}"
+echo "#${sh_file}" >> "${minidlna_restart_refresh_sh_file}"
+echo "#" >> "${minidlna_restart_refresh_sh_file}"
+echo "cat \"${minidlna_main_log_file}\"" >> "${minidlna_restart_refresh_sh_file}"
+echo "#" >> "${minidlna_restart_refresh_sh_file}"
+
 
 
 echo ""

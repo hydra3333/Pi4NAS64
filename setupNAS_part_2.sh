@@ -11,8 +11,8 @@ echo "#"
 set -x
 do_setup_hdidle=false
 do_setup_NFS=false
-do_setup_SAMBA=true
-do_setup_miniDLNA=false
+do_setup_SAMBA=false
+do_setup_miniDLNA=true
 set +x
 echo "#"
 set -x
@@ -115,7 +115,7 @@ echo "# List and Remove any prior hd-idle package"
 echo ""
 set -x
 sudo systemctl disable hd-idle
-sleep 1s
+sleep 2s
 sudo dpkg -l hd-idle
 sudo dpkg -P hd-idle 
 # dpkg -P is the one that works for us, also use 'apt purge' in case an old one was instaleld via apt
@@ -192,7 +192,7 @@ sudo systemctl restart hd-idle
 sleep 2s
 set +x
 echo ""
-sleep 5s
+sleep 2s
 sudo cat /var/log/hd-idle.log
 set +x
 echo ""
@@ -237,7 +237,7 @@ cd ~/Desktop
 ##sudo umount -f "${nfs_export_full_2}"
 echo "The first time around, this 'stop nfs-kernel-server' may fail since NFS is not yet installed. That's OK."
 sudo systemctl stop nfs-kernel-server
-sleep 3s
+sleep 2s
 ## apt purge seems to cause it to fail on the subsequent re-install, so let's NOT apt purge.
 ##sudo apt purge -y nfs-common
 ##sudo apt purge -y nfs-kernel-server 
@@ -296,9 +296,9 @@ echo "# Re-start the NFS server"
 echo ""
 set -x
 sudo systemctl stop nfs-kernel-server
-sleep 3s
+sleep 2s
 sudo systemctl restart nfs-kernel-server
-sleep 3s
+sleep 2s
 set +x
 echo ""
 echo "# Manually mount the NFS shares (they are not yet in fstab)"
@@ -690,6 +690,30 @@ echo "NOTE: this miniDLNA setup is SPECIFIC to my media drive(s) sets of folders
 echo "NOTE: this miniDLNA setup is SPECIFIC to my media drive(s) sets of folders !!!"
 echo ""
 echo ""
+echo "# Increase fs.inotify.max_user_watches from default 8192 (used by miniDLNA)"
+max_user_watches=262144
+echo "# Per https://wiki.debian.org/minidlna and https://wiki.archlinux.org/title/ReadyMedia"
+echo "# To avoid Inotify errors, Increase the number for the system :"
+echo "# In /etc/sysctl.conf Add: 'fs.inotify.max_user_watches=${max_user_watches}' in a blank line by itself."
+echo "# Increase system max_user_watches to avoid this error:"
+echo "# WARNING: Inotify max_user_watches [8192] is low or close to the number of used watches [2] and I do not have permission to increase this limit.  Please do so manually by writing a higher value into /proc/sys/fs/inotify/max_user_watches."
+echo ""
+echo "# set a new TEMPORARY limit with:"
+# sudo sed -i.bak "s;8192;${max_user_watches};g" "/proc/sys/fs/inotify/max_user_watches" # this fails with no permissions
+set -x
+sudo cat /proc/sys/fs/inotify/max_user_watches
+sudo sysctl fs.inotify.max_user_watches=${max_user_watches}
+sudo sysctl -p
+set +x
+echo ""
+echo "# set a new PERMANENT limit with:"
+set -x
+sudo sed -i.bak "s;fs.inotify.max_user_watches=;#fs.inotify.max_user_watches=;g" "/etc/sysctl.conf"
+echo fs.inotify.max_user_watches=${max_user_watches} | sudo tee -a "/etc/sysctl.conf"
+sudo sysctl -p
+set +x
+echo ""
+echo ""
 echo "# Un-Install any prior minDLNA"
 echo ""
 set -x
@@ -712,7 +736,7 @@ sudo systemctl stop minidlna
 sleep 2s
 set +x
 echo ""
-echo "# Add Groups, then Create a folder for minidlna logs and db - place the folder in the root of the FIRST external USB3 disk"
+echo "# Add minidlna Groups, then Create a folder for minidlna logs and db - place the folder in the root of the FIRST external USB3 disk"
 echo ""
 set -x
 set minidlna_root_folder="${USB3_mountpoint_1}/minidlna"
@@ -733,8 +757,6 @@ sudo chmod -c a=rwx -R "/var/cache/minidlna"
 sudo chown -c -R pi:minidlna "/var/cache/minidlna"
 sudo chmod -c a=rwx -R "/var/log/minidlna.log"
 sudo chown -c -R pi:minidlna "/var/log/minidlna.log"
-#sudo cat "/var/log/minidlna.log"
-#sudo rm -vfR "/var/log/minidlna.log"
 set +x
 echo ""
 echo "# Change miniDLNA config settings"
@@ -747,7 +769,6 @@ minidlna_main_log_file=${minidlna_log_dir}/minidlna.log
 minidlna_refresh_log_file=${minidlna_log_dir}/minidlna_refresh.log
 minidlna_refresh_sh_file=${minidlna_sh_dir}/minidlna_refresh.sh
 minidlna_restart_refresh_sh_file=~/Desktop/minidlna_restart_refresh.sh
-
 sudo cp -fv "/etc/minidlna.conf" "/etc/minidlna.conf.old"
 sudo sed -i "s;#user=minidlna;#user=minidlna\n#user=pi;g" "/etc/minidlna.conf"
 sudo sed -i "s;#db_dir=/var/cache/minidlna;#db_dir=/var/cache/minidlna\ndb_dir=${minidlna_db_dir};g" "/etc/minidlna.conf"
@@ -790,51 +811,133 @@ echo ""
 sudo rm -vf "${minidlna_main_log_file}"
 sudo rm -vf "${minidlna_refresh_log_file}"
 sudo touch "${minidlna_refresh_log_file}"
-
 echo ""
-echo "Create the .sh used by crontab to refresh the db every night"
+echo "Create the .sh used by crontab to refresh the db every night. ${minidlna_refresh_sh_file}"
 echo ""
 sudo rm -vf "${minidlna_refresh_sh_file}"
 sudo touch "${minidlna_refresh_sh_file}"
 sudo chmod -c a=rwx "${minidlna_refresh_sh_file}"
 echo "#!/bin/bash" >> "${minidlna_refresh_sh_file}"
-echo "# used by crontab to refresh the the db every night" >> "${minidlna_refresh_sh_file}"
 echo "set -x" >> "${minidlna_refresh_sh_file}"
+echo "# ${minidlna_refresh_sh_file}" >> "${minidlna_refresh_sh_file}"
+echo "# used by crontab to refresh the the db every night" >> "${minidlna_refresh_sh_file}"
 echo "sudo systemctl stop minidlna" >> "${minidlna_refresh_sh_file}"
-echo "sleep 5s" >> "${minidlna_refresh_sh_file}"
-echo "sudo systemctl start minidlna" >> "${minidlna_refresh_sh_file}"
-echo "sleep 5s" >> "${minidlna_refresh_sh_file}"
-echo "sudo systemctl reload-or-restart minidlna" >> "${minidlna_refresh_sh_file}"
+echo "sleep 2s" >> "${minidlna_refresh_sh_file}"
+echo "sudo systemctl restart minidlna" >> "${minidlna_refresh_sh_file}"
+echo "sleep 2s" >> "${minidlna_refresh_sh_file}"
 echo "echo 'Wait 15 minutes for minidlna to index media files'" >> "${minidlna_refresh_sh_file}"
 echo "echo 'For progress do in another terminal window: cat ${main_log_dir}'" >> "${minidlna_refresh_sh_file}"
 echo "sleep 900s" >> "${minidlna_refresh_sh_file}"
 echo "set +x" >> "${minidlna_refresh_sh_file}"
-
-
+echo "# ${minidlna_refresh_sh_file}" >> "${minidlna_refresh_sh_file}"
 echo ""
-echo "Create the .sh used by a user to manually refresh the the db"
+echo "Create the .sh used by a user to manually refresh the the db. ${minidlna_restart_refresh_sh_file}"
 echo ""
 sudo rm -vf "${minidlna_restart_refresh_sh_file}"
 sudo touch "${minidlna_restart_refresh_sh_file}"
 sudo chmod -c a=rwx "${minidlna_restart_refresh_sh_file}"
 echo "#!/bin/bash" >> "${minidlna_restart_refresh_sh_file}"
-echo "# used in ~/Desktop for a user to manually refresh the the db" >> "${minidlna_restart_refresh_sh_file}"
 echo "set -x" >> "${minidlna_restart_refresh_sh_file}"
+echo "# ${minidlna_restart_refresh_sh_file}" >> "${minidlna_restart_refresh_sh_file}"
+echo "# used in ~/Desktop for a user to manually refresh the the db" >> "${minidlna_restart_refresh_sh_file}"
 echo "sudo systemctl stop minidlna" >> "${minidlna_restart_refresh_sh_file}"
-echo "sleep 5s" >> "${minidlna_restart_refresh_sh_file}"
-echo "sudo systemctl start minidlna" >> "${minidlna_restart_refresh_sh_file}"
-echo "sleep 5s" >> "${minidlna_restart_refresh_sh_file}"
-echo "sudo systemctl reload-or-restart minidlna" >> "${minidlna_restart_refresh_sh_file}"
+echo "sleep 2s" >> "${minidlna_restart_refresh_sh_file}"
+echo "sudo systemctl restart minidlna" >> "${minidlna_restart_refresh_sh_file}"
+echo "sleep 2s" >> "${minidlna_restart_refresh_sh_file}"
 echo "echo 'Wait 15 minutes for minidlna to index media files'" >> "${minidlna_restart_refresh_sh_file}"
 echo "echo 'For progress do in another terminal window: cat ${main_log_dir}'" >> "${minidlna_restart_refresh_sh_file}"
 echo "sleep 900s" >> "${minidlna_restart_refresh_sh_file}"
-echo "set +x" >> "${minidlna_restart_refresh_sh_file}"
 echo "#" >> "${minidlna_restart_refresh_sh_file}"
 echo "cat \"${minidlna_main_log_file}\"" >> "${minidlna_restart_refresh_sh_file}"
 echo "#" >> "${minidlna_restart_refresh_sh_file}"
-
-
-
+echo "set +x" >> "${minidlna_restart_refresh_sh_file}"
+echo "set +x" >> "${minidlna_restart_refresh_sh_file}"
+echo "# ${minidlna_restart_refresh_sh_file}" >> "${minidlna_restart_refresh_sh_file}"
+echo ""
+echo "Add the 2:00 am nightly crontab job to re-index miniDLNA (${})"
+echo ""
+# https://stackoverflow.com/questions/610839/how-can-i-programmatically-create-a-new-cron-job
+#The layout for a cron entry is made up of six components: minute, hour, day of month, month of year, day of week, and the command to be executed.
+# m h  dom mon dow   command
+# * * * * *  command to execute
+# ┬ ┬ ┬ ┬ ┬
+# │ │ │ │ │
+# │ │ │ │ │
+# │ │ │ │ └───── day of week (0 - 7) (0 to 6 are Sunday to Saturday, or use names; 7 is Sunday, the same as 0)
+# │ │ │ └────────── month (1 - 12)
+# │ │ └─────────────── day of month (1 - 31)
+# │ └──────────────────── hour (0 - 23)
+# └───────────────────────── min (0 - 59)
+# https://stackoverflow.com/questions/610839/how-can-i-programmatically-create-a-new-cron-job
+# <minute> <hour> <day> <month> <dow> <tags and command>
+echo "# crontab List BEFORE contab ADD:"
+set -x
+sudo crontab -l # before
+crontab -l # before
+set +x
+echo "# Adding crontab as user pi (no sudo):"
+set -x
+( crontab -l ; echo "0 2 * * * ${minidlna_refresh_sh_file} 2>&1 >> ${log_file}" ) 2>&1 | sed "s/no crontab for $(whoami)//g" | sort - | uniq - | crontab -
+set +x
+echo "#"
+echo "# crontab List AFTER contab ADD:"
+set -x
+sudo crontab -l # after
+crontab -l # before
+set +x
+echo "# syslog AFTER contab ADD:"
+set -x
+sudo grep CRON /var/log/syslog
+set +x
+echo ""
+echo "# Start miniDLNA: Force a re-load of miniDLNA to ensure it starts re-looking for new files."
+echo ""
+set -x
+sudo ls -al "/run/minidlna"
+sudo systemctl stop minidlna
+sleep 2s
+sudo systemctl restart minidlna
+sleep 2s
+set +x
+echo "#"
+echo "# The minidlna service comes with a small webinterface. "
+echo "# This webinterface is just for informational purposes. "
+echo "# You will not be able to configure anything here. "
+echo "# However, it gives you a nice and short information screen how many files have been found by minidlna. "
+echo "# minidlna comes with it’s own webserver integrated. "
+echo "# This means that no additional webserver is needed in order to use the webinterface."
+echo "# To access the webinterface, open your browser of choice and enter url http://127.0.0.1:8200"
+echo ""
+set -x
+curl -i http://127.0.0.1:8200
+set +x
+echo ""
+# The actual streaming process
+# A short overview how a connection from a client to the configured and running minidlna server could work. 
+# In this scenario we simply use a computer which is in the same local area network than the server. 
+# As the client software we use the Video Lan Client (VLC). 
+# Simple, robust, cross-platform and open source. 
+# After starting VLC, go to the playlist mode by pressing CTRL+L in windows. 
+# You will now see on the left side a category which is called Local Network. 
+# Click on Universal Plug’n’Play which is under the Local Network category. 
+# You will then see a list of available DLNA service within your local network. 
+# In this list you should see your DLNA server. 
+# Navigate through the different directories for music, videos and pictures and select a file to start the streaming process
+echo ""
+#
+set -x
+sudo ls -al "/run/minidlna"
+set +x
+echo ""
+set -x
+sudo ls -al "${minidlna_main_log_file}"
+sudo cat "${minidlna_main_log_file}"
+set +x
+echo ""
+set -x
+sudo ls -al "${minidlna_refresh_log_file}"
+sudo cat "${minidlna_refresh_log_file}"
+set +x
 echo ""
 #
 #############################################################################################################################################

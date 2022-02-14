@@ -810,7 +810,8 @@ sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\n###---#
 #		echo "line3"
 #		echo "line4"
 #	) -i -- input.txt
-sudo sed ';^###---###$;r'<(
+# for in medialibrary2 on SECOND USB3 drive
+sudo sed -i '/^###---###/r'<(
 	# in my medialibrary2 on FIRST USB3 drive
 	echo "media_dir=PVA,${root_folder_1}/2015.11.29-Jess-21st-birthday-party"
 	echo "media_dir=PVA,${root_folder_1}/BigIdeas"
@@ -822,12 +823,11 @@ sudo sed ';^###---###$;r'<(
 	echo "media_dir=PVA,${root_folder_1}/OldMovies"
 	echo "media_dir=PVA,${root_folder_1}/OldSciFi"
 	echo "media_dir=PVA,${root_folder_1}/SciFi"
-	# for in medialibrary2 on SECOND USB3 drive
 	echo "media_dir=PVA,${root_folder_2}/Footy"
 	echo "media_dir=PVA,${root_folder_2}/MusicVideos"
 	echo "media_dir=PVA,${root_folder_2}/Railway_Journeys"
 	echo "media_dir=PVA,${root_folder_2}/Series"
-) -i -- "/etc/minidlna.conf"
+) -- "/etc/minidlna.conf"
 sudo cat "/etc/minidlna.conf"
 sudo diff -U 10 "/etc/minidlna.conf.old" "/etc/minidlna.conf"
 set +x

@@ -790,6 +790,7 @@ echo "# Change miniDLNA folders SPECIFIC to my media drive(s) sets of folders !!
 echo "# Change miniDLNA folders SPECIFIC to my media drive(s) sets of folders !!! For me only !!!"
 echo ""
 set -x
+sudo sed -i "/^#zzz---zzz/d" "/etc/minidlna.conf"
 sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\n#zzz---zzz;g" "/etc/minidlna.conf"
 sudo sed -i "s;#zzz---zzz;#zzz---zzz\nmedia_dir=PVA,${root_folder_2}/Series;g" "/etc/minidlna.conf"
 sudo sed -i "s;#zzz---zzz;#zzz---zzz\nmedia_dir=PVA,${root_folder_2}/Railway_Journeys;g" "/etc/minidlna.conf"

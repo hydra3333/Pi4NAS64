@@ -861,16 +861,10 @@ echo "#" >> "${minidlna_restart_refresh_sh_file}"
 echo "cat \"${minidlna_main_log_file}\"" >> "${minidlna_restart_refresh_sh_file}"
 echo "#" >> "${minidlna_restart_refresh_sh_file}"
 echo "set +x" >> "${minidlna_restart_refresh_sh_file}"
-echo "set +x" >> "${minidlna_restart_refresh_sh_file}"
 echo "# ${minidlna_restart_refresh_sh_file}" >> "${minidlna_restart_refresh_sh_file}"
 set -x
 sudo cat "${minidlna_restart_refresh_sh_file}"
 set +x
-
-
-read -p "# Press Enter to continue."
-
-
 echo ""
 echo "Add the 2:00 am nightly crontab job to re-index miniDLNA (${minidlna_refresh_sh_file})"
 echo ""
@@ -899,7 +893,7 @@ echo "#"
 echo "# Adding crontab as user pi (no sudo):"
 echo "#"
 set -x
-( crontab -l ; echo "0 2 * * * ${minidlna_refresh_sh_file} 2>&1 >> ${log_file}" ) 2>&1 | sed "s/no crontab for $(whoami)//g" | sort - | uniq - | crontab -
+( crontab -l ; echo "0 2 * * * ${minidlna_refresh_sh_file} 2>&1 >> ${minidlna_refresh_log_file}" ) 2>&1 | sed "s/no crontab for $(whoami)//g" | sort - | uniq - | crontab -
 set +x
 echo "#"
 echo "# crontab List AFTER contab ADD:"

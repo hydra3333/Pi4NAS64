@@ -817,9 +817,11 @@ sudo touch "${minidlna_refresh_log_file}"
 echo ""
 echo "Create the .sh used by crontab to refresh the db every night. ${minidlna_refresh_sh_file}"
 echo ""
+set -x
 sudo rm -vf "${minidlna_refresh_sh_file}"
 sudo touch "${minidlna_refresh_sh_file}"
 sudo chmod -c a=rwx "${minidlna_refresh_sh_file}"
+set +x
 echo "#!/bin/bash" >> "${minidlna_refresh_sh_file}"
 echo "set -x" >> "${minidlna_refresh_sh_file}"
 echo "# ${minidlna_refresh_sh_file}" >> "${minidlna_refresh_sh_file}"
@@ -833,12 +835,17 @@ echo "echo 'For progress do in another terminal window: cat ${main_log_dir}'" >>
 echo "sleep 900s" >> "${minidlna_refresh_sh_file}"
 echo "set +x" >> "${minidlna_refresh_sh_file}"
 echo "# ${minidlna_refresh_sh_file}" >> "${minidlna_refresh_sh_file}"
+set -x
+sudo cat "${minidlna_refresh_sh_file}"
+set +x
 echo ""
 echo "Create the .sh used by a user to manually refresh the the db. ${minidlna_restart_refresh_sh_file}"
 echo ""
+set -x
 sudo rm -vf "${minidlna_restart_refresh_sh_file}"
 sudo touch "${minidlna_restart_refresh_sh_file}"
 sudo chmod -c a=rwx "${minidlna_restart_refresh_sh_file}"
+set +x
 echo "#!/bin/bash" >> "${minidlna_restart_refresh_sh_file}"
 echo "set -x" >> "${minidlna_restart_refresh_sh_file}"
 echo "# ${minidlna_restart_refresh_sh_file}" >> "${minidlna_restart_refresh_sh_file}"
@@ -856,6 +863,9 @@ echo "#" >> "${minidlna_restart_refresh_sh_file}"
 echo "set +x" >> "${minidlna_restart_refresh_sh_file}"
 echo "set +x" >> "${minidlna_restart_refresh_sh_file}"
 echo "# ${minidlna_restart_refresh_sh_file}" >> "${minidlna_restart_refresh_sh_file}"
+set -x
+sudo cat "${minidlna_restart_refresh_sh_file}"
+set +x
 
 
 read -p "# Press Enter to continue."

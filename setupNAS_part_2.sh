@@ -802,8 +802,15 @@ echo "# Change miniDLNA folders SPECIFIC to my media drive(s) sets of folders !!
 echo "# Change miniDLNA folders SPECIFIC to my media drive(s) sets of folders !!! For me only !!!"
 echo ""
 set -x
-sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\n###---###'g" "/etc/minidlna.conf"
-sudo sed '/^###---###$/r'<(
+sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\n###---###;g" "/etc/minidlna.conf"
+# example in https://stackoverflow.com/questions/22497246/insert-multiple-lines-into-a-file-after-specified-pattern-using-shell-script
+#	sed '/^cdef$/r'<(
+#		echo "line1"
+#		echo "line2"
+#		echo "line3"
+#		echo "line4"
+#	) -i -- input.txt
+sudo sed ';^###---###$;r'<(
 	# in my medialibrary2 on FIRST USB3 drive
 	echo "media_dir=PVA,${root_folder_1}/2015.11.29-Jess-21st-birthday-party"
 	echo "media_dir=PVA,${root_folder_1}/BigIdeas"

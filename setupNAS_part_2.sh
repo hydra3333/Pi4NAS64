@@ -813,7 +813,7 @@ echo "media_dir=PVA,${root_folder_2}/MusicVideos">>"./tmp_sed_input.txt"
 echo "media_dir=PVA,${root_folder_2}/Railway_Journeys">>"./tmp_sed_input.txt"
 echo "media_dir=PVA,${root_folder_2}/Series">>"./tmp_sed_input.txt"
 cat "./tmp_sed_input.txt"
-sudo sed -iBAK '/zzz---zzz/r "./tmp_sed_input.txt"' "/etc/minidlna.conf"
+sudo sed -iBAK '/^#zzz---zzz/r "./tmp_sed_input.txt"' "/etc/minidlna.conf"
 sudo rm -vf "./tmp_sed_input.txt"
 #
 sudo cat "/etc/minidlna.conf"

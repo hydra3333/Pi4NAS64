@@ -839,7 +839,7 @@ set -x
 sudo cat "${minidlna_refresh_sh_file}"
 set +x
 echo ""
-echo "Create the .sh used by a user to manually refresh the the db. ${minidlna_restart_refresh_sh_file}"
+echo "Create the .sh used by a user to manually refresh the minidlna db. ${minidlna_restart_refresh_sh_file}"
 echo ""
 set -x
 sudo rm -vf "${minidlna_restart_refresh_sh_file}"
@@ -872,7 +872,7 @@ read -p "# Press Enter to continue."
 
 
 echo ""
-echo "Add the 2:00 am nightly crontab job to re-index miniDLNA (${})"
+echo "Add the 2:00 am nightly crontab job to re-index miniDLNA (${minidlna_refresh_sh_file})"
 echo ""
 # https://stackoverflow.com/questions/610839/how-can-i-programmatically-create-a-new-cron-job
 #The layout for a cron entry is made up of six components: minute, hour, day of month, month of year, day of week, and the command to be executed.
@@ -888,22 +888,29 @@ echo ""
 # └───────────────────────── min (0 - 59)
 # https://stackoverflow.com/questions/610839/how-can-i-programmatically-create-a-new-cron-job
 # <minute> <hour> <day> <month> <dow> <tags and command>
+echo "#"
 echo "# crontab List BEFORE contab ADD:"
+echo "#"
 set -x
 sudo crontab -l # before
 crontab -l # before
 set +x
+echo "#"
 echo "# Adding crontab as user pi (no sudo):"
+echo "#"
 set -x
 ( crontab -l ; echo "0 2 * * * ${minidlna_refresh_sh_file} 2>&1 >> ${log_file}" ) 2>&1 | sed "s/no crontab for $(whoami)//g" | sort - | uniq - | crontab -
 set +x
 echo "#"
 echo "# crontab List AFTER contab ADD:"
+echo "#"
 set -x
 sudo crontab -l # after
 crontab -l # before
 set +x
+echo "#"
 echo "# syslog AFTER contab ADD:"
+echo "#"
 set -x
 sudo grep CRON /var/log/syslog
 set +x

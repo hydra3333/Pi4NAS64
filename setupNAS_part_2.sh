@@ -893,14 +893,24 @@ echo "#"
 echo "# Adding crontab as user pi (no sudo):"
 echo "#"
 set -x
-( crontab -l ; echo "0 2 * * * ${minidlna_refresh_sh_file} 2>&1 >> ${minidlna_refresh_log_file}" ) 2>&1 | sed "s/no crontab for $(whoami)//g" | sort - | uniq - | crontab -
+sudo rm 
+cd ./Desktop
+rm -vf "./local_crontab.txt"
+crontab -l > "./local_crontab.txt"
+sed -i ";no crontab for $(whoami);d" "./local_crontab.txt"
+sed -i ";${minidlna_refresh_sh_file};/d" "./local_crontab.txt"
+echo "0 2 * * * ${minidlna_refresh_sh_file} 2>&1 >> ${minidlna_refresh_log_file}" >> "./local_crontab.txt"
+sort "./local_crontab.txt" | uniq > "./local_crontab.txt"
+cat "./local_crontab.txt"
+crontab "./local_crontab.txt"
+rm -vf "./local_crontab.txt"
 set +x
 echo "#"
 echo "# crontab List AFTER contab ADD:"
 echo "#"
 set -x
 sudo crontab -l # after
-crontab -l # before
+crontab -l # after
 set +x
 echo "#"
 echo "# syslog AFTER contab ADD:"
@@ -908,6 +918,9 @@ echo "#"
 set -x
 sudo grep CRON /var/log/syslog
 set +x
+
+
+
 
 
 read -p "# Press Enter to continue."

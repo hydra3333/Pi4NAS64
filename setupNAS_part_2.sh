@@ -792,33 +792,28 @@ echo ""
 set -x
 sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\n#zzz---zzz;g" "/etc/minidlna.conf"
 # example in https://stackoverflow.com/questions/22497246/insert-multiple-lines-into-a-file-after-specified-pattern-using-shell-script
-#	sed '/^cdef$/r'<(
-#		echo "line1"
-#		echo "line2"
-#		echo "line3"
-#		echo "line4"
-#	) -i -- input.txt
-### example: sed '/cdef/r add.txt' input.txt
-sudo rm -vf "~/Desktop/tmp_sed_input.txt"
-sudo touch "~/Desktop/tmp_sed_input.txt"
+# example: sed '/cdef/r add.txt' input.txt
+cd ~/Desktop
+sudo rm -vf "./tmp_sed_input.txt"
+sudo touch "./tmp_sed_input.txt"
 # for my medialibrary1 on FIRST USB3 drive
-sudo echo "media_dir=PVA,${root_folder_1}/2015.11.29-Jess-21st-birthday-party">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_1}/BigIdeas">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_1}/CharlieWalsh">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_1}/ClassicDocumentaries">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_1}/ClassicMovies">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_1}/Documentaries">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_1}/movies">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_1}/OldMovies">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_1}/OldSciFi">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_1}/SciFi">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/2015.11.29-Jess-21st-birthday-party">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/BigIdeas">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/CharlieWalsh">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/ClassicDocumentaries">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/ClassicMovies">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/Documentaries">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/movies">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/OldMovies">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/OldSciFi">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/SciFi">>"./tmp_sed_input.txt"
 # for in medialibrary2 on SECOND USB3 drive
-sudo echo "media_dir=PVA,${root_folder_2}/Footy">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_2}/MusicVideos">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_2}/Railway_Journeys">>"~/Desktop/tmp_sed_input.txt"
-sudo echo "media_dir=PVA,${root_folder_2}/Series">>"~/Desktop/tmp_sed_input.txt"
-set -iBAK '/zzz---zzz/r "~/Desktop/tmp_sed_input.txt"' "/etc/minidlna.conf"
-sudo rm -vf "~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_2}/Footy">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_2}/MusicVideos">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_2}/Railway_Journeys">>"./tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_2}/Series">>"./tmp_sed_input.txt"
+set -iBAK '/zzz---zzz/r "./tmp_sed_input.txt"' "/etc/minidlna.conf"
+sudo rm -vf "./tmp_sed_input.txt"
 #
 sudo cat "/etc/minidlna.conf"
 #

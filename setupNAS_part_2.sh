@@ -726,7 +726,7 @@ sudo apt autoremove -y
 sudo rm -vfR "/etc/minidlna.conf"
 sudo rm -vfR "/var/log/minidlna.log"
 sudo rm -vfR "/run/minidlna"
-sudo rm -vfR "${server_root_USBmountpoint}/minidlna"
+sudo rm -vfR "${USB3_mountpoint_1}/minidlna"
 set +x
 echo ""
 echo "# Do the minidlna install and the stop the service so we can configure it"

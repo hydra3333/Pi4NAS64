@@ -712,7 +712,11 @@ sudo sed -i.bak "s;fs.inotify.max_user_watches=;#fs.inotify.max_user_watches=;g"
 echo fs.inotify.max_user_watches=${max_user_watches} | sudo tee -a "/etc/sysctl.conf"
 sudo sysctl -p
 set +x
-echo ""
+
+
+read -p "# Press Enter to continue."
+
+
 echo ""
 echo "# Un-Install any prior minDLNA"
 echo ""
@@ -735,6 +739,11 @@ sleep 2s
 sudo systemctl stop minidlna
 sleep 2s
 set +x
+
+
+read -p "# Press Enter to continue."
+
+
 echo ""
 echo "# Add minidlna Groups, then Create a folder for minidlna logs and db - place the folder in the root of the FIRST external USB3 disk"
 echo ""
@@ -758,6 +767,11 @@ sudo chown -c -R pi:minidlna "/var/cache/minidlna"
 sudo chmod -c a=rwx -R "/var/log/minidlna.log"
 sudo chown -c -R pi:minidlna "/var/log/minidlna.log"
 set +x
+
+
+read -p "# Press Enter to continue."
+
+
 echo ""
 echo "# Change miniDLNA config settings"
 echo ""
@@ -790,6 +804,7 @@ echo ""
 set -x
 sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\n###---###'g" "/etc/minidlna.conf"
 sudo sed '/^###---###$/r'<(
+	# in my medialibrary2 on FIRST USB3 drive
 	echo "media_dir=PVA,${root_folder_1}/2015.11.29-Jess-21st-birthday-party"
 	echo "media_dir=PVA,${root_folder_1}/BigIdeas"
 	echo "media_dir=PVA,${root_folder_1}/CharlieWalsh"
@@ -799,7 +814,9 @@ sudo sed '/^###---###$/r'<(
 	echo "media_dir=PVA,${root_folder_1}/movies"
 	echo "media_dir=PVA,${root_folder_1}/OldMovies"
 	echo "media_dir=PVA,${root_folder_1}/OldSciFi"
-	echo "media_dir=PVA,${root_folder_2}/movies"
+	echo "media_dir=PVA,${root_folder_1}/SciFi"
+	# for in medialibrary2 on SECOND USB3 drive
+	echo "media_dir=PVA,${root_folder_2}/Footy"
 	echo "media_dir=PVA,${root_folder_2}/MusicVideos"
 	echo "media_dir=PVA,${root_folder_2}/Railway_Journeys"
 	echo "media_dir=PVA,${root_folder_2}/Series"
@@ -811,6 +828,11 @@ echo ""
 sudo rm -vf "${minidlna_main_log_file}"
 sudo rm -vf "${minidlna_refresh_log_file}"
 sudo touch "${minidlna_refresh_log_file}"
+
+
+read -p "# Press Enter to continue."
+
+
 echo ""
 echo "Create the .sh used by crontab to refresh the db every night. ${minidlna_refresh_sh_file}"
 echo ""
@@ -853,6 +875,11 @@ echo "#" >> "${minidlna_restart_refresh_sh_file}"
 echo "set +x" >> "${minidlna_restart_refresh_sh_file}"
 echo "set +x" >> "${minidlna_restart_refresh_sh_file}"
 echo "# ${minidlna_restart_refresh_sh_file}" >> "${minidlna_restart_refresh_sh_file}"
+
+
+read -p "# Press Enter to continue."
+
+
 echo ""
 echo "Add the 2:00 am nightly crontab job to re-index miniDLNA (${})"
 echo ""
@@ -889,6 +916,11 @@ echo "# syslog AFTER contab ADD:"
 set -x
 sudo grep CRON /var/log/syslog
 set +x
+
+
+read -p "# Press Enter to continue."
+
+
 echo ""
 echo "# Start miniDLNA: Force a re-load of miniDLNA to ensure it starts re-looking for new files."
 echo ""

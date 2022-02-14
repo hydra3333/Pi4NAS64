@@ -715,11 +715,6 @@ sudo sed -i.bak "s;fs.inotify.max_user_watches=;#fs.inotify.max_user_watches=;g"
 echo fs.inotify.max_user_watches=${max_user_watches} | sudo tee -a "/etc/sysctl.conf"
 sudo sysctl -p
 set +x
-
-
-read -p "# Press Enter to continue."
-
-
 echo ""
 echo "# Un-Install any prior minDLNA"
 echo ""
@@ -742,11 +737,6 @@ sleep 2s
 sudo systemctl stop minidlna
 sleep 2s
 set +x
-
-
-read -p "# Press Enter to continue."
-
-
 echo ""
 echo "# Add minidlna Groups, then Create a folder for minidlna logs and db - place the folder in the root of the FIRST external USB3 disk"
 echo ""
@@ -770,11 +760,6 @@ sudo chown -c -R pi:minidlna "/var/cache/minidlna"
 sudo chmod -c a=rwx -R "/var/log/minidlna.log"
 sudo chown -c -R pi:minidlna "/var/log/minidlna.log"
 set +x
-
-
-read -p "# Press Enter to continue."
-
-
 echo ""
 echo "# Change miniDLNA config settings"
 echo ""
@@ -815,23 +800,24 @@ sudo sed -i "s;media_dir=/var/lib/minidlna;#media_dir=/var/lib/minidlna\n#zzz---
 #	) -i -- input.txt
 ### example: sed '/cdef/r add.txt' input.txt
 sudo rm -vf "~/Desktop/tmp_sed_input.txt"
+sudo touch "~/Desktop/tmp_sed_input.txt"
 # for my medialibrary1 on FIRST USB3 drive
-echo "media_dir=PVA,${root_folder_1}/2015.11.29-Jess-21st-birthday-party">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_1}/BigIdeas">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_1}/CharlieWalsh">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_1}/ClassicDocumentaries">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_1}/ClassicMovies">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_1}/Documentaries">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_1}/movies">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_1}/OldMovies">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_1}/OldSciFi">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_1}/SciFi">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/2015.11.29-Jess-21st-birthday-party">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/BigIdeas">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/CharlieWalsh">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/ClassicDocumentaries">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/ClassicMovies">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/Documentaries">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/movies">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/OldMovies">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/OldSciFi">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_1}/SciFi">>"~/Desktop/tmp_sed_input.txt"
 # for in medialibrary2 on SECOND USB3 drive
-echo "media_dir=PVA,${root_folder_2}/Footy">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_2}/MusicVideos">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_2}/Railway_Journeys">>"~/Desktop/tmp_sed_input.txt"
-echo "media_dir=PVA,${root_folder_2}/Series">>"~/Desktop/tmp_sed_input.txt"
-set -iBAK '/cdef/r "~/Desktop/tmp_sed_input.txt"' "/etc/minidlna.conf"
+sudo echo "media_dir=PVA,${root_folder_2}/Footy">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_2}/MusicVideos">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_2}/Railway_Journeys">>"~/Desktop/tmp_sed_input.txt"
+sudo echo "media_dir=PVA,${root_folder_2}/Series">>"~/Desktop/tmp_sed_input.txt"
+set -iBAK '/zzz---zzz/r "~/Desktop/tmp_sed_input.txt"' "/etc/minidlna.conf"
 sudo rm -vf "~/Desktop/tmp_sed_input.txt"
 #
 sudo cat "/etc/minidlna.conf"

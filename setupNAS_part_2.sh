@@ -748,11 +748,11 @@ echo ""
 echo "# Add minidlna Groups, then Create a folder for minidlna logs and db - place the folder in the root of the FIRST external USB3 disk"
 echo ""
 set -x
-set minidlna_root_folder="${USB3_mountpoint_1}/minidlna"
+minidlna_root_folder="${USB3_mountpoint_1}/minidlna"
 sudo usermod -a -G pi minidlna
 sudo usermod -a -G minidlna pi
 sudo usermod -a -G minidlna root
-sudo mkdir -p "${minidlna_root_folder}"
+sudo mkdir -pv "${minidlna_root_folder}"
 sudo chmod -c a=rwx -R "${minidlna_root_folder}"
 sudo chown -c -R pi:minidlna "${minidlna_root_folder}"
 sudo chmod -c a=rwx -R "/run/minidlna"

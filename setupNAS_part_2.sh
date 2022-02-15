@@ -892,16 +892,15 @@ set +x
 echo "#"
 echo "# Adding crontab as user pi (no sudo):"
 echo "#"
+# escaped path for use in: sed "/findstring/d"
+EscapedPath=`echo "${minidlna_refresh_sh_file}" | sed 's:/:\\\/:g'`
 set -x
 cd ~/Desktop
 sudo rm -vf "./local_crontab.txt" "./local_crontab_tmp.txt"
 crontab -l > "./local_crontab.txt"
 sed -i "/no crontab for $(whoami)/d" "./local_crontab.txt"
-# escaped path for use in: sed "/findstring/d"
-EscapedPath=`echo "${minidlna_refresh_sh_file}" | sed 's:/:\\\/:g'`
 cat "./local_crontab.txt"
 sed -i "/${EscapedPath}/d" "./local_crontab.txt"
-
 cat "./local_crontab.txt"
 echo "0 2 * * * ${minidlna_refresh_sh_file} 2>&1 >> ${minidlna_refresh_log_file}" >> "./local_crontab.txt"
 cat "./local_crontab.txt" | sort | uniq  > "./local_crontab_tmp.txt"
@@ -923,12 +922,6 @@ echo "#"
 set -x
 sudo grep CRON /var/log/syslog
 set +x
-
-
-
-read -p "# Press Enter to continue."
-
-
 echo ""
 echo "# Start miniDLNA: Force a re-load of miniDLNA to ensure it starts re-looking for new files."
 echo ""

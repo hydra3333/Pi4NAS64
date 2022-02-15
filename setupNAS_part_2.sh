@@ -899,13 +899,8 @@ crontab -l > "./local_crontab.txt"
 
 sed -i "/no crontab for $(whoami)/d" "./local_crontab.txt"
 #EscapedPath=(echo "${minidlna_refresh_sh_file}" | sed 's:/:\\\/:g')
-
-EscapedPath=`echo "${minidlna_refresh_sh_file}" | sed 's:/:\\\/:g')`
-
-echo ${EscapedPath}
-
 # escaped path for use in: sed "/findstring/d"
-
+EscapedPath=`echo "${minidlna_refresh_sh_file}" | sed 's:/:\\\/:g'`
 cat "./local_crontab.txt"
 sed -i "/${EscapedPath}/d" "./local_crontab.txt"
 cat "./local_crontab.txt"

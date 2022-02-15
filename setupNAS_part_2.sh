@@ -898,7 +898,9 @@ sudo rm -vf "./local_crontab.txt"
 crontab -l > "./local_crontab.txt"
 
 sed -i "/no crontab for $(whoami)/d" "./local_crontab.txt"
-EscapedPath=(echo "${minidlna_refresh_sh_file}" | sed 's:/:\\\/:g')	
+#EscapedPath=(echo "${minidlna_refresh_sh_file}" | sed 's:/:\\\/:g')
+
+EscapedPath=`echo "${minidlna_refresh_sh_file}" | sed 's:/:\\\/:g')`
 
 echo ${EscapedPath}
 

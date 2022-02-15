@@ -9,10 +9,10 @@ echo "#-------------------------------------------------------------------------
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#"
 set -x
-do_setup_hdidle=false
-do_setup_NFS=false
-do_setup_SAMBA=false
-do_setup_miniDLNA=true
+do_setup_hdidle=true
+do_setup_NFS=true
+do_setup_SAMBA=true
+do_setup_miniDLNA=false
 set +x
 echo "#"
 set -x
@@ -990,4 +990,3 @@ set -x
 sudo reboot now
 set +x
 exit
-

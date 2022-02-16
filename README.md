@@ -151,11 +151,11 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 3. If the Pi4 is Wired ethernet (it should be, so that it halves WiFi traffic/contention eg cuts out the hop from the Pi to Router), disable WiFi and BlueTooth on the Pi4   
    - ... perhaps in a Terminal use `sudo nano /boot/config.txt` to edit the file.   
-   - add this line at the TOP into `/boot/config.txt` to force time for the USB3 disks to spin up   
+   - add this line **at the TOP into** `/boot/config.txt` to force time for the USB3 disks to spin up   
       ```
       boot_delay=30
       ```
-   - then add these lines near the END (before all of these label line `[cm4] [All] [pi4] [All]`) into `/boot/config.txt` to disable WiFi and bluetooth   
+   - then add these lines near the END (**before all of these label lines** `[cm4] [All] [pi4] [All]`) into `/boot/config.txt` to disable WiFi and bluetooth   
  
       ```
       dtoverlay=disable-wifi   
@@ -182,7 +182,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      * a folder at the root level of the first USB3 drive must be `mp4library2` (NOT the same as the first drive) and have security set to `Everyone` having `Full Access` to this folder and all subfolders and files 
    - copy media files into the folder tree one created, and check security permissikons on them is set correctly	 
 
-6. Cross-check **eveything** and **Reboot the Pi4** one last time to ensure all settings are good and being used !
+6. Cross-check **everything** and **Reboot the Pi4** one last time to ensure all settings are good and being used !
 
 ---
 

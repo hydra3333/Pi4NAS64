@@ -155,7 +155,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
       ```
       boot_delay=30
       ```
-   - then add these lines near the END (before the line `[All]`) into `/boot/config.txt` to disable WiFi and bluetooth   
+   - then add these lines near the END (before all of these label line `[cm4] [All] [pi4] [All]`) into `/boot/config.txt` to disable WiFi and bluetooth   
  
       ```
       dtoverlay=disable-wifi   

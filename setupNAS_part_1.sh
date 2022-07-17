@@ -86,6 +86,15 @@ echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
+echo "# Install mergerfs which we need to logically merge folders together for presentation eg via NFS"
+echo ""
+set -x
+sudo apt install -y mergerfs
+set +x
+echo ""
+#
+echo "#-------------------------------------------------------------------------------------------------------------------------------------"
+echo ""
 echo "# Install the tool which can be used to turn EOL inside text files from windows type to unix type"
 echo ""
 set -x
@@ -314,7 +323,7 @@ fi
 # define disks which be mounted prior to mergerfs
 mergerfs_requires="${mergerfs_requires_1}${mergerfs_requires_2}"
 # comment out any existing mergerfs mountpoint in /etc/fstab
-sudo sed -i.bak"s;.*${mergerfs_mountpoint};#&;g" "/etc/fstab"
+sudo sed -i.bak "s;.*${mergerfs_mountpoint};#&;g" "/etc/fstab"
 # add a new mergerfs mount point defining the required folder(s) ... see 
 # https://manpages.ubuntu.com/manpages/impish/man1/mergerfs.1.html
 # https://github.com/trapexit/mergerfs

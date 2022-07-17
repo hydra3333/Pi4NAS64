@@ -44,6 +44,13 @@ USB3_DISK_NAME_2=""
 USB3_DEVICE_NAME_2=""
 USB3_DEVICE_UUID_2=""
 #
+#mergerfs_mountpoint="/mnt/mergerfs/mp4library"
+#mergerfs_mountpoint_default="/mnt/mergerfs/mp4library"
+mergerfs_mountpoint_default=""
+mergerfs_mountpoint=""
+mergerfs_folders=""
+mergerfs_virtual_folder_name_default=""
+mergerfs_virtual_folder_name=""
 #---
 #
 if [[ -f "$setup_config_file" ]]; then
@@ -68,6 +75,17 @@ USB3_mountpoint_1="${input_string:-$USB3_mountpoint_default_1}" # forces the nam
 if [[ "${root_folder_default_1}" = "" ]]; then root_folder_default_1=${USB3_mountpoint_1}/${virtual_folder_name_1}; fi
 read -e -p "Designate the physical root folder on the FIRST USB3 external hard drive [${root_folder_default_1}]: " -i "${root_folder_default_1}" input_string
 root_folder_1="${input_string:-$root_folder_default_1}" # forces the name to be the original default if the user erases the input or default (submitting a null).
+#
+#
+if [[ "${mergerfs_virtual_folder_name_default}" = "" ]]; then mergerfs_virtual_folder_name_default=mp4library; fi;
+read -e -p "Designate the mergerfs virtual_folder_name  [${mergerfs_virtual_folder_name_default}]: " -i "${mergerfs_virtual_folder_name_default}" input_string
+mergerfs_virtual_folder_name="${input_string:-$mergerfs_virtual_folder_name_default}" # forces the name to be the original default if the user erases the input or default (submitting a null).
+#
+if [[ "${mergerfs_mountpoint_default}" = "" ]]; then  mergerfs_mountpoint_default=/mnt/mergerfs/${mergerfs_virtual_folder_name}; fi
+read -e -p "Designate the mount point for the 'mergerfs' virtual disk for NFS [${mergerfs_mountpoint_default}]: " -i "${mergerfs_mountpoint_default}" input_string
+mergerfs_mountpoint="${input_string:-$mergerfs_mountpoint_default}" # forces the name to be the original default if the user erases the input or default (submitting a null).
+mergerfs_folders="${root_folder_1}"
+mergerfs_root_folder=${mergerfs_mountpoint}
 #
 #---
 #
@@ -94,6 +112,8 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	if [[ "${root_folder_default_2}" = "" ]]; then root_folder_default_2=${USB3_mountpoint_2}/${virtual_folder_name_2}; fi;
 	read -e -p "Designate the physical root folder on the SECOND USB3 external hard drive [${root_folder_default_2}]: " -i "${root_folder_default_2}" input_string
 	root_folder_2="${input_string:-$root_folder_default_2}" # forces the name to be the original default if the user erases the input or default (submitting a null).
+	#
+	mergerfs_folders="${mergerfs_folders}:${root_folder_2}"
 else
 	if [[ "${virtual_folder_name_default_2}" = "" ]]; then virtual_folder_name_default_2=mp4library2; fi;
 	if [[ "${USB3_mountpoint_default_2}" = "" ]]; then USB3_mountpoint_default_2=/mnt/${virtual_folder_name_default_2}; fi;
@@ -251,7 +271,7 @@ echo "root_folder_default_1=${root_folder_1}">> "$setup_config_file"
 echo "USB3_DISK_NAME_1=${USB3_DISK_NAME_1}">> "$setup_config_file"
 echo "USB3_DEVICE_NAME_1=${USB3_DEVICE_NAME_1}">> "$setup_config_file"
 echo "USB3_DEVICE_UUID_1=${USB3_DEVICE_UUID_1}">> "$setup_config_file"
-#
+echo ""
 echo "SecondDisk=${SecondDisk}">> "$setup_config_file"
 echo "virtual_folder_name_2=${virtual_folder_name_2}">> "$setup_config_file"
 echo "virtual_folder_name_default_2=${virtual_folder_name_2}">> "$setup_config_file"
@@ -262,6 +282,13 @@ echo "root_folder_default_2=${root_folder_2}">> "$setup_config_file"
 echo "USB3_DISK_NAME_2=${USB3_DISK_NAME_2}">> "$setup_config_file"
 echo "USB3_DEVICE_NAME_2=${USB3_DEVICE_NAME_2}">> "$setup_config_file"
 echo "USB3_DEVICE_UUID_2=${USB3_DEVICE_UUID_2}">> "$setup_config_file"
+echo ""
+echo "mergerfs_virtual_folder_name_default=${mergerfs_virtual_folder_name_default}">> "$setup_config_file"
+echo "mergerfs_virtual_folder_name=${mergerfs_virtual_folder_name}">> "$setup_config_file"
+echo "mergerfs_mountpoint_default=${mergerfs_mountpoint_default}">> "$setup_config_file"
+echo "mergerfs_mountpoint=${mergerfs_mountpoint}">> "$setup_config_file"
+echo "mergerfs_folders=${mergerfs_folders}">> "$setup_config_file"
+echo "mergerfs_root_folder=${mergerfs_root_folder}">> "$setup_config_file"
 #
 echo "#">> "$setup_config_file"
 set -x
@@ -289,6 +316,11 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	echo "           USB3_DEVICE_NAME_2=${USB3_DEVICE_NAME_2}"
 	echo "           USB3_DEVICE_UUID_2=${USB3_DEVICE_UUID_2}"
 fi
+echo ""
+echo "          mergerfs_mountpoint=${mergerfs_mountpoint}"
+echo "             mergerfs_folders=${mergerfs_folders}"
+echo " mergerfs_virtual_folder_name=${mergerfs_virtual_folder_name}"
+echo "         mergerfs_root_folder=${mergerfs_root_folder}"
 echo "*****"
 echo ""
 echo "# ------------------------------------------------------------------------------------------------------------------------"

@@ -211,7 +211,7 @@ if [[ ${do_setup_NFS} = true ]]; then
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Install NFS and create the NFS shares"
+echo "# Install NFS and create the NFS shares - using the mergerfs disk: ${mergerfs_mountpoint}"
 echo ""
 # https://magpi.raspberrypi.org/articles/raspberry-pi-samba-file-server
 # https://pimylifeup.com/raspberry-pi-samba/
@@ -225,6 +225,7 @@ if [[ "${SecondDisk}" = "y" ]]; then
 else
 	nfs_export_full_2=""
 fi
+nfs_export_full_mergerfs="${nfs_export_top}/${mergerfs_virtual_folder_name}"
 echo ""
 #
 #echo "### NO NO NO Un-Install any previous NFS install ... 
@@ -235,6 +236,7 @@ cd ~/Desktop
 ## do not unmount them
 ##sudo umount -f "${nfs_export_full_1}"
 ##sudo umount -f "${nfs_export_full_2}"
+##sudo umount -f "${nfs_export_full_mergerfs}"
 echo "The first time around, this 'stop nfs-kernel-server' may fail since NFS is not yet installed. That's OK."
 sudo systemctl stop nfs-kernel-server
 sleep 2s
@@ -258,9 +260,9 @@ echo ""
 ##sudo rm -fv "/etc/exports"
 ##sudo rm -fv "/etc/default/nfs-kernel-server"
 ##sudo rm -fv "/etc/idmapd.conf"
-## do NOT NOT NOT use rm on the next 2 items, as it may accidentally wipe all of our media files !!!
-##sudo rm -fvR "${nfs_export_full_1}"
-##sudo rm -fvR "${nfs_export_top}"
+## do NOT NOT NOT use rm on the next 2 items, as it WILL accidentally wipe all of our media files !!!
+##sudo .rm -fvR "${nfs_export_full_1}"
+##sudo .rm -fvR "${nfs_export_top}"
 echo ""
 echo "# Check that uid=1000 and gid=1000 match the user/group pi "
 echo ""
@@ -285,11 +287,17 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	sudo chmod -c a=rwx -R "${nfs_export_full_2}"
 	set +x
 fi
+set -x
+sudo mkdir -pv "${nfs_export_full_mergerfs}"
+sudo chmod -c a=rwx -R "${nfs_export_full_mergerfs}"
+set +x
 #
 # Syntax for mount: sudo mount -v --bind  "existing-folder-tree" "new-mount-point-folder"
 #
 # do NOT umount nfs_export_full as it dismounts the underpinning volume and causes things to crash 
 #sudo umount -f "${nfs_export_full_1}" 
+#sudo umount -f "${nfs_export_full_2}" 
+#sudo umount -f "${nfs_export_full_mergerfs}" 
 #sudo mount -v -a # a : Mounts all devices described at /etc/fstab.
 echo ""
 echo "# Re-start the NFS server"
@@ -318,6 +326,11 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	sudo ls -al "${nfs_export_full_2}" 
 	set +x
 fi
+set -x
+sudo mount -v --bind "${${mergerfs_root_folder}}" "${nfs_export_full_mergerfs}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
+sudo ls -al "${${mergerfs_root_folder}}" 
+sudo ls -al "${nfs_export_full_mergerfs}" 
+set +x
 echo ""
 set -x
 sudo df -h
@@ -334,6 +347,7 @@ sudo rm -fv "/etc/fstab.pre-nfs.old"
 sudo cp -fv "/etc/fstab" "/etc/fstab.pre-nfs.old"
 sudo sed -iBAK "s;${root_folder_1} ${nfs_export_full_1};#${root_folder_1} ${nfs_export_full_1};g" "/etc/fstab"
 sudo sed -iBAK "s;${root_folder_2} ${nfs_export_full_2};#${root_folder_2} ${nfs_export_full_2};g" "/etc/fstab" # do the SECOND just in case there was one previously
+sudo sed -iBAK "s;${${mergerfs_root_folder}} ${nfs_export_full_mergerfs};#${${mergerfs_root_folder}} ${nfs_export_full_mergerfs};g" "/etc/fstab"
 sudo sed -iBAK   "s;##;#;g" "/etc/fstab"
 # add the new shares
 ## physical logical
@@ -345,6 +359,9 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	sudo sed -iBAK "$ a ${root_folder_2} ${nfs_export_full_2} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 	set +x
 fi
+set -x
+sudo sed -iBAK "$ a ${${mergerfs_root_folder}} ${nfs_export_full_mergerfs} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+set +x
 echo ""
 set -x
 sudo cat "/etc/fstab"
@@ -363,6 +380,8 @@ sudo sed -i "s;${nfs_export_full_1} ${server_ip}/24;#${nfs_export_full_1} ${serv
 sudo sed -i "s;${nfs_export_full_1} 127.0.0.1;#${nfs_export_full_1} 127.0.0.1;g" "/etc/exports"
 sudo sed -i "s;${nfs_export_full_2} ${server_ip}/24;#${nfs_export_full_1} ${server_ip}/24;g" "/etc/exports"
 sudo sed -i "s;${nfs_export_full_2} 127.0.0.1;#${nfs_export_full_1} 127.0.0.1;g" "/etc/exports"
+sudo sed -i "s;${nfs_export_full_mergerfs} ${server_ip}/24;#${nfs_export_full_mergerfs} ${server_ip}/24;g" "/etc/exports"
+sudo sed -i "s;${nfs_export_full_mergerfs} 127.0.0.1;#${nfs_export_full_mergerfs} 127.0.0.1;g" "/etc/exports"
 set +x
 #... END of comment out prior NFS export entries
 #... START of add entries for the LAN IP range
@@ -375,6 +394,9 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	sudo sed -i "$ a ${nfs_export_full_2} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 	set +x
 fi
+set -x
+sudo sed -i "$ a ${nfs_export_full_mergerfs} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+set +x
 #... END OF add entries for the LAN IP range
 #... START of add entries for localhost 127.0.0.1
 #sudo sed -i "$ a ${nfs_export_top} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
@@ -386,6 +408,9 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	sudo sed -i "$ a ${nfs_export_full_2} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 	set +x
 fi
+set -x
+sudo sed -i "$ a ${nfs_export_full_mergerfs} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+set +x
 #... END of add entries for localhost 127.0.0.1
 set -x
 sudo cat "/etc/exports"
@@ -446,6 +471,9 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	sudo ls -al "${nfs_export_full_2}" 
 	set +x
 fi
+set -x
+sudo ls -al "${${mergerfs_root_folder}}" 
+sudo ls -al "${nfs_export_full_mergerfs}" 
 set +x
 #++++++++++
 echo ""
@@ -457,6 +485,9 @@ cd ~/Desktop
 sudo rm -vf "${f_ls_nsf}"
 temp_remote_nfs_share_1="/temp_remote_nfs_share_1"
 temp_remote_nfs_share_2="/temp_remote_nfs_share_2"
+
+# mergerfs_root_folder put nfs_export_full_mergerfs in here somehow
+
 set +x
 echo "#!/bin/bash" >>"${f_ls_nsf}"
 echo "# to get rid of MSDOS format do this to this file: sudo sed -i.bak s/\\r//g ./filename" >>"${f_ls_nsf}"
@@ -474,6 +505,8 @@ echo "sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 if [[ "${SecondDisk}" = "y" ]]; then
 	echo "sudo umount -f \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
+# mergerfs_root_folder put nfs_export_full_mergerfs in here somehow
+
 echo "#">>"${f_ls_nsf}"
 echo "# Create the local files to be used as temporary share mount points to connect to the remote NFS shares">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
@@ -483,6 +516,9 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	echo "sudo mkdir -pv \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 	echo "sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
+
+# mergerfs_root_folder put nfs_export_full_mergerfs in here somehow
+
 echo "#">>"${f_ls_nsf}"
 echo "# Connect to the remote NFS share(s) using the temporary mount points">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
@@ -508,6 +544,9 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	echo "# do NOT NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!">>"${f_ls_nsf}"
 	echo "###sudo rm -vf \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
+
+# mergerfs_root_folder put nfs_export_full_mergerfs in here somehow
+
 echo ""
 # OK, let's test the NFS shares
 set -x

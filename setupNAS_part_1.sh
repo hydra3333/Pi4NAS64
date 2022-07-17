@@ -273,6 +273,8 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	sudo mkdir -pv ${USB3_mountpoint_2}
 	sudo chmod -c a=rwx -R ${USB3_mountpoint_2}
 fi
+sudo mkdir -pv ${mergerfs_mountpoint}
+sudo chmod -c a=rwx -R ${mergerfs_mountpoint}
 set +x
 echo ""
 #
@@ -301,6 +303,30 @@ if [[ "${SecondDisk}" = "y" ]]; then
 	sudo sed -i.bak "$ a UUID=${USB3_DEVICE_UUID_2} ${USB3_mountpoint_2} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 	set +x
 fi
+echo "# Now we add a line to file '/etc/fstab' so that mergerfs drives are designated the same every time"
+set -x
+mergerfs_requires_1="x-systemd.requires=${USB3_mountpoint_1}"
+if [[ "${SecondDisk}" = "y" ]]; then
+	mergerfs_requires_2=",x-systemd.requires=${USB3_mountpoint_2}"
+else
+	mergerfs_requires_2=""
+fi
+# define disks which be mounted prior to mergerfs
+mergerfs_requires="${mergerfs_requires_1}${mergerfs_requires_2}"
+# comment out any existing mergerfs mountpoint in /etc/fstab
+sudo sed -i.bak"s;.*${mergerfs_mountpoint};#&;g" "/etc/fstab"
+# add a new mergerfs mount point defining the required folder(s) ... see 
+# https://manpages.ubuntu.com/manpages/impish/man1/mergerfs.1.html
+# https://github.com/trapexit/mergerfs
+# https://forums.raspberrypi.com/viewtopic.php?p=2020660#p2020660
+sudo sed -i.bak "$ a ${mergerfs_folders} ${mergerfs_mountpoint} fuse.mergerfs defaults,nofail,auto,owner,users,rw,exec,${mergerfs_requires},noatime,nonempty,allow_other,moveonenospc=true,use_ino,noforget,inodecalc=path-hash,nfsopenhack=all,threads=0,cache.files=partial,dropcacheonclose=true,category.create=epall,category.action=epall,category.search=epff,statfs=base,statfs_ignore=none,func.getattr=newest,fsname=mergerfs 0 0" "/etc/fstab"
+set +x
+# to do it manually see this example ...
+#sudo mergerfs -o nonempty,allow_other,moveonenospc=true,use_ino,noforget,inodecalc=path-hash,nfsopenhack=all,threads=0,cache.files=partial,dropcacheonclose=true,category.create=epall,category.action=epall,category.search=epff,statfs=base,statfs_ignore=none,func.getattr=newest,fsname=mergerfs /mnt/mp4library1/mp4library1:/mnt/mp4library2/mp4library2 /mnt/mergerfs/mp4library
+#ls -al /mnt/mp4library1/mp4library1
+#ls -al /mnt/mp4library2/mp4library2
+#ls -al /mnt/mergerfs/mp4library
+#
 set +x
 echo ""
 set -x

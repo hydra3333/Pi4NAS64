@@ -351,16 +351,17 @@ sudo sed -iBAK "s;${${mergerfs_root_folder}} ${nfs_export_full_mergerfs};#${${me
 sudo sed -iBAK   "s;##;#;g" "/etc/fstab"
 # add the new shares
 ## physical logical
-sudo sed -iBAK "$ a ${root_folder_1} ${nfs_export_full_1} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+# see https://forums.raspberrypi.com/viewtopic.php?p=2020848#p2020848 for an answer to the NFS issue
+sudo sed -iBAK "$ a ${root_folder_1} ${nfs_export_full_1} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	## physical logical
-	sudo sed -iBAK "$ a ${root_folder_2} ${nfs_export_full_2} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+	sudo sed -iBAK "$ a ${root_folder_2} ${nfs_export_full_2} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 	set +x
 fi
 set -x
-sudo sed -iBAK "$ a ${${mergerfs_root_folder}} ${nfs_export_full_mergerfs} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+sudo sed -iBAK "$ a ${${mergerfs_root_folder}} ${nfs_export_full_mergerfs} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
 echo ""
 set -x

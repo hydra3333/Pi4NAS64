@@ -74,11 +74,12 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 2. Install and configure our Raspberry Pi4 4Gb or 8Gb   
    - Install 64-bit Raspberry Pi O/S and configure it to how we like it   
    - Check/configure the software library options and ensure latest OS updates are applied   
-      - start a Terminal, then   
+      - start a Terminal, then do this (perhaps a reboot will be needed afterward, if so do that too)   
          ```
          sudo sed -i.bak "s/#deb/deb/g" "/etc/apt/sources.list"
          sudo apt -y update   
          sudo apt -y full-upgrade
+		 #sudo reboot now
          ```   
 
    - AFTER BOOTING 64-bit Raspberry Pi O/S FOR THE FIRST TIME, and it having auto-re-sized the disk etc:   

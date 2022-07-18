@@ -73,6 +73,14 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
 
 2. Install and configure our Raspberry Pi4 4Gb or 8Gb   
    - Install 64-bit Raspberry Pi O/S and configure it to how we like it   
+   - Check/configure the software library options and ensure latest OS updates are applied   
+      - start a Terminal, then   
+         ```
+         sudo sed -i.bak "s/#deb/deb/g" "/etc/apt/sources.list"
+         sudo apt -y update   
+         sudo apt -y full-upgrade
+         ```   
+
    - AFTER BOOTING 64-bit Raspberry Pi O/S FOR THE FIRST TIME, and it having auto-re-sized the disk etc:   
       - it will ask for the Country etc. Choose
          - Country ```Australia```   
@@ -141,13 +149,6 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
          - ```A7 Boot Loader Version``` as ```latest```   
       - Now ```Finish```
          - If it does not ask to reboot, then use the Pi gui main menu, choose ```Logout``` and then ```Reboot```   
-   - AFTER REBOOTING and auto-logging into the gui, check/configure the software library options.   
-      - start a Terminal to do this to ensure all library sources become available   
-         ```
-         sudo sed -i.bak "s/#deb/deb/g" "/etc/apt/sources.list"
-         sudo apt -y update   
-         sudo apt -y full-upgrade
-         ```   
 
 3. If the Pi4 is Wired ethernet (it should be, so that it halves WiFi traffic/contention eg cuts out the hop from the Pi to Router), disable WiFi and BlueTooth on the Pi4   
    - ... perhaps in a Terminal use `sudo nano /boot/config.txt` to edit the file.   

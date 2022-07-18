@@ -605,7 +605,7 @@ echo "2. Assuming the IP address of the Pi4 is '${server_ip}', display the avail
 echo "      showmount -e ${server_ip}"
 echo "      showmount -a ${server_ip}"
 echo ""
-echo "3. Asssuming the name of the 'mergerfs' NFS share is '${nfs_export_full_mergerfs}', and a free drive letter is X: then mount the share"
+echo "3. Assuming the name of the 'mergerfs' NFS share is '${nfs_export_full_mergerfs}', and a free drive letter is X: then mount the share"
 echo "      mount -o anon -o mtype=soft ${server_ip}:${nfs_export_full_mergerfs} X:"
 echo "      mount"
 echo ""   

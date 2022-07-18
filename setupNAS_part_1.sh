@@ -104,6 +104,7 @@ mergerfs_url=https://github.com/trapexit/mergerfs/releases/download/${mergerfs_v
 #
 set -x
 cd ~/Desktop
+sudo rm -fv mergerfs_*.*
 sudo apt purge -y mergerfs
 sudo dpkg -l mergerfs
 sudo dpkg -P mergerfs # dpkg -P is the one that works for us, also use 'apt purge' in case an old one was instaleld via apt
@@ -125,10 +126,10 @@ cd ~/Desktop
 sudo rm -fv "${mergerfs_deb_built_debug}"
 sudo mv -fv "${mergerfs_deb_built}" "${mergerfs_deb}"
 sudo dpkg -i ${mergerfs_deb}
+sudo rm -fv mergerfs_*.*
 sudo dpkg -l mergerfs
 mergerfs --version
 echo ""
-cd ~/Desktop
 set +x
 #
 # Install mergerfs from pre-built .deb created by the package maintainer
@@ -148,6 +149,7 @@ set +x
 #mergerfs --version
 #cd ~/Desktop
 #set +x
+#
 #
 echo ""
 #

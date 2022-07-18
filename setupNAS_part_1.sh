@@ -89,8 +89,66 @@ echo ""
 echo "# Install mergerfs which we need to logically merge folders together for presentation eg via NFS"
 echo ""
 set -x
-sudo apt install -y mergerfs
+#sudo apt install -y mergerfs
+# https://github.com/trapexit/mergerfs
+mergerfs_ver=2.33.5
+mergerfs_tag=${mergerfs_ver}
+mergerfs_os=debian-bullseye
+mergerfs_arch=arm64
+mergerfs_deb=mergerfs_${mergerfs_ver}.${mergerfs_os}_${mergerfs_arch}.deb
+mergerfs_deb_built=mergerfs_${mergerfs_ver}~${mergerfs_os}_${mergerfs_arch}.deb
+mergerfs_deb_built_debug=mergerfs-dbgsym_${mergerfs_ver}~${mergerfs_os}_${mergerfs_arch}.deb
+mergerfs_url=https://github.com/trapexit/mergerfs/releases/download/${mergerfs_ver}/${mergerfs_deb}
+#
+# Build mergerfs from source and install
+#
+set -x
+cd ~/Desktop
+sudo apt purge -y mergerfs
+sudo dpkg -l mergerfs
+sudo dpkg -P mergerfs # dpkg -P is the one that works for us, also use 'apt purge' in case an old one was instaleld via apt
+rm -fvR ./mergerfs
+git clone --branch ${mergerfs_tag} https://github.com/trapexit/mergerfs.git
+sudo rm -fv "${mergerfs_deb}"
+sudo rm -fv "${mergerfs_deb_built}"
+sudo rm -fv "${mergerfs_deb_built_debug}"
+cd mergerfs
+export DEBIAN_FRONTEND=noninteractive
+sudo apt -y update
+sudo apt -y --no-install-suggests --no-install-recommends install ca-certificates build-essential git g++ debhelper automake fakeroot libtool lsb-release
+sudo apt -y --no-install-suggests --no-install-recommends install python
+sudo apt -y --no-install-suggests --no-install-recommends install python3
+sudo ln -f -s /usr/bin/python3 /usr/bin/python
+make help
+make deb STATIC=0 LTO=1
+cd ~/Desktop
+sudo rm -fv "${mergerfs_deb_built_debug}"
+sudo mv -fv "${mergerfs_deb_built}" "${mergerfs_deb}"
+sudo dpkg -i ${mergerfs_deb}
+sudo dpkg -l mergerfs
+mergerfs --version
+echo ""
+cd ~/Desktop
 set +x
+#
+# Install mergerfs from pre-built .deb created by the package maintainer
+#
+#set -x
+#cd ~/Desktop
+#sudo apt purge -y mergerfs
+#sudo dpkg -l mergerfs
+#sudo dpkg -P mergerfs # dpkg -P is the one that works for us, also use 'apt purge' in case an old one was instaleld via apt
+#rm -fvr ./mergerfs
+#mkdir -pv mergerfs
+#sudo rm -vf "${mergerfs_deb}"
+#cd mergerfs
+#wget ${mergerfs_url}
+#sudo dpkg -i "${mergerfs_deb}"
+#sudo dpkg -l mergerfs
+#mergerfs --version
+#cd ~/Desktop
+#set +x
+#
 echo ""
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"

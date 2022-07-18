@@ -211,68 +211,8 @@ if [[ ${do_setup_NFS} = true ]]; then
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Build and install mergerfs, then"
-echo ""
 echo "# Install NFS and create the NFS shares - using the mergerfs mount point '${mergerfs_mountpoint}'"
 echo ""
-# https://github.com/trapexit/mergerfs
-mergerfs_ver=2.33.5
-mergerfs_tag=${mergerfs_ver}
-mergerfs_os=debian-bullseye
-mergerfs_arch=arm64
-mergerfs_deb=mergerfs_${mergerfs_ver}.${mergerfs_os}_${mergerfs_arch}.deb
-mergerfs_deb_built=mergerfs_${mergerfs_ver}~${mergerfs_os}_${mergerfs_arch}.deb
-mergerfs_deb_built_debug=mergerfs-dbgsym_${mergerfs_ver}~${mergerfs_os}_${mergerfs_arch}.deb
-mergerfs_url=https://github.com/trapexit/mergerfs/releases/download/${mergerfs_ver}/${mergerfs_deb}
-#
-# Build mergerfs from source and install
-#
-set -x
-cd ~/Desktop
-sudo apt purge -y mergerfs
-sudo dpkg -l mergerfs
-sudo dpkg -P mergerfs # dpkg -P is the one that works for us, also use 'apt purge' in case an old one was instaleld via apt
-rm -fvR ./mergerfs
-git clone --branch ${mergerfs_tag} https://github.com/trapexit/mergerfs.git
-sudo rm -fv "${mergerfs_deb}"
-sudo rm -fv "${mergerfs_deb_built}"
-sudo rm -fv "${mergerfs_deb_built_debug}"
-cd mergerfs
-export DEBIAN_FRONTEND=noninteractive
-sudo apt -y update
-sudo apt -y --no-install-suggests --no-install-recommends install ca-certificates build-essential git g++ debhelper automake fakeroot libtool lsb-release
-sudo apt -y --no-install-suggests --no-install-recommends install python
-sudo apt -y --no-install-suggests --no-install-recommends install python3
-sudo ln -f -s /usr/bin/python3 /usr/bin/python
-make help
-make deb STATIC=0 LTO=1
-cd ~/Desktop
-sudo rm -fv "${mergerfs_deb_built_debug}"
-sudo mv -fv "${mergerfs_deb_built}" "${mergerfs_deb}"
-sudo dpkg -i ${mergerfs_deb}
-sudo dpkg -l mergerfs
-mergerfs --version
-echo ""
-cd ~/Desktop
-set +x
-echo ""
-#
-# Install mergerfs from pre-built .deb created by the package maintainer
-#
-#cd ~/Desktop
-#sudo apt purge -y mergerfs
-#sudo dpkg -l mergerfs
-#sudo dpkg -P mergerfs # dpkg -P is the one that works for us, also use 'apt purge' in case an old one was instaleld via apt
-#rm -fvr ./mergerfs
-#mkdir -pv mergerfs
-#sudo rm -vf "${mergerfs_deb}"
-#cd mergerfs
-#wget ${mergerfs_url}
-#sudo dpkg -i "${mergerfs_deb}"
-#sudo dpkg -l mergerfs
-#mergerfs --version
-#cd ~/Desktop
-#set +x
 #
 # define share root name and location(s)
 #
@@ -373,18 +313,21 @@ set -x
 sudo df -h
 sudo mount -l
 ## mount physical logical
-sudo mount -v --bind "${root_folder_1}" "${nfs_export_full_1}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
-sudo ls -al "${root_folder_1}" 
-sudo ls -al "${nfs_export_full_1}" 
+# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+#sudo mount -v --bind "${root_folder_1}" "${nfs_export_full_1}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
+#sudo ls -al "${root_folder_1}" 
+#sudo ls -al "${nfs_export_full_1}" 
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
-	sudo mount -v --bind "${root_folder_2}" "${nfs_export_full_2}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
-	sudo ls -al "${root_folder_2}" 
-	sudo ls -al "${nfs_export_full_2}" 
+	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+	#sudo mount -v --bind "${root_folder_2}" "${nfs_export_full_2}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
+	#sudo ls -al "${root_folder_2}" 
+	#sudo ls -al "${nfs_export_full_2}" 
 	set +x
 fi
 set -x
+# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
 sudo mount -v --bind "${${mergerfs_root_folder}}" "${nfs_export_full_mergerfs}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
 sudo ls -al "${${mergerfs_root_folder}}" 
 sudo ls -al "${nfs_export_full_mergerfs}" 
@@ -403,23 +346,26 @@ echo ""
 set -x
 sudo rm -fv "/etc/fstab.pre-nfs.old"
 sudo cp -fv "/etc/fstab" "/etc/fstab.pre-nfs.old"
-sudo sed -iBAK "s;${root_folder_1} ${nfs_export_full_1};#${root_folder_1} ${nfs_export_full_1};g" "/etc/fstab"
-sudo sed -iBAK "s;${root_folder_2} ${nfs_export_full_2};#${root_folder_2} ${nfs_export_full_2};g" "/etc/fstab" # do the SECOND just in case there was one previously
-sudo sed -iBAK "s;${${mergerfs_root_folder}} ${nfs_export_full_mergerfs};#${${mergerfs_root_folder}} ${nfs_export_full_mergerfs};g" "/etc/fstab"
-sudo sed -iBAK   "s;##;#;g" "/etc/fstab"
+sudo sed -i.BAK "s;${root_folder_1} ${nfs_export_full_1};#${root_folder_1} ${nfs_export_full_1};g" "/etc/fstab"
+sudo sed -i.BAK "s;${root_folder_2} ${nfs_export_full_2};#${root_folder_2} ${nfs_export_full_2};g" "/etc/fstab" # do the SECOND just in case there was one previously
+sudo sed -i.BAK "s;${${mergerfs_root_folder}} ${nfs_export_full_mergerfs};#${${mergerfs_root_folder}} ${nfs_export_full_mergerfs};g" "/etc/fstab"
+sudo sed -i.BAK   "s;##;#;g" "/etc/fstab"
 # add the new shares
 ## physical logical
 # see https://forums.raspberrypi.com/viewtopic.php?p=2020848#p2020848 for an answer to the NFS issue
-sudo sed -iBAK "$ a ${root_folder_1} ${nfs_export_full_1} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+sudo sed -i.BAK "$ a #${root_folder_1} ${nfs_export_full_1} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	## physical logical
-	sudo sed -iBAK "$ a ${root_folder_2} ${nfs_export_full_2} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+	sudo sed -i.BAK "$ a #${root_folder_2} ${nfs_export_full_2} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 	set +x
 fi
 set -x
-sudo sed -iBAK "$ a ${${mergerfs_root_folder}} ${nfs_export_full_mergerfs} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+sudo sed -i.BAK "$ a ${${mergerfs_root_folder}} ${nfs_export_full_mergerfs} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
 echo ""
 set -x
@@ -446,28 +392,34 @@ set +x
 #... START of add entries for the LAN IP range
 set -x
 ##sudo sed -i "$ a ${nfs_export_top} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
-sudo sed -i "$ a ${nfs_export_full_1} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+sudo sed -i "$ a #${nfs_export_full_1} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
-	sudo sed -i "$ a ${nfs_export_full_2} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+	sudo sed -i "$ a #${nfs_export_full_2} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 	set +x
 fi
 set -x
+# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
 sudo sed -i "$ a ${nfs_export_full_mergerfs} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 #... END OF add entries for the LAN IP range
 #... START of add entries for localhost 127.0.0.1
-#sudo sed -i "$ a ${nfs_export_top} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set -x
-sudo sed -i "$ a ${nfs_export_full_1} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+##sudo sed -i "$ a ${nfs_export_top} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+sudo sed -i "$ a #${nfs_export_full_1} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
-	sudo sed -i "$ a ${nfs_export_full_2} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+	sudo sed -i "$ a #${nfs_export_full_2} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 	set +x
 fi
 set -x
+# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
 sudo sed -i "$ a ${nfs_export_full_mergerfs} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 #... END of add entries for localhost 127.0.0.1
@@ -521,13 +473,15 @@ echo ""
 echo "# Now list the content of the exported the definitions to check they are available"
 echo ""
 set -x
-sudo ls -al "${root_folder_1}" 
-sudo ls -al "${nfs_export_full_1}" 
+# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+#sudo ls -al "${root_folder_1}" 
+#sudo ls -al "${nfs_export_full_1}" 
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
-	sudo ls -al "${root_folder_2}" 
-	sudo ls -al "${nfs_export_full_2}" 
+	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+	#sudo ls -al "${root_folder_2}" 
+	#sudo ls -al "${nfs_export_full_2}" 
 	set +x
 fi
 set -x
@@ -560,51 +514,72 @@ echo "cd ~/Desktop">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
 echo "# Dismount the connections to the remote NFS share(s) in case they area already mounted">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
-echo "sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+echo "#sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 if [[ "${SecondDisk}" = "y" ]]; then
-	echo "sudo umount -f \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+	echo "#sudo umount -f \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
 # mergerfs_root_folder put nfs_export_full_mergerfs in here somehow
+
+
+
 
 echo "#">>"${f_ls_nsf}"
 echo "# Create the local files to be used as temporary share mount points to connect to the remote NFS shares">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
-echo "sudo mkdir -pv \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
-echo "sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+echo "#sudo mkdir -pv \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+echo "#sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 if [[ "${SecondDisk}" = "y" ]]; then
-	echo "sudo mkdir -pv \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
-	echo "sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+	echo "#sudo mkdir -pv \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+	echo "#sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
-
 # mergerfs_root_folder put nfs_export_full_mergerfs in here somehow
+
+
+
+
 
 echo "#">>"${f_ls_nsf}"
 echo "# Connect to the remote NFS share(s) using the temporary mount points">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
 echo "sudo df -h">>"${f_ls_nsf}"
 echo "sudo mount -l">>"${f_ls_nsf}"
-echo "sudo mount -v -t nfs ${server_ip}:${nfs_export_full_1} \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+echo "#sudo mount -v -t nfs ${server_ip}:${nfs_export_full_1} \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 echo "# list files in the local folder ">>"${f_ls_nsf}"
-echo "sudo ls -al \"${root_folder_1}\"">>"${f_ls_nsf}"
+echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+echo "#sudo ls -al \"${root_folder_1}\"">>"${f_ls_nsf}"
 echo "# list files in the NFS share, which SHOULD be the same as in the local folder ">>"${f_ls_nsf}"
-echo "sudo ls -al \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+echo "#sudo ls -al \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 echo "# dismount the temporary NFS share">>"${f_ls_nsf}"
-echo "sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
+echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+echo "#sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 echo "# do NOT NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!">>"${f_ls_nsf}"
 echo "###sudo rm -vf \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 if [[ "${SecondDisk}" = "y" ]]; then
-	echo "sudo mount -v -t nfs ${server_ip}:${nfs_export_full_2} \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+	echo "#sudo mount -v -t nfs ${server_ip}:${nfs_export_full_2} \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 	echo "# list files in the local folder ">>"${f_ls_nsf}"
-	echo "sudo ls -al \"${root_folder_2}\"">>"${f_ls_nsf}"
+	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+	echo "#sudo ls -al \"${root_folder_2}\"">>"${f_ls_nsf}"
 	echo "# list files in the NFS share, which SHOULD be the same as in the local folder ">>"${f_ls_nsf}"
-	echo "sudo ls -al \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+	echo "#sudo ls -al \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 	echo "# dismount the temporary NFS share">>"${f_ls_nsf}"
-	echo "sudo umount -f \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
+	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things"
+	echo "#sudo umount -f \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 	echo "# do NOT NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!">>"${f_ls_nsf}"
 	echo "###sudo rm -vf \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
-
 # mergerfs_root_folder put nfs_export_full_mergerfs in here somehow
+
+
+
+
 
 echo ""
 # OK, let's test the NFS shares

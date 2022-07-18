@@ -1,5 +1,5 @@
 #!/bin/bash
-# to get rid of MSDOS format do this to this file: sudo sed -i.bak s/\\r//g ./filename
+# to get rid of MSDOS format do this to this file: sudo sed -i s/\\r//g ./filename
 # or, open in nano, control-o and then then alt-M a few times to toggle msdos format off and then save
 #
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
@@ -346,26 +346,27 @@ echo ""
 set -x
 sudo rm -fv "/etc/fstab.pre-nfs.old"
 sudo cp -fv "/etc/fstab" "/etc/fstab.pre-nfs.old"
-sudo sed -i.BAK "s;${root_folder_1} ${nfs_export_full_1};#${root_folder_1} ${nfs_export_full_1};g" "/etc/fstab"
-sudo sed -i.BAK "s;${root_folder_2} ${nfs_export_full_2};#${root_folder_2} ${nfs_export_full_2};g" "/etc/fstab" # do the SECOND just in case there was one previously
-sudo sed -i.BAK "s;${mergerfs_root_folder} ${nfs_export_full_mergerfs};#${mergerfs_root_folder} ${nfs_export_full_mergerfs};g" "/etc/fstab"
-sudo sed -i.BAK   "s;##;#;g" "/etc/fstab"
+sudo sed -i "s;${root_folder_1} ${nfs_export_full_1};#${root_folder_1} ${nfs_export_full_1};g" "/etc/fstab"
+sudo sed -i "s;${root_folder_2} ${nfs_export_full_2};#${root_folder_2} ${nfs_export_full_2};g" "/etc/fstab" # do the SECOND just in case there was one previously
+sudo sed -i "s;${mergerfs_root_folder} ${nfs_export_full_mergerfs};#${mergerfs_root_folder} ${nfs_export_full_mergerfs};g" "/etc/fstab"
+sudo sed -i   "s;##;#;g" "/etc/fstab"
 # add the new shares
 ## physical logical
 # see https://forums.raspberrypi.com/viewtopic.php?p=2020848#p2020848 for an answer to the NFS issue
 # FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
-sudo sed -i.BAK "$ a #${root_folder_1} ${nfs_export_full_1} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+sudo sed -i "$ a # $(date) added new NFS shares below" "/etc/fstab"
+sudo sed -i "$ a #${root_folder_1} ${nfs_export_full_1} nfs bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	## physical logical
 	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
-	sudo sed -i.BAK "$ a #${root_folder_2} ${nfs_export_full_2} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+	sudo sed -i "$ a #${root_folder_2} ${nfs_export_full_2} nfs bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 	set +x
 fi
 set -x
 # FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
-sudo sed -i.BAK "$ a ${mergerfs_root_folder} ${nfs_export_full_mergerfs} none bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
+sudo sed -i "$ a ${mergerfs_root_folder} ${nfs_export_full_mergerfs} nfs bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
 echo ""
 set -x
@@ -393,6 +394,7 @@ set +x
 set -x
 ##sudo sed -i "$ a ${nfs_export_top} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 # FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+sudo sed -i "$ a # $(date) added new NFS EXPORTS below" "/etc/exports"
 sudo sed -i "$ a #${nfs_export_full_1} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
@@ -501,8 +503,10 @@ temp_remote_nfs_share_2="/temp_remote_nfs_share_2"
 temp_remote_nfs_share_mergerfs="/temp_remote_nfs_share_mergerfs"
 set +x
 echo "#!/bin/bash" >>"${f_ls_nsf}"
-echo "# to get rid of MSDOS format do this to this file: sudo sed -i.bak s/\\r//g ./filename" >>"${f_ls_nsf}"
+echo "# to get rid of MSDOS format do this to this file: sudo sed -i s/\\r//g ./filename" >>"${f_ls_nsf}"
 echo "# or, open in nano, control-o and then then alt-M a few times to toggle msdos format off and then save" >>"${f_ls_nsf}"
+echo "#" >>"${f_ls_nsf}"
+echo "# $(date) ... re-created this file '${f_ls_nsf}'" >>"${f_ls_nsf}"
 echo "#" >>"${f_ls_nsf}"
 echo "set -x" >>"${f_ls_nsf}"
 echo "#" >>"${f_ls_nsf}"
@@ -771,7 +775,7 @@ echo "# Increase system max_user_watches to avoid this error:"
 echo "# WARNING: Inotify max_user_watches [8192] is low or close to the number of used watches [2] and I do not have permission to increase this limit.  Please do so manually by writing a higher value into /proc/sys/fs/inotify/max_user_watches."
 echo ""
 echo "# set a new TEMPORARY limit with:"
-# sudo sed -i.bak "s;8192;${max_user_watches};g" "/proc/sys/fs/inotify/max_user_watches" # this fails with no permissions
+# sudo sed -i "s;8192;${max_user_watches};g" "/proc/sys/fs/inotify/max_user_watches" # this fails with no permissions
 set -x
 sudo cat /proc/sys/fs/inotify/max_user_watches
 sudo sysctl fs.inotify.max_user_watches=${max_user_watches}
@@ -780,7 +784,7 @@ set +x
 echo ""
 echo "# set a new PERMANENT limit with:"
 set -x
-sudo sed -i.bak "s;fs.inotify.max_user_watches=;#fs.inotify.max_user_watches=;g" "/etc/sysctl.conf"
+sudo sed -i "s;fs.inotify.max_user_watches=;#fs.inotify.max_user_watches=;g" "/etc/sysctl.conf"
 echo fs.inotify.max_user_watches=${max_user_watches} | sudo tee -a "/etc/sysctl.conf"
 sudo sysctl -p
 set +x

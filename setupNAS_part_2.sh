@@ -377,6 +377,8 @@ echo ""
 echo "# Now add lines to file '/etc/exports' which definine the new NFS shares"
 echo ""
 # note: id 1000 is user pi $(id -r -u pi) and group pi $(id -r -g pi)
+# note: now need an fsid or error "requires fsid= for NFS export" occurs
+let nfs_fsid=100
 set -x
 sudo cp -fv "/etc/exports" "/etc/exports.old"
 #... START of comment out prior NFS export entries, including second ones in case they exist previously
@@ -395,34 +397,34 @@ set -x
 ##sudo sed -i "$ a ${nfs_export_top} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 # FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
 sudo sed -i "$ a # $(date) added new NFS EXPORTS below" "/etc/exports"
-sudo sed -i "$ a #${nfs_export_full_1} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+sudo sed -i "$ a #${nfs_export_full_1} ${server_ip}/24(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
-	sudo sed -i "$ a #${nfs_export_full_2} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+	sudo sed -i "$ a #${nfs_export_full_2} ${server_ip}/24(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 	set +x
 fi
 set -x
 # FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
-sudo sed -i "$ a ${nfs_export_full_mergerfs} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+sudo sed -i "$ a ${nfs_export_full_mergerfs} ${server_ip}/24(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 #... END OF add entries for the LAN IP range
 #... START of add entries for localhost 127.0.0.1
 set -x
 # FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
 ##sudo sed -i "$ a ${nfs_export_top} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
-sudo sed -i "$ a #${nfs_export_full_1} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+sudo sed -i "$ a #${nfs_export_full_1} 127.0.0.1(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
-	sudo sed -i "$ a #${nfs_export_full_2} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+	sudo sed -i "$ a #${nfs_export_full_2} 127.0.0.1(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 	set +x
 fi
 set -x
 # FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
-sudo sed -i "$ a ${nfs_export_full_mergerfs} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
+sudo sed -i "$ a ${nfs_export_full_mergerfs} 127.0.0.1(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 #... END of add entries for localhost 127.0.0.1
 set -x

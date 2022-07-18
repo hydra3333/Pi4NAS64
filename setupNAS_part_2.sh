@@ -626,6 +626,10 @@ set +x
 echo ""
 echo "# Create a SAMBA password for user 'pi' and for user 'root'"
 echo ""
+echo ""
+echo "# NOTE that, unlike NFS, we will NOT create samba shares on the 'mergerfs' logical drive !!"
+echo ""
+echo ""
 echo "# Before we start the server, you’ll want to set a Samba password. Enter your pi password."
 echo "# Before we start the server, you’ll want to set a Samba password. Enter your pi password."
 set -x

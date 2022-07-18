@@ -8,14 +8,14 @@
 ## Description <TL;DR> 
 
 Configure a Raspberry Pi4 with attached USB3 drives to create an NAS on our local home LAN with 
-- "open" rw NFS file shares   
-- "open" rw SAMBA file shares   
+- "open" NFS file share to a "mergerfs" virtual disk of "merged folders" across Pi4 drives    
+- "open" rw SAMBA file shares to drives containing media   
 - "open" rw ftp server (`proftpd`)   
 - a DLNA server (`miniDLNA`)   
 - the `hd-idle` app to spin down drives when not used   
 
 The newly released "Google ChromeCast with Google TV" devices can connect to the Pi4NAS64 
-with apps like `Kodi` and `VLC` in order to play our collections of home media files.    
+with apps like `VLC` in order to play collections of home media files via the NFS share.    
 
 A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely reliable, and has decent thoughput to handle multiple streams.
 
@@ -237,7 +237,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      ./setupNAS_part_1.sh 2>&1 | tee setupNAS_part_1.log
      ```
 5. Answer the prompts (it will save most of these answers for use later)
-   - `This server_name` it's best to choose the Pi4's hostname of the Pi4 here (we use Pi4NAS64) - it will be used as the network service name by `Kodi` and `VLC` etc
+   - `This server_name` it's best to choose the Pi4's hostname of the Pi4 here (we use Pi4NAS64) - it will be used as the network service name by `VLC` etc
    - `This server_alias (will become a Virtual Folder for mounting purposes)` - recommend leave it as `mp4library1` so it matches the top level folder name on the USB3 drive
      * ... it will be used as the top-level folder name on our external USB3 drive, so put our video files in there
    - `Designate the mount point for the USB3 external hard drive` it's a "virtual" place used everywhere to access the top level of the USB3 external hard drive when mounted, eg `/mnt/mp4library1`
@@ -273,6 +273,38 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
      ```
      again enter the password we had set for the 'pi' login,    
      then enter it when we see `Retype new SMB password:`   
+
+---
+
+## How to connect to the "mergerfs" NFS share from a Windows 10 PC    
+
+1. Ensure microsoft `NFS client` is installed on the Windows 10 PC    
+   - in Control Panel, Programs and Features, Turn Windows Features on or off, tick "Services for NFS" and click OK
+   - then do the commands below in a Windows 10 DOS BOX
+
+2. Assuming the `IP address` of the Pi4 is `10.0.0.18`, display the available NFS shares on that server in 2 different ways    
+   ```
+   showmount -e 10.0.0.18
+   showmount -a 10.0.0.18
+   ```
+
+3. Asssuming the name of the `mergerfs` NFS share is `/NFS-shares/mp4library`, and a free drive letter is X: then mount the share    
+   ```
+   mount -o anon -o mtype=soft 10.0.0.18:/NFS-shares/mp4library X:
+   mount
+   ```
+   
+4. Display files on the NFS share when in a DOS box    
+   ```
+   dir X:
+   ```
+
+5. You can also use Windows File Manager to browse the X: drive and play media normally    
+
+6. Dismount the NFS share on drive X: once we have finished with it    
+   ```
+   umount -f X:
+   ```
 
 ---
 

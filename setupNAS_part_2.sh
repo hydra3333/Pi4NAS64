@@ -590,6 +590,36 @@ set -x
 cd ~/Desktop
 source "${f_ls_nsf}"
 set +x
+#
+echo ""
+echo ""
+echo "TO VIEW THE mergerfs NFS SHARE FROM A WINDOWS 10 PC,"
+echo ""
+echo "1. Ensure microsoft NFS client is installed on the Windows 10 PC"
+echo "   - in Control Panel, Programs and Features, Turn Windows Features on or off, tick 'Services for NFS' and click OK"
+echo ""
+echo "Then do this commands below in a Windows 10 DOS BOX where X: is a free drive letter."
+echo "  (note that files and folders are CASE SENSITIVE)"
+echo ""
+echo "2. Assuming the IP address of the Pi4 is '${server_ip}', display the available NFS shares on that server in 2 different ways"
+echo "      showmount -e ${server_ip}"
+echo "      showmount -a ${server_ip}"
+echo ""
+echo "3. Asssuming the name of the 'mergerfs' NFS share is '${nfs_export_full_mergerfs}', and a free drive letter is X: then mount the share"
+echo "      mount -o anon -o mtype=soft ${server_ip}:${nfs_export_full_mergerfs} X:"
+echo "      mount"
+echo ""   
+echo "4. Display files on the NFS share when in a DOS box"
+echo "      dir X:"
+echo ""
+echo "5. You can also use Windows File Manager to browse the X: drive and play media normally"
+echo ""
+echo "6. Dismount the NFS share on drive X: once we have finished with it"
+echo "      umount -f X:"
+echo ""
+echo ""
+echo ""
+#
 echo ""
 #
 #############################################################################################################################################

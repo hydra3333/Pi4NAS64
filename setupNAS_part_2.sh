@@ -211,11 +211,11 @@ if [[ ${do_setup_NFS} = true ]]; then
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo "#-------------------------------------------------------------------------------------------------------------------------------------"
 echo ""
-echo "# Install NFS and create the NFS shares - using the mergerfs disk: ${mergerfs_mountpoint}"
+echo "# Build and install mergerfs, then"
 echo ""
-#
-# Build mergerfs from source and install
-#
+echo "# Install NFS and create the NFS shares - using the mergerfs mount point '${mergerfs_mountpoint}'"
+echo ""
+# https://github.com/trapexit/mergerfs
 mergerfs_ver=2.33.5
 mergerfs_tag=${mergerfs_ver}
 mergerfs_os=debian-bullseye
@@ -224,7 +224,9 @@ mergerfs_deb=mergerfs_${mergerfs_ver}.${mergerfs_os}_${mergerfs_arch}.deb
 mergerfs_deb_built=mergerfs_${mergerfs_ver}~${mergerfs_os}_${mergerfs_arch}.deb
 mergerfs_deb_built_debug=mergerfs-dbgsym_${mergerfs_ver}~${mergerfs_os}_${mergerfs_arch}.deb
 mergerfs_url=https://github.com/trapexit/mergerfs/releases/download/${mergerfs_ver}/${mergerfs_deb}
-# https://github.com/trapexit/mergerfs
+#
+# Build mergerfs from source and install
+#
 set -x
 cd ~/Desktop
 sudo apt purge -y mergerfs
@@ -241,15 +243,7 @@ sudo apt -y update
 sudo apt -y --no-install-suggests --no-install-recommends install ca-certificates build-essential git g++ debhelper automake fakeroot libtool lsb-release
 sudo apt -y --no-install-suggests --no-install-recommends install python
 sudo apt -y --no-install-suggests --no-install-recommends install python3
-##if [ ! -e /usr/bin/python ]; then
-##    if [ -e /usr/bin/python3 ]; then
-##        sudo ln -s /usr/bin/python3 /usr/bin/python
-##    elif [ -e /usr/bin/python2 ]; then
-##        sudo ln -s /usr/bin/python2 /usr/bin/python
-##    fi
-##fi
 sudo ln -f -s /usr/bin/python3 /usr/bin/python
-##sudo tools/install-build-pkgs
 make help
 make deb STATIC=0 LTO=1
 cd ~/Desktop
@@ -265,15 +259,6 @@ echo ""
 #
 # Install mergerfs from pre-built .deb created by the package maintainer
 #
-#mergerfs_ver=2.33.5
-#mergerfs_tag=${mergerfs_ver}
-#mergerfs_os=debian-bullseye
-#mergerfs_arch=arm64
-#mergerfs_deb=mergerfs_${mergerfs_ver}.${mergerfs_os}_${mergerfs_arch}.deb
-#mergerfs_deb_built=mergerfs_${mergerfs_ver}~${mergerfs_os}_${mergerfs_arch}.deb
-#mergerfs_deb_built_debug=mergerfs-dbgsym_${mergerfs_ver}~${mergerfs_os}_${mergerfs_arch}.deb
-#mergerfs_url=https://github.com/trapexit/mergerfs/releases/download/${mergerfs_ver}/${mergerfs_deb}
-## https://github.com/trapexit/mergerfs
 #cd ~/Desktop
 #sudo apt purge -y mergerfs
 #sudo dpkg -l mergerfs

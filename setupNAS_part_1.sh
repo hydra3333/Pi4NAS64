@@ -364,6 +364,7 @@ sudo sed -i.bak "/ntfs defaults,auto/s/^/#/" "/etc/fstab"
 #	The substitution will insert a pound character (#) at the beginning of the line (^)
 #	old subst fails with too many substitutes if server_USB3_DEVICE_UUID2 is blank : sudo sed -i.bak "s/UUID=${server_USB3_DEVICE_UUID}/#UUID=${server_USB3_DEVICE_UUID}/g" "/etc/fstab"
 sudo sed -i.bak "s/UUID=${USB3_DEVICE_UUID_1}/#UUID=${USB3_DEVICE_UUID_1}/g" "/etc/fstab"
+sudo sed -i.bak "$ a # $(date) added new auto USB3 Disk mounts below" "/etc/fstab"
 sudo sed -i.bak "$ a UUID=${USB3_DEVICE_UUID_1} ${USB3_mountpoint_1} ntfs defaults,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
@@ -388,6 +389,7 @@ sudo sed -i.bak "s;.*${mergerfs_mountpoint};#&;g" "/etc/fstab"
 # https://manpages.ubuntu.com/manpages/impish/man1/mergerfs.1.html
 # https://github.com/trapexit/mergerfs
 # https://forums.raspberrypi.com/viewtopic.php?p=2020660#p2020660
+sudo sed -i.bak "$ a # $(date) added new auto 'mergerfs' mounts below" "/etc/fstab"
 sudo sed -i.bak "$ a ${mergerfs_folders} ${mergerfs_mountpoint} fuse.mergerfs defaults,nofail,auto,owner,users,rw,exec,${mergerfs_requires},noatime,nonempty,allow_other,moveonenospc=true,use_ino,noforget,inodecalc=path-hash,nfsopenhack=all,threads=0,cache.files=partial,dropcacheonclose=true,category.create=epall,category.action=epall,category.search=epff,statfs=base,statfs_ignore=none,func.getattr=newest,fsname=mergerfs 0 0" "/etc/fstab"
 set +x
 # to do it manually see this example ...

@@ -288,7 +288,7 @@ A Raspbetty Pi 4 is comparatively cheap, has very low power usage, is extremely 
    showmount -a 10.0.0.18
    ```
 
-3. Asssuming the name of the `mergerfs` NFS share is `/NFS-shares/mp4library`, and a free drive letter is X: then mount the share    
+3. Asssuming the name of the 'mergerfs' NFS share is `/NFS-shares/mp4library`, and a free drive letter is `X:` then mount the share    
    ```
    mount -o anon -o mtype=soft 10.0.0.18:/NFS-shares/mp4library X:
    mount

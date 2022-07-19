@@ -522,7 +522,7 @@ echo "#     Note 'allow-interfaces' defaults to all local interfaces except loop
 echo "#     Perhaps consider changing '#publish-domain=no' to 'publish-domain=yes'">>${ahavi_tmpfile}
 echo "#     Perhaps consider changing '#publish-workstation=no' to 'publish-workstation=yes'">>${ahavi_tmpfile}
 echo "# 2. avahi-browse -kat">>${ahavi_tmpfile}
-echo "# 3. Create/update file '/etc/avahi/services/mp4library_nfs.service' with the content below \(no comment lines\)">>${ahavi_tmpfile}
+echo "# 3. Create/update file '/etc/avahi/services/mp4library_nfs.service' with the content below (no comment lines)">>${ahavi_tmpfile}
 echo "# 4. #sudo systemctl stop   avahi-daemon.service avahi-daemon.socket">>${ahavi_tmpfile}
 echo "#    sudo systemctl restart avahi-daemon.service">>${ahavi_tmpfile}
 echo "# 5. #sudo systemctl start  avahi-daemon.service avahi-daemon.socket">>${ahavi_tmpfile}
@@ -533,8 +533,8 @@ echo "# https://wiki.debian.org/Avahi">>${ahavi_tmpfile}
 echo "# https://manpages.debian.org/bullseye/avahi-daemon/avahi.service.5.en.html">>${ahavi_tmpfile}
 echo "# Per  https://askubuntu.com/questions/19590/how-do-i-share-nfs-mounts-over-zeroconf">>${ahavi_tmpfile}
 echo "#     Using port 2049 requires us to use the "insecure" option in the /etc/exports file, eg:">>${ahavi_tmpfile}
-echo "#       /NFS-shares/mp4library 10.0.0.18/24\(rw,fsid=102,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=1000,anongid=1000\)">>${ahavi_tmpfile}
-echo "#       /NFS-shares/mp4library 127.0.0.1\(rw,fsid=105,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=1000,anongid=1000\)">>${ahavi_tmpfile}
+echo "#       /NFS-shares/mp4library 10.0.0.18/24(rw,fsid=102,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=1000,anongid=1000)">>${ahavi_tmpfile}
+echo "#       /NFS-shares/mp4library 127.0.0.1(rw,fsid=105,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=1000,anongid=1000)">>${ahavi_tmpfile}
 echo "#">>${ahavi_tmpfile}
 echo "-->">>${ahavi_tmpfile}
 echo "<service-group>">>${ahavi_tmpfile}
@@ -545,10 +545,16 @@ echo "    <port>2049</port>">>${ahavi_tmpfile}
 echo "    <txt-record value-format=\"text\">path=/NFS-shares/mp4library</txt-record>">>${ahavi_tmpfile}
 echo "  </service>">>${ahavi_tmpfile}
 echo "</service-group>">>${ahavi_tmpfile}
+set -x
+sudo rm -fv ${ahavi_finalfile}
 sudo cp -fv ${ahavi_tmpfile} ${ahavi_finalfile}
+cat ${ahavi_finalfile}
 sudo systemctl restart avahi-daemon.service
+sleep 2s
 sudo service avahi-daemon status
-avahi-browse -katl
+sleep 2s
+avahi-browse -kat
+set +x
 #++++++++++
 echo ""
 echo "Create a .sh to test NFS stuff at any time, mounting and dismounting shares ..."

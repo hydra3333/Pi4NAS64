@@ -8,7 +8,8 @@
 ## Description <TL;DR> 
 
 Configure a Raspberry Pi4 with attached USB3 drives to create an NAS on our local home LAN with 
-- "open" NFS file share to a "mergerfs" virtual disk of "merged folders" across Pi4 drives    
+- "open" NFS   file share to a "mergerfs" virtual disk of "merged folders" across Pi4 drives    
+- "open" SAMBA file share to a "mergerfs" virtual disk of "merged folders" across Pi4 drives    
 - "open" rw SAMBA file shares to drives containing media   
 - "open" rw ftp server (`proftpd`)   
 - a DLNA server (`miniDLNA`)   

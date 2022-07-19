@@ -313,21 +313,21 @@ set -x
 sudo df -h
 sudo mount -l
 ## mount physical logical
-# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 #sudo mount -v --bind "${root_folder_1}" "${nfs_export_full_1}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
 #sudo ls -al "${root_folder_1}" 
 #sudo ls -al "${nfs_export_full_1}" 
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
-	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+	# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 	#sudo mount -v --bind "${root_folder_2}" "${nfs_export_full_2}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
 	#sudo ls -al "${root_folder_2}" 
 	#sudo ls -al "${nfs_export_full_2}" 
 	set +x
 fi
 set -x
-# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 sudo mount -v --bind "${mergerfs_root_folder}" "${nfs_export_full_mergerfs}" --options defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),noatime,nodiratime,x-systemd.device-timeout=120
 sudo ls -al "${mergerfs_root_folder}" 
 sudo ls -al "${nfs_export_full_mergerfs}" 
@@ -353,19 +353,19 @@ sudo sed -i   "s;##;#;g" "/etc/fstab"
 # add the new shares
 ## physical logical
 # see https://forums.raspberrypi.com/viewtopic.php?p=2020848#p2020848 for an answer to the NFS issue
-# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 sudo sed -i "$ a # $(date) added new NFS shares below" "/etc/fstab"
 sudo sed -i "$ a #${root_folder_1} ${nfs_export_full_1} nfs bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
 	## physical logical
-	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+	# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 	sudo sed -i "$ a #${root_folder_2} ${nfs_export_full_2} nfs bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 	set +x
 fi
 set -x
-# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 sudo sed -i "$ a ${mergerfs_root_folder} ${nfs_export_full_mergerfs} nfs bind,defaults,nofail,auto,users,rw,exec,umask=000,dmask=000,fmask=000,uid=$(id -r -u pi),gid=$(id -r -g pi),lookupcache=none,noatime,nodiratime,x-systemd.device-timeout=120 0 0" "/etc/fstab"
 set +x
 echo ""
@@ -395,35 +395,35 @@ set +x
 #... START of add entries for the LAN IP range
 set -x
 ##sudo sed -i "$ a ${nfs_export_top} ${server_ip}/24(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
-# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 sudo sed -i "$ a # $(date) added new NFS EXPORTS below" "/etc/exports"
 sudo sed -i "$ a #${nfs_export_full_1} ${server_ip}/24(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
-	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+	# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 	sudo sed -i "$ a #${nfs_export_full_2} ${server_ip}/24(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 	set +x
 fi
 set -x
-# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 sudo sed -i "$ a ${nfs_export_full_mergerfs} ${server_ip}/24(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 #... END OF add entries for the LAN IP range
 #... START of add entries for localhost 127.0.0.1
 set -x
-# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 ##sudo sed -i "$ a ${nfs_export_top} 127.0.0.1(rw,insecure,sync,no_subtree_check,all_squash,crossmnt,fsid=0,root_squash,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 sudo sed -i "$ a #${nfs_export_full_1} 127.0.0.1(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
-	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+	# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 	sudo sed -i "$ a #${nfs_export_full_2} 127.0.0.1(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 	set +x
 fi
 set -x
-# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 sudo sed -i "$ a ${nfs_export_full_mergerfs} 127.0.0.1(rw,fsid=$((nfs_fsid++)),insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=$(id -r -u pi),anongid=$(id -r -g pi))" "/etc/exports"
 set +x
 #... END of add entries for localhost 127.0.0.1
@@ -477,13 +477,13 @@ echo ""
 echo "# Now list the content of the exported the definitions to check they are available"
 echo ""
 set -x
-# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 #sudo ls -al "${root_folder_1}" 
 #sudo ls -al "${nfs_export_full_1}" 
 set +x
 if [[ "${SecondDisk}" = "y" ]]; then
 	set -x
-	# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things
+	# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS
 	#sudo ls -al "${root_folder_2}" 
 	#sudo ls -al "${nfs_export_full_2}" 
 	set +x
@@ -492,6 +492,63 @@ set -x
 sudo ls -al "${mergerfs_root_folder}" 
 sudo ls -al "${nfs_export_full_mergerfs}" 
 set +x
+#++++++++++
+# Expose the mergerfs NFS share via ahavi (mDNS)
+cd ~/Desktop
+ahavi_filename=mp4library_nfs.service
+ahavi_tmpfile=./${ahavi_filename}
+ahavi_finalfile=/etc/avahi/services/${ahavi_filename}
+sudo rm ${ahavi_tmpfile}
+echo "<?xml version=\"1.0\" standalone='no'?>">${ahavi_tmpfile}
+echo "<!DOCTYPE service-group SYSTEM \"avahi-service.dtd\">">${ahavi_tmpfile}
+echo "<!--">${ahavi_tmpfile}
+echo "# To pre-check the NFS share works from a Win10 PC, ignoring this avahi stuff,">${ahavi_tmpfile}
+echo "#">${ahavi_tmpfile}
+echo "REM In a Win10 PC DOS BOX, check the Raspberry Pi NFS share works">${ahavi_tmpfile}
+echo "REM If we can see a file in the folder, all is well">${ahavi_tmpfile}
+echo "showmount -e 10.0.0.18">${ahavi_tmpfile}
+echo "showmount -e Pi48GB.local">${ahavi_tmpfile}
+echo "REM showmount -a 10.0.0.18">${ahavi_tmpfile}
+echo "REM showmount -a Pi48GB.local">${ahavi_tmpfile}
+echo "mount -o anon -o mtype=soft 10.0.0.18:/NFS-shares/mp4library X:">${ahavi_tmpfile}
+echo "mount">${ahavi_tmpfile}
+echo "dir X:\folder_on_2nd_drive">${ahavi_tmpfile}
+echo "umount -f X:">${ahavi_tmpfile}
+echo "#">${ahavi_tmpfile}
+echo "# 1. sudo apt -y install avahi-utils">${ahavi_tmpfile}
+echo "# 1.1 In /etc/avahi/avahi-daemon.conf ">${ahavi_tmpfile}
+echo "#     Perhaps consider change 'use-ipv6=yes' to 'use-ipv6=no'">${ahavi_tmpfile}
+echo "#     Note 'allow-interfaces' defaults to all local interfaces except loopback and point-to-point">${ahavi_tmpfile}
+echo "#     Perhaps consider changing '#publish-domain=no' to 'publish-domain=yes'">${ahavi_tmpfile}
+echo "#     Perhaps consider changing '#publish-workstation=no' to 'publish-workstation=yes'">${ahavi_tmpfile}
+echo "# 2. avahi-browse -kat">${ahavi_tmpfile}
+echo "# 3. Create/update file '/etc/avahi/services/mp4library_nfs.service' with the content below \(no comment lines\)">${ahavi_tmpfile}
+echo "# 4. #sudo systemctl stop   avahi-daemon.service avahi-daemon.socket">${ahavi_tmpfile}
+echo "#    sudo systemctl restart avahi-daemon.service">${ahavi_tmpfile}
+echo "# 5. #sudo systemctl start  avahi-daemon.service avahi-daemon.socket">${ahavi_tmpfile}
+echo "# 6. sudo service avahi-daemon status">${ahavi_tmpfile}
+echo "# 7. avahi-browse -katl">${ahavi_tmpfile}
+echo "# NOTES:">${ahavi_tmpfile}
+echo "# https://wiki.debian.org/Avahi">${ahavi_tmpfile}
+echo "# https://manpages.debian.org/bullseye/avahi-daemon/avahi.service.5.en.html">${ahavi_tmpfile}
+echo "# Per  https://askubuntu.com/questions/19590/how-do-i-share-nfs-mounts-over-zeroconf">${ahavi_tmpfile}
+echo "#     Using port 2049 requires us to use the "insecure" option in the /etc/exports file, eg:">${ahavi_tmpfile}
+echo "#       /NFS-shares/mp4library 10.0.0.18/24\(rw,fsid=102,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=1000,anongid=1000\)">${ahavi_tmpfile}
+echo "#       /NFS-shares/mp4library 127.0.0.1\(rw,fsid=105,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=1000,anongid=1000\)">${ahavi_tmpfile}
+echo "#">${ahavi_tmpfile}
+echo "-->">${ahavi_tmpfile}
+echo "<service-group>">${ahavi_tmpfile}
+echo "  <name replace-wildcards=\"yes\">%h mp4library NFS share</name>">${ahavi_tmpfile}
+echo "  <service>">${ahavi_tmpfile}
+echo "    <type>_nfs._tcp</type>">${ahavi_tmpfile}
+echo "    <port>2049</port>">${ahavi_tmpfile}
+echo "    <txt-record value-format=\"text\">path=/NFS-shares/mp4library</txt-record>">${ahavi_tmpfile}
+echo "  </service>">${ahavi_tmpfile}
+echo "</service-group>">${ahavi_tmpfile}
+sudo cp -fv ${ahavi_tmpfile} ${ahavi_finalfile}
+sudo systemctl restart avahi-daemon.service
+sudo service avahi-daemon status
+avahi-browse -katl
 #++++++++++
 echo ""
 echo "Create a .sh to test NFS stuff at any time, mounting and dismounting shares ..."
@@ -518,21 +575,21 @@ echo "cd ~/Desktop">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
 echo "# Dismount the connections to the remote NFS share(s) in case they area already mounted">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
-echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 echo "#sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 if [[ "${SecondDisk}" = "y" ]]; then
-	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+	echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 	echo "#sudo umount -f \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
 echo "sudo umount -f \"${temp_remote_nfs_share_mergerfs}\"">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
 echo "# Create the local files to be used as temporary share mount points to connect to the remote NFS shares">>"${f_ls_nsf}"
 echo "#">>"${f_ls_nsf}"
-echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 echo "#sudo mkdir -pv \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 echo "#sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 if [[ "${SecondDisk}" = "y" ]]; then
-	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+	echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 	echo "#sudo mkdir -pv \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 	echo "#sudo chmod -c a=rwx -R \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
@@ -543,43 +600,43 @@ echo "# Connect to the remote NFS share(s) using the temporary mount points">>"$
 echo "#">>"${f_ls_nsf}"
 echo "sudo df -h">>"${f_ls_nsf}"
 echo "sudo mount -l">>"${f_ls_nsf}"
-echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 echo "#sudo mount -v -t nfs ${server_ip}:${nfs_export_full_1} \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 echo "# list files in the local folder ">>"${f_ls_nsf}"
-echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 echo "#sudo ls -al \"${root_folder_1}\"">>"${f_ls_nsf}"
 echo "# list files in the NFS share, which SHOULD be the same as in the local folder ">>"${f_ls_nsf}"
-echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 echo "#sudo ls -al \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 echo "# dismount the temporary NFS share">>"${f_ls_nsf}"
-echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 echo "#sudo umount -f \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 echo "# do NOT NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!">>"${f_ls_nsf}"
 echo "###sudo rm -vf \"${temp_remote_nfs_share_1}\"">>"${f_ls_nsf}"
 if [[ "${SecondDisk}" = "y" ]]; then
-	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+	echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 	echo "#sudo mount -v -t nfs ${server_ip}:${nfs_export_full_2} \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 	echo "# list files in the local folder ">>"${f_ls_nsf}"
-	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+	echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 	echo "#sudo ls -al \"${root_folder_2}\"">>"${f_ls_nsf}"
 	echo "# list files in the NFS share, which SHOULD be the same as in the local folder ">>"${f_ls_nsf}"
-	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+	echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 	echo "#sudo ls -al \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 	echo "# dismount the temporary NFS share">>"${f_ls_nsf}"
-	echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+	echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 	echo "#sudo umount -f \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 	echo "# do NOT NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!">>"${f_ls_nsf}"
 	echo "###sudo rm -vf \"${temp_remote_nfs_share_2}\"">>"${f_ls_nsf}"
 fi
 echo "sudo mount -v -t nfs ${server_ip}:${nfs_export_full_mergerfs} \"${temp_remote_nfs_share_mergerfs}\"">>"${f_ls_nsf}"
 echo "# list files in the local folder ">>"${f_ls_nsf}"
-echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 echo "sudo ls -al \"${mergerfs_root_folder}\"">>"${f_ls_nsf}"
 echo "# list files in the NFS share, which SHOULD be the same as in the local folder ">>"${f_ls_nsf}"
-echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 echo "sudo ls -al \"${temp_remote_nfs_share_mergerfs}\"">>"${f_ls_nsf}"
 echo "# dismount the temporary NFS share">>"${f_ls_nsf}"
-echo "# FOR NOW, only use the merger_fs disk in NFS, so comment out non-mergerFS things">>"${f_ls_nsf}"
+echo "# FOR NOW, only expose the merger_fs disk in NFS, so comment out non-mergerFS things for NFS">>"${f_ls_nsf}"
 echo "sudo umount -f \"${temp_remote_nfs_share_mergerfs}\"">>"${f_ls_nsf}"
 echo "# do NOT NOT remove the mountpoint as it may accidentally wipe the mounted drive !!!">>"${f_ls_nsf}"
 echo "###sudo rm -vf \"${temp_remote_nfs_share_mergerfs}\"">>"${f_ls_nsf}"
@@ -675,7 +732,7 @@ url="https://raw.githubusercontent.com/hydra3333/Pi4NAS/master/smb.conf"
 curl -4 -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' -H 'Cache-Control: max-age=0' "$url" --retry 50 -L --output "./smb.conf" --fail # -L means "allow redirection" or some odd :|
 sudo cp -fv "./smb.conf"  "./smb.conf.old"
 set +x
-echo "Start appending stuff to temporary local file copy of 'smb.conf' ..."
+echo "Start appending access config settings to temporary local file copy of 'smb.conf' ..."
 echo "[${virtual_folder_name_1}]">>"./smb.conf"
 echo "comment=${server_name} ${virtual_folder_name_1} home">>"./smb.conf"
 echo "#force group = users">>"./smb.conf"
@@ -722,7 +779,33 @@ if [ "${SecondDisk}" = "y" ]; then
 	echo "wide links = yes">>"./smb.conf"
 	echo "">>"./smb.conf"
 fi
-echo "Finished appending stuff to temporary local file copy of 'smb.conf' ..."
+# setup mergerfs share ... example values are:
+#    mergerfs_virtual_folder_name=mp4library
+#    mergerfs_mountpoint=/mnt/mergerfs/mp4library
+#    mergerfs_root_folder=/mnt/mergerfs/mp4library
+echo "[${mergerfs_virtual_folder_name}]">>"./smb.conf"
+echo "comment=${server_name} ${mergerfs_virtual_folder_name} 'mergerfs' home">>"./smb.conf"
+echo "#force group = users">>"./smb.conf"
+echo "#guest only = Yes">>"./smb.conf"
+echo "guest ok = Yes">>"./smb.conf"
+echo "public = yes">>"./smb.conf"
+echo "#valid users = @users">>"./smb.conf"
+echo "path = ${mergerfs_mountpoint}">>"./smb.conf"
+echo "available = yes">>"./smb.conf"
+echo "read only = no">>"./smb.conf"
+echo "browsable = yes">>"./smb.conf"
+echo "writeable = yes">>"./smb.conf"
+echo "#create mask = 0777">>"./smb.conf"
+echo "#directory mask = 0777">>"./smb.conf"
+echo "force create mode = 1777">>"./smb.conf"
+echo "force directory mode = 1777">>"./smb.conf"
+echo "inherit permissions = yes">>"./smb.conf"
+echo "# 2022.02.06">>"./smb.conf"
+echo "allow insecure wide links = yes">>"./smb.conf"
+echo "follow symlinks = yes">>"./smb.conf"
+echo "wide links = yes">>"./smb.conf"
+echo "">>"./smb.conf"
+echo "Finished appending access config settings to temporary local file copy of 'smb.conf' ..."
 echo "Copy the updated 'smb.conf' to '/etc/samba/smb.conf' ..."
 set -x
 sudo chmod -c a=rwx -R *

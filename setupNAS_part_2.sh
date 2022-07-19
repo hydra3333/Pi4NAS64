@@ -498,53 +498,53 @@ cd ~/Desktop
 ahavi_filename=mp4library_nfs.service
 ahavi_tmpfile=./${ahavi_filename}
 ahavi_finalfile=/etc/avahi/services/${ahavi_filename}
-sudo rm ${ahavi_tmpfile}
-echo "<?xml version=\"1.0\" standalone='no'?>">${ahavi_tmpfile}
-echo "<!DOCTYPE service-group SYSTEM \"avahi-service.dtd\">">${ahavi_tmpfile}
-echo "<!--">${ahavi_tmpfile}
-echo "# To pre-check the NFS share works from a Win10 PC, ignoring this avahi stuff,">${ahavi_tmpfile}
-echo "#">${ahavi_tmpfile}
-echo "REM In a Win10 PC DOS BOX, check the Raspberry Pi NFS share works">${ahavi_tmpfile}
-echo "REM If we can see a file in the folder, all is well">${ahavi_tmpfile}
-echo "showmount -e 10.0.0.18">${ahavi_tmpfile}
-echo "showmount -e Pi48GB.local">${ahavi_tmpfile}
-echo "REM showmount -a 10.0.0.18">${ahavi_tmpfile}
-echo "REM showmount -a Pi48GB.local">${ahavi_tmpfile}
-echo "mount -o anon -o mtype=soft 10.0.0.18:/NFS-shares/mp4library X:">${ahavi_tmpfile}
-echo "mount">${ahavi_tmpfile}
-echo "dir X:\folder_on_2nd_drive">${ahavi_tmpfile}
-echo "umount -f X:">${ahavi_tmpfile}
-echo "#">${ahavi_tmpfile}
-echo "# 1. sudo apt -y install avahi-utils">${ahavi_tmpfile}
-echo "# 1.1 In /etc/avahi/avahi-daemon.conf ">${ahavi_tmpfile}
-echo "#     Perhaps consider change 'use-ipv6=yes' to 'use-ipv6=no'">${ahavi_tmpfile}
-echo "#     Note 'allow-interfaces' defaults to all local interfaces except loopback and point-to-point">${ahavi_tmpfile}
-echo "#     Perhaps consider changing '#publish-domain=no' to 'publish-domain=yes'">${ahavi_tmpfile}
-echo "#     Perhaps consider changing '#publish-workstation=no' to 'publish-workstation=yes'">${ahavi_tmpfile}
-echo "# 2. avahi-browse -kat">${ahavi_tmpfile}
-echo "# 3. Create/update file '/etc/avahi/services/mp4library_nfs.service' with the content below \(no comment lines\)">${ahavi_tmpfile}
-echo "# 4. #sudo systemctl stop   avahi-daemon.service avahi-daemon.socket">${ahavi_tmpfile}
-echo "#    sudo systemctl restart avahi-daemon.service">${ahavi_tmpfile}
-echo "# 5. #sudo systemctl start  avahi-daemon.service avahi-daemon.socket">${ahavi_tmpfile}
-echo "# 6. sudo service avahi-daemon status">${ahavi_tmpfile}
-echo "# 7. avahi-browse -katl">${ahavi_tmpfile}
-echo "# NOTES:">${ahavi_tmpfile}
-echo "# https://wiki.debian.org/Avahi">${ahavi_tmpfile}
-echo "# https://manpages.debian.org/bullseye/avahi-daemon/avahi.service.5.en.html">${ahavi_tmpfile}
-echo "# Per  https://askubuntu.com/questions/19590/how-do-i-share-nfs-mounts-over-zeroconf">${ahavi_tmpfile}
-echo "#     Using port 2049 requires us to use the "insecure" option in the /etc/exports file, eg:">${ahavi_tmpfile}
-echo "#       /NFS-shares/mp4library 10.0.0.18/24\(rw,fsid=102,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=1000,anongid=1000\)">${ahavi_tmpfile}
-echo "#       /NFS-shares/mp4library 127.0.0.1\(rw,fsid=105,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=1000,anongid=1000\)">${ahavi_tmpfile}
-echo "#">${ahavi_tmpfile}
-echo "-->">${ahavi_tmpfile}
-echo "<service-group>">${ahavi_tmpfile}
-echo "  <name replace-wildcards=\"yes\">%h mp4library NFS share</name>">${ahavi_tmpfile}
-echo "  <service>">${ahavi_tmpfile}
-echo "    <type>_nfs._tcp</type>">${ahavi_tmpfile}
-echo "    <port>2049</port>">${ahavi_tmpfile}
-echo "    <txt-record value-format=\"text\">path=/NFS-shares/mp4library</txt-record>">${ahavi_tmpfile}
-echo "  </service>">${ahavi_tmpfile}
-echo "</service-group>">${ahavi_tmpfile}
+sudo rm "${ahavi_tmpfile}"
+echo "<?xml version=\"1.0\" standalone='no'?>">>${ahavi_tmpfile}
+echo "<!DOCTYPE service-group SYSTEM \"avahi-service.dtd\">">>${ahavi_tmpfile}
+echo "<!--">>${ahavi_tmpfile}
+echo "# To pre-check the NFS share works from a Win10 PC, ignoring this avahi stuff,">>${ahavi_tmpfile}
+echo "#">>${ahavi_tmpfile}
+echo "REM In a Win10 PC DOS BOX, check the Raspberry Pi NFS share works">>${ahavi_tmpfile}
+echo "REM If we can see a file in the folder, all is well">>${ahavi_tmpfile}
+echo "showmount -e 10.0.0.18">>${ahavi_tmpfile}
+echo "showmount -e Pi48GB.local">>${ahavi_tmpfile}
+echo "REM showmount -a 10.0.0.18">>${ahavi_tmpfile}
+echo "REM showmount -a Pi48GB.local">>${ahavi_tmpfile}
+echo "mount -o anon -o mtype=soft 10.0.0.18:/NFS-shares/mp4library X:">>${ahavi_tmpfile}
+echo "mount">>${ahavi_tmpfile}
+echo "dir X:\folder_on_2nd_drive">>${ahavi_tmpfile}
+echo "umount -f X:">>${ahavi_tmpfile}
+echo "#">>${ahavi_tmpfile}
+echo "# 1. sudo apt -y install avahi-utils">>${ahavi_tmpfile}
+echo "# 1.1 In /etc/avahi/avahi-daemon.conf ">>${ahavi_tmpfile}
+echo "#     Perhaps consider change 'use-ipv6=yes' to 'use-ipv6=no'">>${ahavi_tmpfile}
+echo "#     Note 'allow-interfaces' defaults to all local interfaces except loopback and point-to-point">>${ahavi_tmpfile}
+echo "#     Perhaps consider changing '#publish-domain=no' to 'publish-domain=yes'">>${ahavi_tmpfile}
+echo "#     Perhaps consider changing '#publish-workstation=no' to 'publish-workstation=yes'">>${ahavi_tmpfile}
+echo "# 2. avahi-browse -kat">>${ahavi_tmpfile}
+echo "# 3. Create/update file '/etc/avahi/services/mp4library_nfs.service' with the content below \(no comment lines\)">>${ahavi_tmpfile}
+echo "# 4. #sudo systemctl stop   avahi-daemon.service avahi-daemon.socket">>${ahavi_tmpfile}
+echo "#    sudo systemctl restart avahi-daemon.service">>${ahavi_tmpfile}
+echo "# 5. #sudo systemctl start  avahi-daemon.service avahi-daemon.socket">>${ahavi_tmpfile}
+echo "# 6. sudo service avahi-daemon status">>${ahavi_tmpfile}
+echo "# 7. avahi-browse -katl">>${ahavi_tmpfile}
+echo "# NOTES:">>${ahavi_tmpfile}
+echo "# https://wiki.debian.org/Avahi">>${ahavi_tmpfile}
+echo "# https://manpages.debian.org/bullseye/avahi-daemon/avahi.service.5.en.html">>${ahavi_tmpfile}
+echo "# Per  https://askubuntu.com/questions/19590/how-do-i-share-nfs-mounts-over-zeroconf">>${ahavi_tmpfile}
+echo "#     Using port 2049 requires us to use the "insecure" option in the /etc/exports file, eg:">>${ahavi_tmpfile}
+echo "#       /NFS-shares/mp4library 10.0.0.18/24\(rw,fsid=102,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=1000,anongid=1000\)">>${ahavi_tmpfile}
+echo "#       /NFS-shares/mp4library 127.0.0.1\(rw,fsid=105,insecure,sync,no_subtree_check,all_squash,crossmnt,anonuid=1000,anongid=1000\)">>${ahavi_tmpfile}
+echo "#">>${ahavi_tmpfile}
+echo "-->">>${ahavi_tmpfile}
+echo "<service-group>">>${ahavi_tmpfile}
+echo "  <name replace-wildcards=\"yes\">%h mp4library NFS share</name>">>${ahavi_tmpfile}
+echo "  <service>">>${ahavi_tmpfile}
+echo "    <type>_nfs._tcp</type>">>${ahavi_tmpfile}
+echo "    <port>2049</port>">>${ahavi_tmpfile}
+echo "    <txt-record value-format=\"text\">path=/NFS-shares/mp4library</txt-record>">>${ahavi_tmpfile}
+echo "  </service>">>${ahavi_tmpfile}
+echo "</service-group>">>${ahavi_tmpfile}
 sudo cp -fv ${ahavi_tmpfile} ${ahavi_finalfile}
 sudo systemctl restart avahi-daemon.service
 sudo service avahi-daemon status
